@@ -1,0 +1,341 @@
+import apiClient from './config'
+
+// 用户认证API
+export const authAPI = {
+  // 用户注册
+  register: async (userData) => {
+    return await apiClient.post('/auth/register', userData)
+  },
+
+  // 用户登录
+  login: async (credentials) => {
+    return await apiClient.post('/auth/login', credentials)
+  },
+
+  // 刷新Token
+  refreshToken: async () => {
+    return await apiClient.post('/auth/refresh')
+  },
+
+  // 登出
+  logout: async () => {
+    return await apiClient.post('/auth/logout')
+  },
+
+  // 获取当前用户信息
+  getCurrentUser: async () => {
+    return await apiClient.get('/auth/me')
+  }
+}
+
+// 时间线API
+export const timelineAPI = {
+  // 获取时间线事件列表
+  getEvents: async (params = {}) => {
+    return await apiClient.get('/timeline/events', { params })
+  },
+
+  // 获取单个事件详情
+  getEvent: async (eventId) => {
+    return await apiClient.get(`/timeline/events/${eventId}`)
+  }
+}
+
+// 接力活动API
+export const relayAPI = {
+  // 获取接力活动列表
+  getActivities: async (params = {}) => {
+    return await apiClient.get('/relay/activities', { params })
+  },
+
+  // 获取单个活动详情
+  getActivity: async (activityId) => {
+    return await apiClient.get(`/relay/activities/${activityId}`)
+  },
+
+  // 参与接力活动
+  participate: async (data) => {
+    return await apiClient.post('/relay/participate', data)
+  },
+
+  // 获取活动参与者
+  getParticipants: async (activityId, params = {}) => {
+    return await apiClient.get(`/relay/activities/${activityId}/participants`, { params })
+  }
+}
+
+// 格言API
+export const maximAPI = {
+  // 获取格言列表
+  getMaxims: async (params = {}) => {
+    return await apiClient.get('/maxims', { params })
+  },
+
+  // 获取单个格言
+  getMaxim: async (maximId) => {
+    return await apiClient.get(`/maxims/${maximId}`)
+  },
+
+  // 提交格言
+  createMaxim: async (data) => {
+    return await apiClient.post('/maxims', data)
+  },
+
+  // 点赞格言
+  likeMaxim: async (maximId) => {
+    return await apiClient.post(`/maxims/${maximId}/like`)
+  },
+
+  // 取消点赞
+  unlikeMaxim: async (maximId) => {
+    return await apiClient.delete(`/maxims/${maximId}/like`)
+  }
+}
+
+// 文件上传API
+export const uploadAPI = {
+  // 上传文件
+  uploadFile: async (file, onProgress) => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return await apiClient.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      onUploadProgress: (progressEvent) => {
+        if (onProgress) {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          onProgress(percentCompleted)
+        }
+      }
+    })
+  },
+
+  // 上传多个文件
+  uploadFiles: async (files, onProgress) => {
+    const formData = new FormData()
+    files.forEach(file => {
+      formData.append('files', file)
+    })
+
+    return await apiClient.post('/upload/multiple', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      onUploadProgress: (progressEvent) => {
+        if (onProgress) {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          onProgress(percentCompleted)
+        }
+      }
+    })
+  }
+}
+
+// 文章API
+export const articleAPI = {
+  // 获取文章列表
+  getArticles: async (params = {}) => {
+    return await apiClient.get('/articles', { params })
+  },
+
+  // 获取文章详情
+  getArticle: async (articleId) => {
+    return await apiClient.get(`/articles/${articleId}`)
+  },
+
+  // 创建文章 (需要登录)
+  createArticle: async (data) => {
+    return await apiClient.post('/articles', data)
+  },
+
+  // 更新文章 (需要登录)
+  updateArticle: async (articleId, data) => {
+    return await apiClient.put(`/articles/${articleId}`, data)
+  },
+
+  // 删除文章 (需要登录)
+  deleteArticle: async (articleId) => {
+    return await apiClient.delete(`/articles/${articleId}`)
+  }
+}
+
+// 评论API
+export const commentAPI = {
+  // 获取文章评论列表
+  getComments: async (articleId, params = {}) => {
+    return await apiClient.get(`/comments/article/${articleId}`, { params })
+  },
+
+  // 发表评论 (需要登录)
+  createComment: async (articleId, data) => {
+    return await apiClient.post(`/comments/article/${articleId}`, data)
+  },
+
+  // 删除评论 (需要登录)
+  deleteComment: async (commentId) => {
+    return await apiClient.delete(`/comments/${commentId}`)
+  },
+
+  // 点赞评论 (需要登录)
+  likeComment: async (commentId) => {
+    return await apiClient.post(`/comments/${commentId}/like`)
+  },
+
+  // 取消点赞评论 (需要登录)
+  unlikeComment: async (commentId) => {
+    return await apiClient.delete(`/comments/${commentId}/like`)
+  }
+}
+
+// 祝福API
+export const blessingAPI = {
+  // 获取祝福列表
+  getBlessings: async (params = {}) => {
+    return await apiClient.get('/blessings', { params })
+  },
+
+  // 获取随机祝福
+  getRandomBlessings: async (limit = 5) => {
+    return await apiClient.get('/blessings/random', { params: { limit } })
+  },
+
+  // 获取单条祝福
+  getBlessing: async (blessingId) => {
+    return await apiClient.get(`/blessings/${blessingId}`)
+  },
+
+  // 发表祝福 (需要登录)
+  createBlessing: async (data) => {
+    return await apiClient.post('/blessings', data)
+  },
+
+  // 更新祝福 (需要登录)
+  updateBlessing: async (blessingId, data) => {
+    return await apiClient.put(`/blessings/${blessingId}`, data)
+  },
+
+  // 删除祝福 (需要登录)
+  deleteBlessing: async (blessingId) => {
+    return await apiClient.delete(`/blessings/${blessingId}`)
+  },
+
+  // 点赞祝福 (需要登录)
+  likeBlessing: async (blessingId) => {
+    return await apiClient.post(`/blessings/${blessingId}/like`)
+  },
+
+  // 取消点赞祝福 (需要登录)
+  unlikeBlessing: async (blessingId) => {
+    return await apiClient.delete(`/blessings/${blessingId}/like`)
+  }
+}
+
+// 访客统计API
+export const visitorAPI = {
+  // 增加访客量
+  addVisitor: async (sessionId = null) => {
+    return await apiClient.post('/visitors/add', { sessionId })
+  },
+
+  // 获取访客总数
+  getCount: async () => {
+    return await apiClient.get('/visitors/count')
+  },
+
+  // 获取访客统计（管理员）
+  getStats: async () => {
+    return await apiClient.get('/visitors/stats')
+  }
+}
+
+// 寄语未来API
+export const futureMessageAPI = {
+  // 创建寄语
+  createMessage: async (data) => {
+    return await apiClient.post('/future-messages', data)
+  },
+
+  // 获取寄语列表
+  getMessages: async (params = {}) => {
+    return await apiClient.get('/future-messages', { params })
+  },
+
+  // 获取随机寄语
+  getRandomMessages: async (limit = 5) => {
+    return await apiClient.get('/future-messages/random', { params: { limit } })
+  },
+
+  // 获取单条寄语详情
+  getMessage: async (messageId) => {
+    return await apiClient.get(`/future-messages/${messageId}`)
+  },
+
+  // 获取所有寄语（管理员）
+  getAllMessages: async (params = {}) => {
+    return await apiClient.get('/future-messages/admin/all', { params })
+  },
+
+  // 审核寄语（管理员）
+  reviewMessage: async (messageId, status) => {
+    return await apiClient.put(`/future-messages/admin/${messageId}/review`, { status })
+  },
+
+  // 删除寄语（管理员）
+  deleteMessage: async (messageId) => {
+    return await apiClient.delete(`/future-messages/admin/${messageId}`)
+  }
+}
+
+// 管理员API
+export const adminAPI = {
+  // 获取统计数据
+  getStats: async () => {
+    return await apiClient.get('/admin/stats')
+  },
+
+  // 获取待审核内容
+  getPendingContent: async () => {
+    return await apiClient.get('/admin/pending')
+  },
+
+  // 审核评论
+  reviewComment: async (commentId, status) => {
+    return await apiClient.put(`/admin/comments/${commentId}/review`, { status })
+  },
+
+  // 审核祝福
+  reviewBlessing: async (blessingId, status) => {
+    return await apiClient.put(`/admin/blessings/${blessingId}/review`, { status })
+  },
+
+  // 获取用户列表
+  getUsers: async (params = {}) => {
+    return await apiClient.get('/admin/users', { params })
+  },
+
+  // 删除用户
+  deleteUser: async (userId) => {
+    return await apiClient.delete(`/admin/users/${userId}`)
+  },
+
+  // 批量删除内容
+  batchDelete: async (type, ids) => {
+    return await apiClient.post('/admin/batch-delete', { type, ids })
+  }
+}
+
+export default {
+  auth: authAPI,
+  timeline: timelineAPI,
+  relay: relayAPI,
+  maxim: maximAPI,
+  upload: uploadAPI,
+  article: articleAPI,
+  comment: commentAPI,
+  blessing: blessingAPI,
+  visitor: visitorAPI,
+  futureMessage: futureMessageAPI,
+  admin: adminAPI
+}

@@ -1,0 +1,348 @@
+<template>
+  <div class="mission-spirit">
+    <div class="mission-header">
+      <p class="mission-intro">「我们继承的,不是答案,而是那份'向水而行'的勇气。」</p>
+    </div>
+
+    <div class="missions-container">
+      <div
+        v-for="(mission, index) in missions"
+        :key="index"
+        class="mission-card"
+        :class="{ expanded: expandedMission === index }"
+        @click="toggleMission(index)"
+      >
+        <div class="mission-image">
+          <div class="image-overlay">
+            <span class="overlay-text">{{ mission.title }}</span>
+          </div>
+        </div>
+
+        <div class="mission-content">
+          <h3 class="mission-title">{{ mission.title }}</h3>
+          <p class="mission-subtitle">{{ mission.subtitle }}</p>
+
+          <transition name="expand-detail">
+            <div class="mission-detail" v-if="expandedMission === index">
+              <p class="detail-description">{{ mission.description }}</p>
+              <blockquote class="detail-quote">{{ mission.quote }}</blockquote>
+            </div>
+          </transition>
+
+          <button class="read-more-btn">
+            <span>{{ expandedMission === index ? '收起' : '了解更多' }}</span>
+            <svg class="arrow-icon" :class="{ rotated: expandedMission === index }" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const expandedMission = ref(null)
+
+const missions = ref([
+  {
+    title: '三峡工程',
+    subtitle: '工地院士的坚守',
+    description: '郑守仁先生作为三峡工程设计总负责人,在坝区一间18平方米的宿舍里坚守27年,突破20多项世界之最。',
+    quote: '三峡是中华民族的世纪梦想,河海人必须扛起这个担子。——郑守仁',
+    image: '/assets/images/sanxia.jpg'
+  },
+  {
+    title: '南水北调',
+    subtitle: '让水往高处流的奇迹',
+    description: '张建云院士用40年踏遍千山万水,擘画四横三纵国家水网。他阐释东线工程:我们给长江水搭了13层电梯,靠的是世界最先进的泵站群。',
+    quote: '青年要眼里有光、脚下有路。——张建云',
+    image: '/assets/images/nanshui.jpg'
+  },
+  {
+    title: '白鹤滩水电站',
+    subtitle: '在地球褶皱里筑坝',
+    description: '设计总工程师徐建荣扎根高山峡谷20年,在印度洋与亚欧板块碰撞的断裂带上,筑起窄坝身、大厂房的超级工程。',
+    quote: '每一次地质勘测都如履薄冰,但河海人艰苦朴素的校训让我们扎稳了根。——徐建荣',
+    image: '/assets/images/baihetan.jpg'
+  },
+  {
+    title: '海上风电',
+    subtitle: '御风而行的中国智慧',
+    description: '国家卓越工程师林毅峰带领团队研发八爪鱼桩基与海上漂不倒翁技术,让50层楼高的风机抵御17级台风。',
+    quote: '海风无常,但为国奉献的初心不移。——林毅峰',
+    image: '/assets/images/windpower.jpg'
+  },
+  {
+    title: '国际水利',
+    subtitle: '以水为媒,惠泽全球',
+    description: '从顾兆勋教授1958年获越南友谊勋章,到余钟波教授2021年当选联合国教科文组织国际水文计划首位中国籍主席;从柬埔寨甘再水电站到西非海域监测,河海人将中国标准带向世界。',
+    quote: '水是世界的语言,合作是人类的未来。——余钟波',
+    image: '/assets/images/international.jpg'
+  }
+])
+
+const toggleMission = (index) => {
+  if (expandedMission.value === index) {
+    expandedMission.value = null
+  } else {
+    expandedMission.value = index
+  }
+}
+</script>
+
+<style scoped>
+.mission-spirit {
+  width: 100%;
+  padding: var(--spacing-3xl) 0;
+  background: linear-gradient(180deg, #F8F5EF 0%, #FFFFFF 100%);
+}
+
+.mission-header {
+  text-align: center;
+  margin-bottom: var(--spacing-3xl);
+  padding: 0 var(--spacing-lg);
+}
+
+.mission-intro {
+  font-size: var(--text-2xl);
+  font-family: var(--font-title);
+  color: var(--color-river-blue);
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.missions-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  /* 使用CSS columns实现真正的瀑布流布局 */
+  column-count: 3;
+  column-gap: var(--spacing-xl);
+}
+
+/* 任务卡片 */
+.mission-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: visible;
+  box-shadow: var(--shadow-soft);
+  /* 添加平滑的高度和位置过渡 */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  /* 防止卡片被分割到两列 */
+  break-inside: avoid;
+  /* 卡片间距 */
+  margin-bottom: var(--spacing-xl);
+  /* 防止展开时抖动 */
+  will-change: transform, box-shadow;
+}
+
+.mission-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+}
+
+.mission-card.expanded {
+  /* 展开时保持hover效果的阴影 */
+  box-shadow: var(--shadow-medium);
+  transform: none;
+}
+
+/* 卡片图片 */
+.mission-image {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: var(--gradient-river);
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.mission-card:hover .image-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 122, 26, 0.4) 0%,
+    rgba(10, 106, 184, 0.7) 100%
+  );
+}
+
+.overlay-text {
+  font-size: var(--text-3xl);
+  font-family: var(--font-title);
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  font-weight: 700;
+}
+
+/* 卡片内容 */
+.mission-content {
+  padding: var(--spacing-xl);
+}
+
+.mission-title {
+  font-size: var(--text-2xl);
+  font-family: var(--font-title);
+  color: var(--color-river-blue);
+  margin-bottom: var(--spacing-sm);
+}
+
+.mission-subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-torch-amber);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+}
+
+.mission-detail {
+  overflow: hidden;
+}
+
+/* 展开/收起动画 */
+.expand-detail-enter-active {
+  transition: all 0.5s ease-out;
+  transition-property: max-height, opacity, margin, padding;
+}
+
+.expand-detail-leave-active {
+  transition: all 0.4s ease-in;
+  transition-property: max-height, opacity, margin, padding;
+}
+
+.expand-detail-enter-from {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+.expand-detail-enter-to {
+  max-height: 600px;
+  opacity: 1;
+  margin-top: var(--spacing-lg);
+  margin-bottom: 0;
+  padding-top: var(--spacing-lg);
+}
+
+.expand-detail-leave-from {
+  max-height: 600px;
+  opacity: 1;
+  margin-top: var(--spacing-lg);
+  margin-bottom: 0;
+  padding-top: var(--spacing-lg);
+}
+
+.expand-detail-leave-to {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+.detail-description {
+  font-size: var(--text-base);
+  color: var(--color-ink-black);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(10, 106, 184, 0.2);
+}
+
+.detail-quote {
+  font-size: var(--text-base);
+  font-family: var(--font-title);
+  font-style: italic;
+  color: var(--color-river-blue);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-left: 4px solid var(--color-torch-amber);
+  background: rgba(10, 106, 184, 0.05);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 0;
+}
+
+/* 阅读更多按钮 */
+.read-more-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--text-base);
+  color: var(--color-river-blue);
+  background: transparent;
+  border: 2px solid var(--color-river-blue);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+.read-more-btn:hover {
+  color: white;
+  background: var(--gradient-river);
+  border-color: transparent;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-base);
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .missions-container {
+    column-count: 1;
+  }
+
+  .mission-intro {
+    font-size: var(--text-lg);
+  }
+
+  .mission-image {
+    height: 180px;
+  }
+
+  .overlay-text {
+    font-size: var(--text-2xl);
+  }
+
+  .mission-title {
+    font-size: var(--text-xl);
+  }
+
+  .mission-subtitle {
+    font-size: var(--text-base);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .missions-container {
+    column-count: 2;
+  }
+}
+</style>
