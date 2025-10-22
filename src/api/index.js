@@ -326,6 +326,114 @@ export const adminAPI = {
   }
 }
 
+// 论坛API
+export const forumAPI = {
+  // 板块相关
+  // 获取所有板块
+  getForums: async (params = {}) => {
+    return await apiClient.get('/forum/forums', { params })
+  },
+
+  // 获取单个板块详情
+  getForum: async (forumId) => {
+    return await apiClient.get(`/forum/forums/${forumId}`)
+  },
+
+  // 创建板块 (管理员)
+  createForum: async (data) => {
+    return await apiClient.post('/forum/forums', data)
+  },
+
+  // 更新板块 (管理员)
+  updateForum: async (forumId, data) => {
+    return await apiClient.put(`/forum/forums/${forumId}`, data)
+  },
+
+  // 删除板块 (管理员)
+  deleteForum: async (forumId) => {
+    return await apiClient.delete(`/forum/forums/${forumId}`)
+  },
+
+  // 帖子相关
+  // 获取帖子列表
+  getPosts: async (params = {}) => {
+    return await apiClient.get('/forum/posts', { params })
+  },
+
+  // 获取单个帖子详情
+  getPost: async (postId) => {
+    return await apiClient.get(`/forum/posts/${postId}`)
+  },
+
+  // 创建帖子 (需登录)
+  createPost: async (data) => {
+    return await apiClient.post('/forum/posts', data)
+  },
+
+  // 更新帖子 (作者或管理员)
+  updatePost: async (postId, data) => {
+    return await apiClient.put(`/forum/posts/${postId}`, data)
+  },
+
+  // 删除帖子 (作者或管理员)
+  deletePost: async (postId) => {
+    return await apiClient.delete(`/forum/posts/${postId}`)
+  },
+
+  // 回复相关
+  // 获取回复列表
+  getReplies: async (postId, params = {}) => {
+    return await apiClient.get(`/forum/posts/${postId}/replies`, { params })
+  },
+
+  // 创建回复 (需登录)
+  createReply: async (postId, data) => {
+    return await apiClient.post(`/forum/posts/${postId}/replies`, data)
+  },
+
+  // 删除回复 (作者或管理员)
+  deleteReply: async (replyId) => {
+    return await apiClient.delete(`/forum/replies/${replyId}`)
+  },
+
+  // 点赞相关
+  // 点赞帖子或回复
+  like: async (targetType, targetId) => {
+    return await apiClient.post(`/forum/${targetType}/${targetId}/like`)
+  },
+
+  // 取消点赞
+  unlike: async (targetType, targetId) => {
+    return await apiClient.delete(`/forum/${targetType}/${targetId}/like`)
+  },
+
+  // 管理员功能
+  // 置顶/取消置顶
+  toggleSticky: async (postId, isSticky) => {
+    return await apiClient.put(`/forum/posts/${postId}/sticky`, { isSticky })
+  },
+
+  // 加精/取消加精
+  toggleHighlight: async (postId, isHighlighted) => {
+    return await apiClient.put(`/forum/posts/${postId}/highlight`, { isHighlighted })
+  },
+
+  // 锁定/解锁
+  toggleLock: async (postId, isLocked) => {
+    return await apiClient.put(`/forum/posts/${postId}/lock`, { isLocked })
+  },
+
+  // 审核帖子
+  reviewPost: async (postId, status) => {
+    return await apiClient.put(`/forum/posts/${postId}/review`, { status })
+  },
+
+  // 审核回复
+  reviewReply: async (replyId, status) => {
+    return await apiClient.put(`/forum/replies/${replyId}/review`, { status })
+  }
+}
+
 export default {
   auth: authAPI,
   timeline: timelineAPI,
@@ -337,5 +445,6 @@ export default {
   blessing: blessingAPI,
   visitor: visitorAPI,
   futureMessage: futureMessageAPI,
-  admin: adminAPI
+  admin: adminAPI,
+  forum: forumAPI
 }

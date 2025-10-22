@@ -61,6 +61,21 @@ const routes = [
     component: () => import('@/pages/ArticleDetail.vue')
   },
   {
+    path: '/forum',
+    name: 'Forum',
+    component: () => import('@/pages/Forum.vue')
+  },
+  {
+    path: '/forum/board/:id',
+    name: 'ForumBoard',
+    component: () => import('@/pages/ForumBoard.vue')
+  },
+  {
+    path: '/forum/post/:id',
+    name: 'ForumPost',
+    component: () => import('@/pages/ForumPost.vue')
+  },
+  {
     path: '/blessings',
     name: 'Blessings',
     component: () => import('@/pages/Blessings.vue')

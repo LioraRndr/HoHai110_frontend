@@ -6,10 +6,7 @@
         <p class="subtitle">分享记忆，交流想法，共建河海社区</p>
       </div>
 
-      <div v-if="loading" class="loading">
-        <div class="spinner"></div>
-        <p>加载中...</p>
-      </div>
+      <div v-if="loading" class="loading">加载中...</div>
 
       <div v-else class="forums-container">
         <div
@@ -108,26 +105,10 @@ onMounted(() => {
 }
 
 .loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem;
+  text-align: center;
+  padding: 3rem;
   color: #999;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(74, 144, 226, 0.1);
-  border-top-color: #4A90E2;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  font-size: 1.1rem;
 }
 
 .forums-container {
