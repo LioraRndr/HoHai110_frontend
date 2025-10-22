@@ -49,17 +49,36 @@
             </svg>
             <span>管理</span>
           </router-link>
-          <div class="user-avatar">
-            {{ userStore.userName.charAt(0).toUpperCase() }}
-          </div>
-          <span class="user-name">{{ userStore.userName }}</span>
-          <button class="logout-button" @click="handleLogout">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
+
+          <!-- 用户头像下拉菜单 -->
+          <div class="user-dropdown" @click="toggleUserMenu">
+            <div class="user-avatar" :class="{ active: showUserMenu }">
+              {{ userStore.userName.charAt(0).toUpperCase() }}
+            </div>
+            <span class="user-name">{{ userStore.userName }}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="dropdown-icon" :class="{ rotated: showUserMenu }">
+              <polyline points="6 9 12 15 18 9"/>
             </svg>
-          </button>
+
+            <!-- 下拉菜单 -->
+            <div v-if="showUserMenu" class="dropdown-menu">
+              <router-link to="/profile" class="dropdown-item" @click="closeUserMenu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>个人中心</span>
+              </router-link>
+              <button class="dropdown-item" @click="handleLogout">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16 17 21 12 16 7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span>退出登录</span>
+              </button>
+            </div>
+          </div>
         </div>
         <div v-else class="auth-buttons">
           <router-link to="/login" class="auth-link login-link">登录</router-link>
@@ -108,6 +127,14 @@
             {{ userStore.userName.charAt(0).toUpperCase() }}
           </div>
           <span class="mobile-user-name">{{ userStore.userName }}</span>
+          <!-- 个人中心 -->
+          <router-link to="/profile" class="mobile-profile-link" @click="closeMobileMenu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>个人中心</span>
+          </router-link>
           <!-- 管理员入口 -->
           <router-link v-if="userStore.isAdmin" to="/admin" class="mobile-admin-link" @click="closeMobileMenu">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -146,6 +173,7 @@ const userStore = useUserStore()
 const isScrolled = ref(false)
 const isHidden = ref(false)
 const isMobileMenuOpen = ref(false)
+const showUserMenu = ref(false)
 let lastScrollY = 0
 
 const handleScroll = () => {
@@ -177,7 +205,24 @@ const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
 }
 
+const toggleUserMenu = () => {
+  showUserMenu.value = !showUserMenu.value
+}
+
+const closeUserMenu = () => {
+  showUserMenu.value = false
+}
+
+// 点击外部关闭下拉菜单
+const handleClickOutside = (event) => {
+  const dropdown = document.querySelector('.user-dropdown')
+  if (dropdown && !dropdown.contains(event.target)) {
+    showUserMenu.value = false
+  }
+}
+
 const handleLogout = async () => {
+  closeUserMenu()
   await userStore.logout()
   router.push('/')
 }
@@ -217,6 +262,7 @@ const initUserState = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  document.addEventListener('click', handleClickOutside)
   // 初始化用户状态
   console.log('[Navbar] Component mounted')
   initUserState()
@@ -224,6 +270,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  document.removeEventListener('click', handleClickOutside)
 })
 
 // 监听路由变化，确保用户状态保持同步
@@ -415,6 +462,83 @@ watch(() => route.path, (newPath) => {
   white-space: nowrap;
 }
 
+/* 用户下拉菜单 */
+.user-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+.user-dropdown:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar.active {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.dropdown-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition-base);
+}
+
+.dropdown-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-sm));
+  right: 0;
+  min-width: 180px;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 1001;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-torch-amber);
+}
+
+.dropdown-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 .logout-button {
   display: flex;
   align-items: center;
@@ -579,6 +703,35 @@ watch(() => route.path, (newPath) => {
   font-size: var(--text-xl);
   font-weight: 600;
   text-align: center;
+}
+
+/* 移动端个人中心链接 */
+.mobile-profile-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  margin-top: var(--spacing-sm);
+}
+
+.mobile-profile-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.mobile-profile-link svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* 移动端管理员链接 */

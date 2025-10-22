@@ -3,11 +3,11 @@
     <!-- 顶部导航栏 -->
     <nav class="auth-navbar">
       <div class="auth-navbar-container">
-        <router-link :to="backPath" class="back-button">
+        <router-link to="/login" class="back-button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span>{{ backText }}</span>
+          <span>返回登录</span>
         </router-link>
 
         <div class="navbar-logo">
@@ -20,9 +20,9 @@
       <!-- 左侧装饰 -->
       <div class="auth-decoration">
         <div class="decoration-content">
-          <h1 class="decoration-title">加入我们</h1>
+          <h1 class="decoration-title">重置密码</h1>
           <h2 class="decoration-subtitle">河海大学110周年</h2>
-          <p class="decoration-text">共同见证百十薪传的历史时刻</p>
+          <p class="decoration-text">设置您的新密码</p>
           <div class="decoration-wave">
             <svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,50 C300,100 400,0 600,50 C800,100 900,0 1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/>
@@ -34,8 +34,8 @@
       <!-- 右侧表单 -->
       <div class="auth-form-wrapper">
         <div class="auth-form">
-          <h2 class="form-title">创建账户</h2>
-          <p class="form-subtitle">填写信息开始您的旅程</p>
+          <h2 class="form-title">重置密码</h2>
+          <p class="form-subtitle">请输入验证码和新密码</p>
 
           <!-- 成功提示 -->
           <transition name="fade">
@@ -44,7 +44,7 @@
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
-              注册成功!正在跳转到登录页面...
+              密码重置成功!正在跳转到登录页面...
             </div>
           </transition>
 
@@ -61,46 +61,43 @@
           </transition>
 
           <form @submit.prevent="handleSubmit">
-            <!-- 用户名 -->
+            <!-- 邮箱 (只读) -->
             <div class="form-group">
-              <label for="username" class="form-label">用户名</label>
-              <input
-                id="username"
-                v-model="formData.username"
-                type="text"
-                class="form-input"
-                placeholder="请输入用户名 (3-20个字符)"
-                required
-                :disabled="isLoading"
-                minlength="3"
-                maxlength="20"
-              />
-            </div>
-
-            <!-- 邮箱 -->
-            <div class="form-group">
-              <label for="email" class="form-label">邮箱</label>
+              <label for="email" class="form-label">邮箱地址</label>
               <input
                 id="email"
                 v-model="formData.email"
                 type="email"
                 class="form-input"
-                placeholder="请输入邮箱地址"
-                required
-                :disabled="isLoading"
+                readonly
               />
             </div>
 
-            <!-- 密码 -->
+            <!-- 验证码 -->
             <div class="form-group">
-              <label for="password" class="form-label">密码</label>
+              <label for="code" class="form-label">验证码</label>
+              <input
+                id="code"
+                v-model="formData.code"
+                type="text"
+                class="form-input"
+                placeholder="请输入邮箱中收到的6位验证码"
+                required
+                :disabled="isLoading"
+                maxlength="6"
+              />
+            </div>
+
+            <!-- 新密码 -->
+            <div class="form-group">
+              <label for="password" class="form-label">新密码</label>
               <div class="password-input-wrapper">
                 <input
                   id="password"
-                  v-model="formData.password"
+                  v-model="formData.newPassword"
                   :type="showPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请输入密码 (至少6个字符)"
+                  placeholder="请输入新密码 (至少6个字符)"
                   required
                   :disabled="isLoading"
                   minlength="6"
@@ -121,24 +118,18 @@
                   </svg>
                 </button>
               </div>
-              <div class="password-strength">
-                <div class="strength-bar" :class="passwordStrength.class">
-                  <div class="strength-fill" :style="{ width: passwordStrength.width }"></div>
-                </div>
-                <span class="strength-text">{{ passwordStrength.text }}</span>
-              </div>
             </div>
 
-            <!-- 确认密码 -->
+            <!-- 确认新密码 -->
             <div class="form-group">
-              <label for="confirmPassword" class="form-label">确认密码</label>
+              <label for="confirmPassword" class="form-label">确认新密码</label>
               <div class="password-input-wrapper">
                 <input
                   id="confirmPassword"
                   v-model="formData.confirmPassword"
                   :type="showConfirmPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请再次输入密码"
+                  placeholder="请再次输入新密码"
                   required
                   :disabled="isLoading"
                 />
@@ -160,43 +151,25 @@
               </div>
             </div>
 
-            <!-- 注册关闭提示 -->
-            <div v-if="registrationClosed" class="warning-message">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
-              系统当前不允许新用户注册,请稍后再试或联系管理员。
-            </div>
-
-            <!-- 用户协议 -->
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input v-model="formData.agreeToTerms" type="checkbox" required>
-                <span>我已阅读并同意 <router-link to="/terms" class="terms-link" target="_blank">用户协议</router-link> 和 <router-link to="/privacy" class="terms-link" target="_blank">隐私政策</router-link></span>
-              </label>
-            </div>
-
             <!-- 提交按钮 -->
             <button
               type="submit"
               class="submit-button"
-              :disabled="isLoading || !formData.agreeToTerms"
+              :disabled="isLoading"
             >
-              <span v-if="!isLoading">注册</span>
+              <span v-if="!isLoading">重置密码</span>
               <span v-else class="loading-spinner">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                 </svg>
-                注册中...
+                重置中...
               </span>
             </button>
           </form>
 
-          <!-- 登录链接 -->
+          <!-- 返回登录链接 -->
           <div class="auth-footer">
-            已有账户? <router-link to="/login" class="auth-link">立即登录</router-link>
+            <router-link to="/forgot-password" class="auth-link">重新发送验证码</router-link>
           </div>
         </div>
       </div>
@@ -205,21 +178,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useUserStore } from '@/store/user'
-import { authAPI } from '@/api'
+import { userAPI } from '@/api'
 
 const router = useRouter()
 const route = useRoute()
-const userStore = useUserStore()
 
 const formData = reactive({
-  username: '',
   email: '',
-  password: '',
-  confirmPassword: '',
-  agreeToTerms: false
+  code: '',
+  newPassword: '',
+  confirmPassword: ''
 })
 
 const showPassword = ref(false)
@@ -227,80 +197,30 @@ const showConfirmPassword = ref(false)
 const isLoading = ref(false)
 const error = ref('')
 const success = ref(false)
-const registrationClosed = ref(false)
 
-// 检查注册状态
-onMounted(async () => {
-  try {
-    const response = await authAPI.getRegistrationStatus()
-    registrationClosed.value = !response.message.enabled
-  } catch (err) {
-    console.error('获取注册状态失败:', err)
+onMounted(() => {
+  // 从路由参数中获取邮箱
+  if (route.query.email) {
+    formData.email = route.query.email
+  } else {
+    // 如果没有邮箱参数,跳转回忘记密码页面
+    router.replace('/forgot-password')
   }
-})
-
-// 计算返回按钮的路径和文本
-const backPath = computed(() => {
-  const redirect = route.query.redirect
-  return redirect || '/'
-})
-
-const backText = computed(() => {
-  const redirect = route.query.redirect
-  return redirect ? '返回' : '返回首页'
-})
-
-// 密码强度计算
-const passwordStrength = computed(() => {
-  const password = formData.password
-  if (!password) return { class: '', width: '0%', text: '' }
-
-  let strength = 0
-  if (password.length >= 6) strength++
-  if (password.length >= 10) strength++
-  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++
-  if (/\d/.test(password)) strength++
-  if (/[^a-zA-Z0-9]/.test(password)) strength++
-
-  if (strength <= 1) return { class: 'weak', width: '33%', text: '弱' }
-  if (strength <= 3) return { class: 'medium', width: '66%', text: '中' }
-  return { class: 'strong', width: '100%', text: '强' }
 })
 
 const validateForm = () => {
-  // 用户名验证
-  if (formData.username.length < 3 || formData.username.length > 20) {
-    error.value = '用户名长度必须在3-20个字符之间'
+  if (!formData.code || formData.code.length !== 6) {
+    error.value = '请输入6位验证码'
     return false
   }
 
-  if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-    error.value = '用户名只能包含字母、数字和下划线'
-    return false
-  }
-
-  // 邮箱验证
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(formData.email)) {
-    error.value = '请输入有效的邮箱地址'
-    return false
-  }
-
-  // 密码验证
-  if (formData.password.length < 6) {
+  if (formData.newPassword.length < 6) {
     error.value = '密码长度至少为6个字符'
     return false
   }
 
-  // 确认密码验证
-  if (formData.password !== formData.confirmPassword) {
+  if (formData.newPassword !== formData.confirmPassword) {
     error.value = '两次输入的密码不一致'
-    return false
-  }
-
-  // 用户协议验证
-  if (!formData.agreeToTerms) {
-    error.value = '请阅读并同意用户协议和隐私政策'
     return false
   }
 
@@ -310,13 +230,6 @@ const validateForm = () => {
 const handleSubmit = async () => {
   error.value = ''
 
-  // 检查注册是否关闭
-  if (registrationClosed.value) {
-    error.value = '系统当前不允许新用户注册'
-    return
-  }
-
-  // 表单验证
   if (!validateForm()) {
     return
   }
@@ -324,32 +237,19 @@ const handleSubmit = async () => {
   isLoading.value = true
 
   try {
-    const result = await userStore.register({
-      username: formData.username,
+    await userAPI.resetPassword({
       email: formData.email,
-      password: formData.password,
-      confirmPassword: formData.confirmPassword
+      code: formData.code,
+      newPassword: formData.newPassword
     })
 
-    if (result.success) {
-      success.value = true
-      // 3秒后跳转到登录页,保留重定向路径
-      setTimeout(() => {
-        // 检查是否有重定向路径
-        const redirectPath = localStorage.getItem('redirectAfterLogin') || router.currentRoute.value.query.redirect
-
-        if (redirectPath) {
-          // 保留重定向路径到登录页
-          router.push({ path: '/login', query: { redirect: redirectPath } })
-        } else {
-          router.push('/login')
-        }
-      }, 3000)
-    } else {
-      error.value = result.message || '注册失败,请稍后重试'
-    }
+    success.value = true
+    // 2秒后跳转到登录页面
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
   } catch (err) {
-    error.value = err.message || '注册失败,请稍后重试'
+    error.value = err.response?.data?.message || '重置失败,请检查验证码是否正确'
   } finally {
     isLoading.value = false
   }
@@ -423,7 +323,7 @@ const handleSubmit = async () => {
   padding: var(--spacing-xl);
   width: 100%;
   max-width: 1000px;
-  margin: 0 auto var(--spacing-xl) auto;
+  margin: 0 auto;
   background: white;
   border-radius: var(--radius-xl);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -433,7 +333,7 @@ const handleSubmit = async () => {
 }
 
 .auth-decoration {
-  background: var(--gradient-torch);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   padding: var(--spacing-3xl);
   display: flex;
   flex-direction: column;
@@ -488,8 +388,6 @@ const handleSubmit = async () => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-height: 90vh;
-  overflow-y: auto;
 }
 
 .auth-form {
@@ -548,25 +446,6 @@ const handleSubmit = async () => {
   flex-shrink: 0;
 }
 
-.warning-message {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  background: #fff3cd;
-  color: #856404;
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  margin-bottom: var(--spacing-lg);
-  border: 1px solid #ffeeba;
-}
-
-.warning-message svg {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
 .form-group {
   margin-bottom: var(--spacing-lg);
 }
@@ -595,7 +474,8 @@ const handleSubmit = async () => {
   box-shadow: 0 0 0 3px rgba(10, 106, 184, 0.1);
 }
 
-.form-input:disabled {
+.form-input:disabled,
+.form-input:read-only {
   background: #f5f5f5;
   cursor: not-allowed;
 }
@@ -628,97 +508,22 @@ const handleSubmit = async () => {
   display: block;
 }
 
-.password-strength {
-  margin-top: var(--spacing-xs);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.strength-bar {
-  flex: 1;
-  height: 4px;
-  background: #e0e0e0;
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.strength-fill {
-  height: 100%;
-  transition: width 0.3s ease;
-}
-
-.strength-bar.weak .strength-fill {
-  background: #f44336;
-}
-
-.strength-bar.medium .strength-fill {
-  background: #ff9800;
-}
-
-.strength-bar.strong .strength-fill {
-  background: #4caf50;
-}
-
-.strength-text {
-  font-size: var(--text-xs);
-  font-weight: 600;
-  min-width: 20px;
-}
-
-.strength-bar.weak + .strength-text {
-  color: #f44336;
-}
-
-.strength-bar.medium + .strength-text {
-  color: #ff9800;
-}
-
-.strength-bar.strong + .strength-text {
-  color: #4caf50;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-xs);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  line-height: 1.6;
-}
-
-.checkbox-label input[type="checkbox"] {
-  margin-top: 2px;
-  cursor: pointer;
-}
-
-.terms-link {
-  color: var(--color-river-blue);
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.terms-link:hover {
-  color: var(--color-torch-amber);
-}
-
 .submit-button {
   width: 100%;
   padding: var(--spacing-md) var(--spacing-xl);
   font-size: var(--text-lg);
   font-weight: 600;
   color: white;
-  background: var(--gradient-torch);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-base);
-  margin-top: var(--spacing-md);
 }
 
 .submit-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.3);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
 }
 
 .submit-button:disabled {
@@ -814,7 +619,6 @@ const handleSubmit = async () => {
 
   .auth-form-wrapper {
     padding: var(--spacing-2xl);
-    max-height: none;
   }
 
   .form-title {

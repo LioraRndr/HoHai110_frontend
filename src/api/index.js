@@ -2,6 +2,11 @@ import apiClient from './config'
 
 // 用户认证API
 export const authAPI = {
+  // 查询注册状态
+  getRegistrationStatus: async () => {
+    return await apiClient.get('/auth/registration-status')
+  },
+
   // 用户注册
   register: async (userData) => {
     return await apiClient.post('/auth/register', userData)
@@ -25,6 +30,44 @@ export const authAPI = {
   // 获取当前用户信息
   getCurrentUser: async () => {
     return await apiClient.get('/auth/me')
+  }
+}
+
+// 用户API
+export const userAPI = {
+  // 获取个人信息
+  getProfile: async () => {
+    return await apiClient.get('/users/profile')
+  },
+
+  // 更新个人信息
+  updateProfile: async (data) => {
+    return await apiClient.put('/users/profile', data)
+  },
+
+  // 修改密码
+  changePassword: async (data) => {
+    return await apiClient.put('/users/password', data)
+  },
+
+  // 发送邮箱验证码
+  sendEmailCode: async (data) => {
+    return await apiClient.post('/users/email/send-code', data)
+  },
+
+  // 更换邮箱
+  changeEmail: async (data) => {
+    return await apiClient.put('/users/email', data)
+  },
+
+  // 忘记密码 - 发送验证码
+  forgotPassword: async (data) => {
+    return await apiClient.post('/users/forgot-password', data)
+  },
+
+  // 重置密码
+  resetPassword: async (data) => {
+    return await apiClient.post('/users/reset-password', data)
   }
 }
 
@@ -94,12 +137,12 @@ export const maximAPI = {
 
 // 文件上传API
 export const uploadAPI = {
-  // 上传文件
-  uploadFile: async (file, onProgress) => {
+  // 上传媒体文件
+  uploadMedia: async (file, onProgress) => {
     const formData = new FormData()
     formData.append('file', file)
 
-    return await apiClient.post('/upload', formData, {
+    return await apiClient.post('/upload/media', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
@@ -112,24 +155,9 @@ export const uploadAPI = {
     })
   },
 
-  // 上传多个文件
-  uploadFiles: async (files, onProgress) => {
-    const formData = new FormData()
-    files.forEach(file => {
-      formData.append('files', file)
-    })
-
-    return await apiClient.post('/upload/multiple', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      onUploadProgress: (progressEvent) => {
-        if (onProgress) {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          onProgress(percentCompleted)
-        }
-      }
-    })
+  // 兼容旧的 uploadFile 方法
+  uploadFile: async (file, onProgress) => {
+    return await uploadAPI.uploadMedia(file, onProgress)
   }
 }
 
@@ -310,9 +338,25 @@ export const adminAPI = {
     return await apiClient.put(`/admin/blessings/${blessingId}/review`, { status })
   },
 
+  // 用户管理
   // 获取用户列表
   getUsers: async (params = {}) => {
     return await apiClient.get('/admin/users', { params })
+  },
+
+  // 添加用户
+  createUser: async (data) => {
+    return await apiClient.post('/admin/users', data)
+  },
+
+  // 修改用户角色
+  changeUserRole: async (userId, role) => {
+    return await apiClient.put(`/admin/users/${userId}/role`, { role })
+  },
+
+  // 编辑用户信息
+  updateUser: async (userId, data) => {
+    return await apiClient.put(`/admin/users/${userId}`, data)
   },
 
   // 删除用户
@@ -320,9 +364,40 @@ export const adminAPI = {
     return await apiClient.delete(`/admin/users/${userId}`)
   },
 
+  // 批量删除用户
+  batchDeleteUsers: async (ids) => {
+    return await apiClient.post('/admin/users/batch-delete', { ids })
+  },
+
   // 批量删除内容
   batchDelete: async (type, ids) => {
     return await apiClient.post('/admin/batch-delete', { type, ids })
+  },
+
+  // 系统配置管理
+  // 获取所有系统配置
+  getConfigs: async () => {
+    return await apiClient.get('/admin/configs')
+  },
+
+  // 获取单个系统配置
+  getConfig: async (key) => {
+    return await apiClient.get(`/admin/configs/${key}`)
+  },
+
+  // 设置注册开关
+  setRegistrationStatus: async (enabled) => {
+    return await apiClient.put('/admin/configs/registration', { enabled })
+  },
+
+  // 设置SMTP配置
+  setSMTPConfig: async (config) => {
+    return await apiClient.put('/admin/configs/smtp', config)
+  },
+
+  // 测试SMTP连接
+  testSMTP: async () => {
+    return await apiClient.post('/admin/configs/smtp/test')
   }
 }
 
@@ -449,6 +524,7 @@ export const forumAPI = {
 
 export default {
   auth: authAPI,
+  user: userAPI,
   timeline: timelineAPI,
   relay: relayAPI,
   maxim: maximAPI,

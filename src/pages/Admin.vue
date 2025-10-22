@@ -226,12 +226,27 @@
                 class="search-input"
               />
               <button @click="loadUsers" class="search-btn">搜索</button>
+              <button @click="showCreateUserDialog" class="create-btn">添加用户</button>
+              <button
+                v-if="selectedUsers.length > 0"
+                @click="batchDeleteUsers"
+                class="delete-btn"
+              >
+                批量删除 ({{ selectedUsers.length }})
+              </button>
             </div>
             <div v-if="usersLoading" class="loading-text">加载中...</div>
             <div v-else class="users-table">
               <table>
                 <thead>
                   <tr>
+                    <th width="50">
+                      <input
+                        type="checkbox"
+                        @change="toggleAllUsers"
+                        :checked="selectedUsers.length === users.length && users.length > 0"
+                      />
+                    </th>
                     <th>ID</th>
                     <th>用户名</th>
                     <th>邮箱</th>
@@ -244,6 +259,14 @@
                 </thead>
                 <tbody>
                   <tr v-for="user in users" :key="user.id">
+                    <td>
+                      <input
+                        type="checkbox"
+                        :value="user.id"
+                        v-model="selectedUsers"
+                        :disabled="user.role === 'admin'"
+                      />
+                    </td>
                     <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
@@ -256,14 +279,32 @@
                     <td>{{ user.department || '-' }}</td>
                     <td>{{ formatDate(user.createdAt) }}</td>
                     <td>
-                      <button
-                        v-if="user.role !== 'admin'"
-                        @click="deleteUser(user.id)"
-                        class="delete-btn"
-                      >
-                        删除
-                      </button>
-                      <span v-else class="protected">-</span>
+                      <div class="table-actions">
+                        <button
+                          @click="editUser(user)"
+                          class="edit-btn-sm"
+                          title="编辑"
+                        >
+                          编辑
+                        </button>
+                        <button
+                          v-if="user.role !== 'admin'"
+                          @click="changeRole(user)"
+                          class="action-btn-sm"
+                          title="修改角色"
+                        >
+                          改为{{ user.role === 'user' ? '管理员' : '用户' }}
+                        </button>
+                        <button
+                          v-if="user.role !== 'admin'"
+                          @click="deleteUser(user.id)"
+                          class="delete-btn-sm"
+                          title="删除"
+                        >
+                          删除
+                        </button>
+                        <span v-else class="protected">-</span>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -584,7 +625,175 @@
               </div>
             </div>
           </section>
+
+          <!-- 系统设置 -->
+          <section v-if="activeMenu === 'settings'" class="content-section">
+            <h2>系统设置</h2>
+            <div class="tabs-container">
+              <div class="tabs">
+                <button
+                  :class="{ active: settingsTab === 'registration' }"
+                  @click="settingsTab = 'registration'"
+                  class="tab-btn"
+                >
+                  注册设置
+                </button>
+                <button
+                  :class="{ active: settingsTab === 'smtp' }"
+                  @click="settingsTab = 'smtp'"
+                  class="tab-btn"
+                >
+                  SMTP配置
+                </button>
+              </div>
+
+              <!-- 注册设置 -->
+              <div v-if="settingsTab === 'registration'" class="settings-panel">
+                <div class="form-group">
+                  <label class="switch-label">
+                    <span>允许用户注册</span>
+                    <div class="switch-wrapper">
+                      <input
+                        type="checkbox"
+                        v-model="registrationEnabled"
+                        @change="updateRegistrationStatus"
+                        class="switch-input"
+                      />
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                  <p class="form-hint">
+                    关闭后,新用户将无法注册账号。现有用户不受影响。
+                  </p>
+                </div>
+              </div>
+
+              <!-- SMTP配置 -->
+              <div v-if="settingsTab === 'smtp'" class="settings-panel">
+                <div class="form-group">
+                  <label>SMTP服务器地址</label>
+                  <input
+                    v-model="smtpConfig.host"
+                    type="text"
+                    class="form-input"
+                    placeholder="smtp.example.com"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>端口</label>
+                  <input
+                    v-model.number="smtpConfig.port"
+                    type="number"
+                    class="form-input"
+                    placeholder="587"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      v-model="smtpConfig.secure"
+                    />
+                    <span>使用SSL/TLS</span>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label>发件邮箱</label>
+                  <input
+                    v-model="smtpConfig.user"
+                    type="email"
+                    class="form-input"
+                    placeholder="your-email@example.com"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>邮箱密码/授权码</label>
+                  <input
+                    v-model="smtpConfig.password"
+                    type="password"
+                    class="form-input"
+                    placeholder="请输入密码或授权码"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>发件人名称</label>
+                  <input
+                    v-model="smtpConfig.fromName"
+                    type="text"
+                    class="form-input"
+                    placeholder="河海大学110周年校庆"
+                  />
+                </div>
+                <div class="form-actions">
+                  <button @click="testSMTP" class="action-btn" :disabled="smtpTesting">
+                    {{ smtpTesting ? '测试中...' : '测试连接' }}
+                  </button>
+                  <button @click="saveSMTPConfig" class="confirm-btn" :disabled="smtpSaving">
+                    {{ smtpSaving ? '保存中...' : '保存配置' }}
+                  </button>
+                </div>
+                <div v-if="smtpTestResult" class="test-result" :class="smtpTestResult.success ? 'success' : 'error'">
+                  {{ smtpTestResult.message }}
+                </div>
+              </div>
+            </div>
+          </section>
         </main>
+      </div>
+
+      <!-- 创建/编辑用户对话框 -->
+      <div v-if="userDialog.show" class="dialog-overlay" @click.self="closeUserDialog">
+        <div class="dialog">
+          <div class="dialog-header">
+            <h3>{{ userDialog.isEdit ? '编辑用户' : '添加用户' }}</h3>
+            <button @click="closeUserDialog" class="close-btn">×</button>
+          </div>
+          <div class="dialog-body">
+            <div class="form-group">
+              <label>用户名 *</label>
+              <input v-model="userDialog.data.username" type="text" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>邮箱 *</label>
+              <input v-model="userDialog.data.email" type="email" class="form-input" />
+            </div>
+            <div class="form-group" v-if="!userDialog.isEdit">
+              <label>密码 *</label>
+              <input v-model="userDialog.data.password" type="password" class="form-input" />
+            </div>
+            <div class="form-group" v-if="userDialog.isEdit">
+              <label>新密码 (留空则不修改)</label>
+              <input v-model="userDialog.data.password" type="password" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>角色</label>
+              <select v-model="userDialog.data.role" class="form-select">
+                <option value="user">用户</option>
+                <option value="admin">管理员</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>毕业年份</label>
+              <input v-model.number="userDialog.data.graduationYear" type="number" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>院系</label>
+              <input v-model="userDialog.data.department" type="text" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>头像URL</label>
+              <input v-model="userDialog.data.avatar" type="text" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>个人简介</label>
+              <textarea v-model="userDialog.data.bio" class="form-textarea"></textarea>
+            </div>
+          </div>
+          <div class="dialog-footer">
+            <button @click="closeUserDialog" class="cancel-btn">取消</button>
+            <button @click="saveUserDialog" class="confirm-btn">保存</button>
+          </div>
+        </div>
       </div>
 
       <!-- 创建/编辑板块对话框 -->
@@ -642,6 +851,7 @@ const router = useRouter()
 const activeMenu = ref('stats')
 const pendingTab = ref('comments')
 const forumTab = ref('boards')
+const settingsTab = ref('registration')
 
 // 数据
 const stats = reactive({
@@ -666,10 +876,25 @@ const pendingContent = reactive({
 })
 
 const users = ref([])
+const selectedUsers = ref([])
 const articles = ref([])
 const futureMessages = ref([])
 const forums = ref([])
 const forumPosts = ref([])
+
+// 系统设置
+const registrationEnabled = ref(true)
+const smtpConfig = reactive({
+  host: '',
+  port: 587,
+  secure: false,
+  user: '',
+  password: '',
+  fromName: '河海大学110周年校庆'
+})
+const smtpTesting = ref(false)
+const smtpSaving = ref(false)
+const smtpTestResult = ref(null)
 
 // 加载状态
 const statsLoading = ref(true)
@@ -714,6 +939,23 @@ const forumDialog = reactive({
   }
 })
 
+// 用户对话框
+const userDialog = reactive({
+  show: false,
+  isEdit: false,
+  data: {
+    id: null,
+    username: '',
+    email: '',
+    password: '',
+    role: 'user',
+    avatar: '',
+    bio: '',
+    graduationYear: null,
+    department: ''
+  }
+})
+
 // 菜单项
 const menuItems = computed(() => [
   { id: 'stats', icon: '📊', label: '数据统计', badge: null },
@@ -726,7 +968,8 @@ const menuItems = computed(() => [
   { id: 'users', icon: '👥', label: '用户管理', badge: null },
   { id: 'articles', icon: '📝', label: '文章管理', badge: null },
   { id: 'future-messages', icon: '💌', label: '寄语管理', badge: null },
-  { id: 'forum', icon: '💬', label: '论坛管理', badge: null }
+  { id: 'forum', icon: '💬', label: '论坛管理', badge: null },
+  { id: 'settings', icon: '⚙️', label: '系统设置', badge: null }
 ])
 
 // 加载统计数据
@@ -819,7 +1062,12 @@ const loadUsers = async () => {
 
 // 删除用户
 const deleteUser = async (userId) => {
-  if (!confirm('确定要删除这个用户吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '此操作将永久删除该用户及其所有相关数据，且无法恢复。',
+    '确认删除用户',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+  if (!confirmed) return
 
   try {
     await adminAPI.deleteUser(userId)
@@ -828,6 +1076,129 @@ const deleteUser = async (userId) => {
   } catch (error) {
     console.error('删除用户失败:', error)
     $message.error('删除失败')
+  }
+}
+
+// 显示创建用户对话框
+const showCreateUserDialog = () => {
+  userDialog.show = true
+  userDialog.isEdit = false
+  userDialog.data = {
+    id: null,
+    username: '',
+    email: '',
+    password: '',
+    role: 'user',
+    avatar: '',
+    bio: '',
+    graduationYear: null,
+    department: ''
+  }
+}
+
+// 编辑用户
+const editUser = (user) => {
+  userDialog.show = true
+  userDialog.isEdit = true
+  userDialog.data = {
+    ...user,
+    password: '' // 密码留空
+  }
+}
+
+// 关闭用户对话框
+const closeUserDialog = () => {
+  userDialog.show = false
+}
+
+// 保存用户对话框
+const saveUserDialog = async () => {
+  // 验证必填字段
+  if (!userDialog.data.username || !userDialog.data.email) {
+    $message.error('请填写用户名和邮箱')
+    return
+  }
+
+  if (!userDialog.isEdit && !userDialog.data.password) {
+    $message.error('请填写密码')
+    return
+  }
+
+  try {
+    const data = { ...userDialog.data }
+    // 如果是编辑且密码为空,删除密码字段
+    if (userDialog.isEdit && !data.password) {
+      delete data.password
+    }
+
+    if (userDialog.isEdit) {
+      await adminAPI.updateUser(data.id, data)
+      $message.success('用户信息已更新')
+    } else {
+      await adminAPI.createUser(data)
+      $message.success('用户已创建')
+    }
+    closeUserDialog()
+    await loadUsers()
+  } catch (error) {
+    console.error('保存用户失败:', error)
+    $message.error(error.response?.data?.message || '保存失败')
+  }
+}
+
+// 修改用户角色
+const changeRole = async (user) => {
+  const newRole = user.role === 'user' ? 'admin' : 'user'
+  const confirmed = await $message.confirm(
+    `确定要将 ${user.username} 的角色改为${newRole === 'admin' ? '管理员' : '普通用户'}吗？`,
+    '修改用户角色',
+    { type: 'warning', confirmText: '确定', cancelText: '取消' }
+  )
+  if (!confirmed) return
+
+  try {
+    await adminAPI.changeUserRole(user.id, newRole)
+    $message.success('角色已修改')
+    await loadUsers()
+  } catch (error) {
+    console.error('修改角色失败:', error)
+    $message.error('修改失败')
+  }
+}
+
+// 切换全选用户
+const toggleAllUsers = (event) => {
+  if (event.target.checked) {
+    selectedUsers.value = users.value
+      .filter(user => user.role !== 'admin')
+      .map(user => user.id)
+  } else {
+    selectedUsers.value = []
+  }
+}
+
+// 批量删除用户
+const batchDeleteUsers = async () => {
+  if (selectedUsers.value.length === 0) {
+    $message.warning('请先选择要删除的用户')
+    return
+  }
+
+  const confirmed = await $message.confirm(
+    `此操作将永久删除选中的 ${selectedUsers.value.length} 个用户及其所有相关数据，且无法恢复。`,
+    '确认批量删除',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+  if (!confirmed) return
+
+  try {
+    await adminAPI.batchDeleteUsers(selectedUsers.value)
+    $message.success(`成功删除 ${selectedUsers.value.length} 个用户`)
+    selectedUsers.value = []
+    await loadUsers()
+  } catch (error) {
+    console.error('批量删除失败:', error)
+    $message.error('批量删除失败')
   }
 }
 
@@ -868,7 +1239,12 @@ const viewArticle = (articleId) => {
 
 // 删除文章
 const deleteArticle = async (articleId) => {
-  if (!confirm('确定要删除这篇文章吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '此操作将永久删除该文章及其所有评论，且无法恢复。',
+    '确认删除文章',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+  if (!confirmed) return
 
   try {
     await articleAPI.deleteArticle(articleId)
@@ -922,7 +1298,12 @@ const reviewFutureMessage = async (messageId, status) => {
 
 // 删除寄语
 const deleteFutureMessage = async (messageId) => {
-  if (!confirm('确定要删除这条寄语吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '此操作将永久删除该寄语，且无法恢复。',
+    '确认删除寄语',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+  if (!confirmed) return
 
   try {
     await futureMessageAPI.deleteMessage(messageId)
@@ -1001,7 +1382,12 @@ const saveForumDialog = async () => {
 
 // 删除板块
 const deleteForum = async (forumId) => {
-  if (!confirm('确定要删除这个板块吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '此操作将永久删除该板块及其所有帖子和回复，且无法恢复。',
+    '确认删除板块',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+  if (!confirmed) return
 
   try {
     await forumAPI.deleteForum(forumId)
@@ -1086,7 +1472,12 @@ const reviewPost = async (postId, status) => {
 
 // 删除帖子
 const deleteForumPost = async (postId) => {
-  if (!confirm('确定要删除这个帖子吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '此操作将永久删除该帖子及其所有回复，且无法恢复。',
+    '确认删除帖子',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+  if (!confirmed) return
 
   try {
     await forumAPI.deletePost(postId)
@@ -1133,6 +1524,88 @@ const getStatusText = (status) => {
   return statusMap[status] || status
 }
 
+// 系统设置相关函数
+// 加载系统配置
+const loadSystemConfig = async () => {
+  try {
+    // 加载注册状态
+    const regStatusResponse = await adminAPI.getConfig('registration_enabled')
+    registrationEnabled.value = regStatusResponse.data.value
+
+    // 加载SMTP配置
+    const smtpResponse = await adminAPI.getConfig('smtp_config')
+    if (smtpResponse.data.value) {
+      Object.assign(smtpConfig, smtpResponse.data.value)
+    }
+  } catch (error) {
+    console.error('加载系统配置失败:', error)
+  }
+}
+
+// 更新注册状态
+const updateRegistrationStatus = async () => {
+  try {
+    await adminAPI.setRegistrationStatus(registrationEnabled.value)
+    $message.success(registrationEnabled.value ? '已开启用户注册' : '已关闭用户注册')
+  } catch (error) {
+    console.error('更新注册状态失败:', error)
+    $message.error('更新失败')
+    // 恢复原值
+    registrationEnabled.value = !registrationEnabled.value
+  }
+}
+
+// 测试SMTP连接
+const testSMTP = async () => {
+  smtpTesting.value = true
+  smtpTestResult.value = null
+
+  try {
+    const response = await adminAPI.testSMTP()
+    smtpTestResult.value = {
+      success: true,
+      message: response.data.message || 'SMTP连接测试成功'
+    }
+    $message.success('SMTP连接测试成功')
+  } catch (error) {
+    console.error('SMTP测试失败:', error)
+    smtpTestResult.value = {
+      success: false,
+      message: error.response?.data?.message || 'SMTP连接测试失败'
+    }
+    $message.error('SMTP连接测试失败')
+  } finally {
+    smtpTesting.value = false
+  }
+}
+
+// 保存SMTP配置
+const saveSMTPConfig = async () => {
+  // 验证必填字段
+  if (!smtpConfig.host || !smtpConfig.user || !smtpConfig.password) {
+    $message.error('请填写SMTP服务器地址、发件邮箱和密码')
+    return
+  }
+
+  smtpSaving.value = true
+  smtpTestResult.value = null
+
+  try {
+    const response = await adminAPI.setSMTPConfig(smtpConfig)
+    $message.success('SMTP配置已保存')
+
+    // 如果返回了测试结果,显示测试结果
+    if (response.data.testResult) {
+      smtpTestResult.value = response.data.testResult
+    }
+  } catch (error) {
+    console.error('保存SMTP配置失败:', error)
+    $message.error(error.response?.data?.message || '保存失败')
+  } finally {
+    smtpSaving.value = false
+  }
+}
+
 onMounted(() => {
   loadStats()
   loadVisitorStats()
@@ -1142,6 +1615,7 @@ onMounted(() => {
   loadFutureMessages()
   loadForums()
   loadForumPosts()
+  loadSystemConfig()
 })
 </script>
 
@@ -1909,5 +2383,158 @@ tbody tr:hover {
   td {
     padding: 0.75rem 0.5rem;
   }
+}
+
+/* 新增样式 */
+/* 表格操作按钮 */
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.edit-btn-sm,
+.delete-btn-sm,
+.action-btn-sm {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.edit-btn-sm {
+  background: rgba(255, 152, 0, 0.2);
+  color: #ff9800;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.edit-btn-sm:hover {
+  background: rgba(255, 152, 0, 0.3);
+}
+
+.delete-btn-sm {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.delete-btn-sm:hover {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+.action-btn-sm {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.action-btn-sm:hover {
+  background: rgba(33, 150, 243, 0.3);
+}
+
+/* 系统设置面板 */
+.settings-panel {
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.switch-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.switch-wrapper {
+  position: relative;
+  width: 50px;
+  height: 26px;
+}
+
+.switch-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 26px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.switch-input:checked + .switch-slider {
+  background-color: #4A90E2;
+}
+
+.switch-input:checked + .switch-slider:before {
+  transform: translateX(24px);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.form-hint {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.test-result {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.test-result.success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.test-result.error {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
 }
 </style>

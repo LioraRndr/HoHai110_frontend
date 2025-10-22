@@ -21,6 +21,34 @@ const routes = [
     meta: { requiresGuest: true }
   },
   {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/pages/ForgotPassword.vue'),
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('@/pages/ResetPassword.vue'),
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/pages/Profile.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/terms',
+    name: 'Terms',
+    component: () => import('@/pages/TermsOfService.vue')
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: () => import('@/pages/PrivacyPolicy.vue')
+  },
+  {
     path: '/timeline',
     name: 'Timeline',
     component: () => import('@/pages/Timeline.vue')
