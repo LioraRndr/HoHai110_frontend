@@ -14,9 +14,27 @@ export function usePeopleData() {
       title: '双院士，中国海岸工程的奠基人',
       years: '1914-2006',
       subtitle: '跨越两个世纪的治水人生',
-      avatar: '/images/people/yankai.jpg',
+      avatar: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e84355965.jpg',
       tags: ['中国科学院院士', '中国工程院院士', '国家科技进步一等奖'],
       quote: '上善若水，水利万物而不争',
+      photos: [
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8beb0883f5.jpg',
+          caption: '1988年，严恺在黄河壶口考察'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8bee7b6875.jpg',
+          caption: '严恺主编的《海港工程》'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8bf4818164.jpg',
+          caption: '1958年，严恺（右）与专家讨论研究长江口治理问题'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8bf5dc92c0.jpg',
+          caption: '1973年，严恺（右三）率中国水利考察组在美国考察'
+        }
+      ],
       timeline: [
         {
           year: '1938',
@@ -53,9 +71,27 @@ export function usePeopleData() {
       title: '三峡工程的定海神针',
       years: '1940-2020',
       subtitle: '用生命诠释工匠精神',
-      avatar: '/images/people/zhengshouren.jpg',
+      avatar: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e68d2a62e.png',
       tags: ['中国工程院院士', '三峡工程设计总工程师', '2019年最美奋斗者'],
       quote: '工程无小事，数据里藏着人民的生命',
+      photos: [
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8c98ac6d85.jpg',
+          caption: '郑守仁在三峡坝区简朴的宿舍里'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8c9cc8532b.jpg',
+          caption: '郑守仁沿长江考察'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8ca64260e2.jpg',
+          caption: '郑守仁在三峡船闸闸室开挖现场'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8ca95ac151.jpg',
+          caption: '三峡工地施工人员正向郑守仁介绍情况'
+        }
+      ],
       timeline: [
         {
           year: '1994',
@@ -97,9 +133,23 @@ export function usePeopleData() {
       title: '南水北调的战略科学家',
       years: '1953年生',
       subtitle: '从沂蒙山走向世界水论坛',
-      avatar: '/images/people/zhangjianyun.jpg',
+      avatar: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e38d34e74.png',
       tags: ['中国工程院院士', '南水北调战略科学家', '国际水资源协会副主席'],
       quote: '治水者，当以苍生为念',
+      photos: [
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8cda74fbd3.jpg',
+          caption: '张建云在爱尔兰求学时的照片（穿格子衬衫者为张建云）'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8cdbf33151.jpg',
+          caption: '张建云在国外求学时，与导师、世界著名水文学家杜格教授（James Dooge，爱尔兰国立大学Dublin学院教授）合影'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8cdcf70cac.jpg',
+          caption: '南京水利科学研究院院长张建云院士一行来西北农林科技大学旱区节水农业研究院考察合影'
+        }
+      ],
       timeline: [
         {
           year: '1977',
@@ -136,9 +186,23 @@ export function usePeopleData() {
       title: '在地球褶皱里筑坝的勇者',
       years: '1960年生',
       subtitle: '用20年书写不可能变可能的传奇',
-      avatar: '/images/people/xujianrong.jpg',
+      avatar: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e2e10a83b.png',
       tags: ['白鹤滩水电站设计总工程师', '国家卓越工程师', '国家科技进步特等奖'],
       quote: '河海人，从来不缺理想和实干',
+      photos: [
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e11b44fb4.jpg',
+          caption: '徐建荣参与白鹤滩水电站建设'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e11b96f6e.jpg',
+          caption: '徐建荣在白鹤滩工地'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e11c077dc.jpg',
+          caption: '白鹤滩水电站建设场景'
+        }
+      ],
       timeline: [
         {
           year: '2008',
@@ -175,9 +239,19 @@ export function usePeopleData() {
       title: '御风而行的追光者',
       years: '1971年生',
       subtitle: '从传统水利到新能源的华丽转身',
-      avatar: '/images/people/linyifeng.jpg',
+      avatar: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e53f9d5b8.png',
       tags: ['中国海上风电技术领军人', '全球风能理事会亚太区主席', '2024年全国劳动模范'],
       quote: '为国奉献，不负韶华',
+      photos: [
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8d9c040b21.jpg',
+          caption: '林毅峰与海上风机'
+        },
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8da532c8be.jpg',
+          caption: '海边的林毅峰'
+        }
+      ],
       timeline: [
         {
           year: '1995',
@@ -214,9 +288,15 @@ export function usePeopleData() {
       title: '让世界听到中国水利声音',
       years: '1968年生',
       subtitle: '从中国讲台走向联合国讲台',
-      avatar: '/images/people/yuzhongbo.jpg',
+      avatar: 'https://s1.img.five-plus-one.com/2025/10/22/68f8d43bb1070.webp',
       tags: ['联合国教科文组织IHP主席', '河海大学水文水资源学院院长', '2023年何梁何利奖'],
       quote: '心怀祖国、放眼世界；扎根人民、造福全球',
+      photos: [
+        {
+          url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8e06b4b7c9.jpg',
+          caption: '会议颁发UNESCO IHP长期突出贡献奖，余钟波基于在水科学领域的杰出成就及其对联合国教科文组织政府间水文计划的杰出贡献获此奖项'
+        }
+      ],
       timeline: [
         {
           year: '1984',
@@ -249,8 +329,14 @@ export function usePeopleData() {
     }
   ])
 
+  const groupPhoto = ref({
+    url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8d479a69eb.jpg',
+    caption: '张建云、钮新强、张金良、徐建荣、林毅峰等河海大学知名校友亲临活动现场，分享参与重大水利建设的奋斗感悟'
+  })
+
   return {
     introduction,
-    people
+    people,
+    groupPhoto
   }
 }

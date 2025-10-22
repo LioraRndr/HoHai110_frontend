@@ -88,28 +88,178 @@
         <div class="content-card project-card">
           <h3>项目简介</h3>
           <p>
-            本项目是为庆祝河海大学建校110周年而设计开发的纪念网站。
+            河海大学110周年纪念网站是一个富有交互性和创意的全栈应用，旨在通过现代化的Web技术展现河海大学110年的辉煌历程。
+            项目采用前后端分离架构，前端使用Vue 3 + Vite构建，后端基于Node.js + Express + MySQL，提供流畅的用户体验和精美的视觉效果。
           </p>
 
-          <h3>技术栈</h3>
-          <div class="tech-stack">
-            <span class="tech-tag">Vue 3</span>
-            <span class="tech-tag">Vite</span>
-            <span class="tech-tag">Pinia</span>
-            <span class="tech-tag">Vue Router</span>
-            <span class="tech-tag">GSAP</span>
-            <span class="tech-tag">Axios</span>
+          <h3>主要亮点</h3>
+          <ul class="feature-list highlight-list">
+            <li>🎨 精美的动画效果和交互体验</li>
+            <li>📱 完善的响应式设计，支持多端访问</li>
+            <li>⚡ 高性能加载和渲染优化</li>
+            <li>🔐 完整的用户认证和权限管理系统</li>
+            <li>💬 丰富的社区互动功能</li>
+          </ul>
+
+          <h3>前端技术栈</h3>
+          <div class="tech-section">
+            <div class="tech-category">
+              <h4>核心框架</h4>
+              <div class="tech-stack">
+                <span class="tech-tag frontend">Vue 3.5.22</span>
+                <span class="tech-tag frontend">Vite 7.1.10</span>
+                <span class="tech-tag frontend">Vue Router 4.6.3</span>
+                <span class="tech-tag frontend">Pinia 3.0.3</span>
+              </div>
+            </div>
+            <div class="tech-category">
+              <h4>核心库</h4>
+              <div class="tech-stack">
+                <span class="tech-tag frontend">GSAP 3.13.0</span>
+                <span class="tech-tag frontend">Three.js 0.180.0</span>
+                <span class="tech-tag frontend">Axios 1.12.2</span>
+                <span class="tech-tag frontend">Socket.IO 4.8.1</span>
+                <span class="tech-tag frontend">@vueuse/core 13.9.0</span>
+              </div>
+            </div>
           </div>
 
-          <h3>功能特色</h3>
-          <ul class="feature-list">
-            <li>✨ 卡片交互式历史时间线</li>
-            <li>🔥 薪火相传动画与祝福墙</li>
-            <li>📖 校训四维立体展示</li>
-            <!-- <li>🗺️ 互动式校园地图</li>
-            <li>🎨 个性化海报生成器</li>
-            <li>📸 校友照片墙</li> -->
-          </ul>
+          <h3>后端技术栈</h3>
+          <div class="tech-section">
+            <div class="tech-category">
+              <h4>核心框架</h4>
+              <div class="tech-stack">
+                <span class="tech-tag backend">Node.js 14+</span>
+                <span class="tech-tag backend">Express 5.x</span>
+                <span class="tech-tag backend">Sequelize 6.x</span>
+                <span class="tech-tag backend">MySQL 8.0+</span>
+              </div>
+            </div>
+            <div class="tech-category">
+              <h4>核心功能</h4>
+              <div class="tech-stack">
+                <span class="tech-tag backend">JWT 认证</span>
+                <span class="tech-tag backend">Socket.IO 实时通信</span>
+                <span class="tech-tag backend">Nodemailer 邮件服务</span>
+                <span class="tech-tag backend">Multer 文件上传</span>
+                <span class="tech-tag backend">bcrypt 密码加密</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>核心功能模块</h3>
+          <div class="features-grid">
+            <div class="feature-category">
+              <div class="category-icon">📖</div>
+              <h4>内容展示</h4>
+              <ul>
+                <li>首页 - 校庆主题内容展示与导航</li>
+                <li>历史时间线 - 河海大学110年发展历程</li>
+                <li>文化展示 - 河海精神与文化内涵</li>
+                <li>河海人物 - 杰出校友和重要人物介绍</li>
+              </ul>
+            </div>
+
+            <div class="feature-category">
+              <div class="category-icon">🎨</div>
+              <h4>互动体验</h4>
+              <ul>
+                <li>海报生成 - 个性化校庆纪念海报制作</li>
+                <li>照片墙 - 校友照片马赛克拼图展示</li>
+                <li>祝福墙 - 师生校友留言祝福互动</li>
+                <li>寄语未来 - 校友寄语征集与展示</li>
+                <li>火炬传递 - 全局火炬传递计数器</li>
+              </ul>
+            </div>
+
+            <div class="feature-category">
+              <div class="category-icon">💬</div>
+              <h4>社区功能</h4>
+              <ul>
+                <li>论坛系统 - 多板块讨论区，支持发帖、回复、点赞</li>
+                <li>文章专栏 - 校庆相关文章发布与阅读</li>
+                <li>评论互动 - 文章和帖子的评论功能</li>
+                <li>接力活动 - 校庆接力活动参与和分享</li>
+              </ul>
+            </div>
+
+            <div class="feature-category">
+              <div class="category-icon">👤</div>
+              <h4>用户系统</h4>
+              <ul>
+                <li>用户认证 - 登录、注册、密码重置</li>
+                <li>个人中心 - 用户信息管理和个性化设置</li>
+                <li>权限管理 - 基于角色的访问控制</li>
+                <li>管理后台 - 管理员内容管理界面</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>技术特性</h3>
+          <div class="tech-features">
+            <div class="tech-feature-item">
+              <div class="feature-icon">🎬</div>
+              <div class="feature-content">
+                <h4>动画效果</h4>
+                <p>GSAP驱动的高性能滚动触发动画、基于Three.js的3D视觉效果、GPU加速的动画渲染</p>
+              </div>
+            </div>
+            <div class="tech-feature-item">
+              <div class="feature-icon">📱</div>
+              <div class="feature-content">
+                <h4>响应式设计</h4>
+                <p>移动优先的设计理念、灵活的栅格布局系统、自适应字体和间距、触摸友好的交互设计</p>
+              </div>
+            </div>
+            <div class="tech-feature-item">
+              <div class="feature-icon">⚡</div>
+              <div class="feature-content">
+                <h4>性能优化</h4>
+                <p>路由级别的代码分割和懒加载、组件异步加载、资源预加载和缓存策略、优化的包体积和加载速度</p>
+              </div>
+            </div>
+            <div class="tech-feature-item">
+              <div class="feature-icon">🔒</div>
+              <div class="feature-content">
+                <h4>安全特性</h4>
+                <p>JWT令牌认证、路由守卫和权限验证、XSS和CSRF防护、安全的数据传输、速率限制保护</p>
+              </div>
+            </div>
+          </div>
+
+          <h3>项目规模</h3>
+          <div class="project-stats">
+            <div class="stat-item">
+              <div class="stat-number">80+</div>
+              <div class="stat-label">API接口</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">21</div>
+              <div class="stat-label">数据表</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">20+</div>
+              <div class="stat-label">页面路由</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">15+</div>
+              <div class="stat-label">后端控制器</div>
+            </div>
+          </div>
+
+          <h3>系统架构</h3>
+          <div class="architecture-info">
+            <p>
+              本项目采用前后端分离的现代化架构设计：
+            </p>
+            <ul>
+              <li><strong>前端层：</strong>Vue 3 + Composition API，组件化开发，响应式状态管理</li>
+              <li><strong>接口层：</strong>RESTful API设计，统一的请求/响应格式，完善的错误处理</li>
+              <li><strong>业务层：</strong>Express路由和控制器，业务逻辑分层，中间件机制</li>
+              <li><strong>数据层：</strong>Sequelize ORM，MySQL关系型数据库，数据模型关联</li>
+              <li><strong>实时通信：</strong>Socket.IO实现WebSocket双向通信，支持在线状态和实时消息</li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -395,6 +545,22 @@ onMounted(() => {
 }
 
 /* 技术栈 */
+.tech-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.tech-category {
+  margin-bottom: var(--spacing-lg);
+}
+
+.tech-category h4 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-ink-black);
+  margin-bottom: var(--spacing-md);
+  opacity: 0.8;
+}
+
 .tech-stack {
   display: flex;
   flex-wrap: wrap;
@@ -404,11 +570,24 @@ onMounted(() => {
 
 .tech-tag {
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: var(--gradient-river);
   color: white;
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: 600;
+  transition: all var(--transition-base);
+}
+
+.tech-tag.frontend {
+  background: linear-gradient(135deg, #42b883 0%, #35495e 100%);
+}
+
+.tech-tag.backend {
+  background: linear-gradient(135deg, #68a063 0%, #215732 100%);
+}
+
+.tech-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 功能列表 */
@@ -422,6 +601,199 @@ onMounted(() => {
   padding: var(--spacing-sm) 0;
   color: var(--color-ink-black);
   line-height: 1.8;
+}
+
+.highlight-list li {
+  font-weight: 500;
+}
+
+/* 功能模块网格 */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.feature-category {
+  background: linear-gradient(135deg, #F8F5EF 0%, #E5E2DC 100%);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(0, 122, 204, 0.1);
+  transition: all var(--transition-base);
+}
+
+.feature-category:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--color-river-blue);
+}
+
+.category-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.feature-category h4 {
+  font-size: var(--text-lg);
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--color-river-blue);
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.feature-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-category ul li {
+  font-size: var(--text-sm);
+  padding: var(--spacing-xs) 0;
+  color: var(--color-ink-black);
+  line-height: 1.8;
+  position: relative;
+  padding-left: var(--spacing-md);
+}
+
+.feature-category ul li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--color-river-blue);
+  font-weight: bold;
+}
+
+/* 技术特性 */
+.tech-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.tech-feature-item {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, #F8F5EF 0%, #E5E2DC 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 122, 204, 0.1);
+  transition: all var(--transition-base);
+}
+
+.tech-feature-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-soft);
+  border-color: var(--color-river-blue);
+}
+
+.tech-feature-item .feature-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.tech-feature-item .feature-content h4 {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-river-blue);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.tech-feature-item .feature-content p {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-ink-black);
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* 项目统计 */
+.project-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, rgba(0, 122, 204, 0.05) 0%, rgba(0, 122, 204, 0.1) 100%);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-river-blue);
+  transition: all var(--transition-base);
+}
+
+.stat-item:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-medium);
+  background: linear-gradient(135deg, rgba(0, 122, 204, 0.1) 0%, rgba(0, 122, 204, 0.15) 100%);
+}
+
+.stat-number {
+  font-size: var(--text-3xl);
+  font-family: var(--font-title);
+  font-weight: 700;
+  background: var(--gradient-river);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+  font-size: var(--text-sm);
+  color: var(--color-ink-black);
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+/* 系统架构 */
+.architecture-info {
+  background: linear-gradient(135deg, #F8F5EF 0%, #E5E2DC 100%);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--color-river-blue);
+}
+
+.architecture-info p {
+  font-size: var(--text-base);
+  line-height: 1.8;
+  color: var(--color-ink-black);
+  margin-bottom: var(--spacing-md);
+  font-weight: 500;
+}
+
+.architecture-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.architecture-info ul li {
+  font-size: var(--text-sm);
+  padding: var(--spacing-sm) 0;
+  color: var(--color-ink-black);
+  line-height: 1.8;
+  position: relative;
+  padding-left: var(--spacing-lg);
+}
+
+.architecture-info ul li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  color: var(--color-river-blue);
+  font-size: 0.8em;
+}
+
+.architecture-info strong {
+  color: var(--color-river-blue);
+  font-weight: 600;
 }
 
 /* 团队信息 */
@@ -553,10 +925,45 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tech-features {
+    grid-template-columns: 1fr;
+  }
+
+  .project-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tech-feature-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .tech-feature-item .feature-icon {
+    font-size: 2.5rem;
+  }
+
   .contact-item {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .project-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .tech-stack {
+    justify-content: center;
+  }
+
+  .stat-number {
+    font-size: var(--text-2xl);
   }
 }
 </style>

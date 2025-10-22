@@ -2,29 +2,36 @@
   <transition name="modal">
     <div v-if="show" class="modal-overlay" @click="handleClose">
       <div class="modal-content" @click.stop>
-        <button class="modal-close" @click="handleClose">&times;</button>
-        <div v-if="achievement" class="modal-body">
-          <div class="modal-icon">{{ achievement.icon }}</div>
-          <h2 class="modal-title">{{ achievement.name }}</h2>
-          <div class="modal-details">
-            <p class="modal-desc">{{ achievement.description }}</p>
-            <div class="modal-stats">
-              <div class="modal-stat">
-                <span class="label">参与校友</span>
-                <span class="value">{{ achievement.alumni }}+ 人</span>
+        <button class="modal-close" @click="handleClose">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="modal-scroll-wrapper">
+          <div v-if="achievement" class="modal-body">
+            <div class="modal-icon">{{ achievement.icon }}</div>
+            <h2 class="modal-title">{{ achievement.name }}</h2>
+            <div class="modal-details">
+              <p class="modal-desc">{{ achievement.description }}</p>
+              <div class="modal-stats">
+                <div class="modal-stat">
+                  <span class="label">参与校友</span>
+                  <span class="value">{{ achievement.alumni }}+ 人</span>
+                </div>
+                <div class="modal-stat">
+                  <span class="label">工程地位</span>
+                  <span class="value">{{ achievement.rank }}</span>
+                </div>
+                <div class="modal-stat">
+                  <span class="label">完成时间</span>
+                  <span class="value">{{ achievement.year }}</span>
+                </div>
               </div>
-              <div class="modal-stat">
-                <span class="label">工程地位</span>
-                <span class="value">{{ achievement.rank }}</span>
+              <div class="modal-story">
+                <h3>工程故事</h3>
+                <p>{{ achievement.story }}</p>
               </div>
-              <div class="modal-stat">
-                <span class="label">完成时间</span>
-                <span class="value">{{ achievement.year }}</span>
-              </div>
-            </div>
-            <div class="modal-story">
-              <h3>工程故事</h3>
-              <p>{{ achievement.story }}</p>
             </div>
           </div>
         </div>
@@ -73,23 +80,28 @@ const handleClose = () => {
   max-width: 700px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
   background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
   border: 2px solid rgba(255, 122, 26, 0.5);
   border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.modal-scroll-wrapper {
+  max-height: 90vh;
+  overflow-y: auto;
   padding: 3rem;
 }
 
-.modal-content::-webkit-scrollbar {
+.modal-scroll-wrapper::-webkit-scrollbar {
   width: 8px;
 }
 
-.modal-content::-webkit-scrollbar-track {
+.modal-scroll-wrapper::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
 }
 
-.modal-content::-webkit-scrollbar-thumb {
+.modal-scroll-wrapper::-webkit-scrollbar-thumb {
   background: rgba(255, 122, 26, 0.5);
   border-radius: 4px;
 }
@@ -104,16 +116,25 @@ const handleClose = () => {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: #ffffff;
-  font-size: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
 }
 
 .modal-close:hover {
   background: rgba(255, 122, 26, 0.3);
+}
+
+.modal-close:hover svg {
   transform: rotate(90deg);
 }
 
@@ -203,7 +224,7 @@ const handleClose = () => {
 }
 
 @media (max-width: 768px) {
-  .modal-content {
+  .modal-scroll-wrapper {
     padding: 2rem 1.5rem;
   }
 

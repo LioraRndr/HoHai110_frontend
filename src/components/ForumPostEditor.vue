@@ -28,32 +28,6 @@
             rows="10"
           ></textarea>
         </div>
-
-        <div class="form-group">
-          <label>图片（可选）</label>
-          <div class="image-upload">
-            <div
-              v-for="(image, index) in postData.images"
-              :key="index"
-              class="image-preview"
-            >
-              <img :src="image" :alt="`图片${index + 1}`" />
-              <button @click="removeImage(index)" class="remove-image-btn">✕</button>
-            </div>
-            <label v-if="postData.images.length < 9" class="upload-btn">
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                @change="handleImageUpload"
-                style="display: none"
-              />
-              <span>+</span>
-              <span class="upload-text">添加图片</span>
-            </label>
-          </div>
-          <p class="upload-tip">最多上传9张图片</p>
-        </div>
       </div>
 
       <div class="modal-footer">
@@ -72,7 +46,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { forumAPI, uploadAPI } from '@/api'
+import { forumAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 
 const props = defineProps({
@@ -94,8 +68,7 @@ const emit = defineEmits(['close', 'posted', 'updated'])
 
 const postData = ref({
   title: '',
-  content: '',
-  images: []
+  content: ''
 })
 
 const submitting = ref(false)
@@ -111,47 +84,10 @@ onMounted(() => {
   if (props.post) {
     postData.value = {
       title: props.post.title || '',
-      content: props.post.content || '',
-      images: props.post.images || []
+      content: props.post.content || ''
     }
   }
 })
-
-// 处理图片上传
-const handleImageUpload = async (event) => {
-  const files = Array.from(event.target.files)
-
-  if (files.length + postData.value.images.length > 9) {
-    $message.error('最多只能上传9张图片')
-    return
-  }
-
-  for (const file of files) {
-    // 检查文件大小（限制5MB）
-    if (file.size > 5 * 1024 * 1024) {
-      $message.error(`${file.name} 超过5MB限制`)
-      continue
-    }
-
-    try {
-      const response = await uploadAPI.uploadFile(file)
-      if (response.data.url) {
-        postData.value.images.push(response.data.url)
-      }
-    } catch (error) {
-      console.error('上传图片失败:', error)
-      $message.error(`上传 ${file.name} 失败`)
-    }
-  }
-
-  // 清空input，允许重复选择同一文件
-  event.target.value = ''
-}
-
-// 移除图片
-const removeImage = (index) => {
-  postData.value.images.splice(index, 1)
-}
 
 // 提交帖子
 const handleSubmit = async () => {
@@ -164,8 +100,7 @@ const handleSubmit = async () => {
       // 更新帖子
       await forumAPI.updatePost(props.post.id, {
         title: postData.value.title.trim(),
-        content: postData.value.content.trim(),
-        images: postData.value.images
+        content: postData.value.content.trim()
       })
       $message.success('帖子更新成功！')
       emit('updated')
@@ -174,8 +109,7 @@ const handleSubmit = async () => {
       await forumAPI.createPost({
         forumId: props.forumId,
         title: postData.value.title.trim(),
-        content: postData.value.content.trim(),
-        images: postData.value.images
+        content: postData.value.content.trim()
       })
       $message.success('帖子发布成功！')
       emit('posted')
@@ -304,98 +238,6 @@ const handleSubmit = async () => {
   border-color: #4A90E2;
 }
 
-.image-upload {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.image-preview {
-  position: relative;
-  width: 100%;
-  padding-top: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #e0e0e0;
-}
-
-.image-preview img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.remove-image-btn {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease;
-}
-
-.remove-image-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.upload-btn {
-  width: 100%;
-  padding-top: 100%;
-  position: relative;
-  border: 2px dashed #d0d0d0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #f8f9fa;
-}
-
-.upload-btn:hover {
-  border-color: #4A90E2;
-  background: #f0f6ff;
-}
-
-.upload-btn > span:first-child {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -60%);
-  font-size: 2rem;
-  color: #999;
-}
-
-.upload-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 40%);
-  font-size: 0.8rem;
-  color: #999;
-  white-space: nowrap;
-}
-
-.upload-tip {
-  font-size: 0.85rem;
-  color: #999;
-  margin-top: 0.5rem;
-}
-
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -443,10 +285,6 @@ const handleSubmit = async () => {
 @media (max-width: 768px) {
   .modal-body {
     padding: 1.5rem;
-  }
-
-  .image-upload {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>

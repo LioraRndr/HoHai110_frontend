@@ -4,16 +4,18 @@
       <div v-if="show" class="modal-overlay" @click="closeModal">
         <div class="modal-container" @click.stop>
           <button class="close-btn" @click="closeModal">
-            <span>×</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </button>
 
-          <div v-if="person" class="modal-content">
+          <div class="modal-scroll-wrapper">
+            <div v-if="person" class="modal-content">
             <!-- Header -->
             <div class="modal-header">
               <div class="header-avatar">
-                <div class="avatar-placeholder">
-                  <span class="avatar-initial">{{ person.name[0] }}</span>
-                </div>
+                <img :src="person.avatar" :alt="person.name" class="avatar-image" />
               </div>
               <div class="header-info">
                 <h2 class="person-name">{{ person.name }}</h2>
@@ -62,6 +64,32 @@
               </div>
             </div>
 
+            <!-- Photo Gallery -->
+            <div v-if="person.photos && person.photos.length > 0" class="gallery-section">
+              <h3 class="section-title">珍贵影像</h3>
+              <div class="photo-gallery">
+                <div
+                  v-for="(photo, index) in person.photos"
+                  :key="index"
+                  class="photo-item"
+                >
+                  <div class="photo-wrapper">
+                    <img
+                      :src="photo.url"
+                      :alt="photo.caption"
+                      class="photo-image"
+                      :class="{
+                        'photo-position-bottom': photo.url.includes('68f8bee7b6875') || photo.url.includes('68f8cdbf33151')
+                      }"
+                    />
+                    <div class="photo-overlay">
+                      <p class="photo-caption">{{ photo.caption }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Achievements -->
             <div class="achievements-section">
               <h3 class="section-title">主要成就</h3>
@@ -84,6 +112,7 @@
                 <p class="legacy-text">{{ person.legacy }}</p>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
@@ -135,7 +164,34 @@ const closeModal = () => {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-container::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 20px 0;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 122, 26, 0.5);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+.modal-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 122, 26, 0.7);
+  background-clip: padding-box;
+}
+
+.modal-scroll-wrapper {
+  width: 100%;
 }
 
 .close-btn {
@@ -149,19 +205,27 @@ const closeModal = () => {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   color: #ffffff;
-  font-size: 2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
   z-index: 10;
   margin: 1rem 1rem 0 0;
+}
+
+.close-btn svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
 }
 
 .close-btn:hover {
   background: rgba(255, 122, 26, 0.8);
   border-color: #FF7A1A;
+}
+
+.close-btn:hover svg {
   transform: rotate(90deg);
 }
 
@@ -187,6 +251,15 @@ const closeModal = () => {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 20px rgba(255, 122, 26, 0.4);
+}
+
+.header-avatar .avatar-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(255, 122, 26, 0.4);
+  border: 3px solid rgba(255, 122, 26, 0.3);
 }
 
 .header-avatar .avatar-initial {
@@ -269,7 +342,8 @@ const closeModal = () => {
 
 .timeline-section,
 .achievements-section,
-.legacy-section {
+.legacy-section,
+.gallery-section {
   margin-bottom: 3rem;
 }
 
@@ -404,6 +478,70 @@ const closeModal = () => {
   text-align: justify;
 }
 
+/* Photo Gallery */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.photo-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 122, 26, 0.3);
+}
+
+.photo-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; /* 4:3 aspect ratio */
+  overflow: hidden;
+}
+
+.photo-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform 0.3s ease;
+}
+
+.photo-image.photo-position-bottom {
+  object-position: center top;
+}
+
+.photo-item:hover .photo-image {
+  transform: scale(1.05);
+}
+
+.photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
+  padding: 1.5rem 1rem 1rem;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.photo-caption {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* Modal transitions */
 .modal-enter-active,
 .modal-leave-active {
@@ -469,6 +607,15 @@ const closeModal = () => {
 
   .section-title {
     font-size: 1.5rem;
+  }
+
+  .photo-gallery {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .photo-caption {
+    font-size: 0.85rem;
   }
 }
 </style>

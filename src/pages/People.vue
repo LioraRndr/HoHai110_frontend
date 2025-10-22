@@ -11,6 +11,19 @@
     <!-- People Grid Section -->
     <PeopleGrid :people="people" @select-person="openPersonModal" />
 
+    <!-- Group Photo Section -->
+    <section class="group-photo-section">
+      <div class="group-photo-container">
+        <h2 class="group-photo-title">河海群英</h2>
+        <div class="group-photo-wrapper">
+          <img :src="groupPhoto.url" :alt="groupPhoto.caption" class="group-photo-image" />
+          <div class="group-photo-caption">
+            <p>{{ groupPhoto.caption }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Person Modal -->
     <PeopleModal
       :show="showModal"
@@ -52,7 +65,7 @@ const navItems = [
 ]
 
 // 使用 composables
-const { introduction, people } = usePeopleData()
+const { introduction, people, groupPhoto } = usePeopleData()
 const { initAnimations, cleanupAnimations } = usePeopleAnimations()
 
 // 状态管理
@@ -91,4 +104,88 @@ onUnmounted(() => {
   color: #ffffff;
   overflow-x: hidden;
 }
+
+/* Group Photo Section */
+.group-photo-section {
+  padding: 6rem 2rem;
+  background: linear-gradient(180deg, rgba(26, 31, 53, 0.5) 0%, rgba(10, 14, 26, 0.8) 100%);
+}
+
+.group-photo-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.group-photo-title {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #FF7A1A 0%, #FFA500 50%, #FF7A1A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.group-photo-wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.group-photo-wrapper:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 80px rgba(255, 122, 26, 0.3);
+}
+
+.group-photo-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.group-photo-wrapper:hover .group-photo-image {
+  transform: scale(1.02);
+}
+
+.group-photo-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 70%, transparent 100%);
+  padding: 3rem 2rem 2rem;
+  color: #ffffff;
+}
+
+.group-photo-caption p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin: 0;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+@media (max-width: 768px) {
+  .group-photo-section {
+    padding: 4rem 1rem;
+  }
+
+  .group-photo-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .group-photo-caption {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .group-photo-caption p {
+    font-size: 1rem;
+  }
+}
+
 </style>

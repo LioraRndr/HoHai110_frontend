@@ -10,9 +10,7 @@
         >
           <div class="card-header">
             <div class="avatar-wrapper">
-              <div class="avatar-placeholder">
-                <span class="avatar-initial">{{ person.name[0] }}</span>
-              </div>
+              <img :src="person.avatar" :alt="person.name" class="avatar-image" />
             </div>
             <div class="person-info">
               <h3 class="person-name">{{ person.name }}</h3>
@@ -176,6 +174,22 @@ defineEmits(['select-person'])
   box-shadow: 0 4px 20px rgba(255, 122, 26, 0.4);
 }
 
+.avatar-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(255, 122, 26, 0.4);
+  border: 3px solid rgba(255, 122, 26, 0.3);
+  transition: all 0.3s ease;
+}
+
+.person-card:hover .avatar-image {
+  border-color: rgba(255, 122, 26, 0.6);
+  box-shadow: 0 6px 25px rgba(255, 122, 26, 0.6);
+  transform: scale(1.05);
+}
+
 .avatar-initial {
   font-size: 2rem;
   font-weight: 700;
@@ -316,6 +330,11 @@ defineEmits(['select-person'])
   }
 
   .avatar-placeholder {
+    width: 60px;
+    height: 60px;
+  }
+
+  .avatar-image {
     width: 60px;
     height: 60px;
   }
