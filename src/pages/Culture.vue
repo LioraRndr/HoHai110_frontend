@@ -6,11 +6,11 @@
     <CultureHero />
 
     <!-- Timeline Section -->
-    <CultureTimeline
+    <!-- <CultureTimeline
       :milestones="milestones"
       :active-milestone="activeMilestone"
       @update:active-milestone="setActiveMilestone"
-    />
+    /> -->
 
     <!-- Spirit Section -->
     <CultureSpirit

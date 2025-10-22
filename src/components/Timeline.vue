@@ -76,7 +76,7 @@
         <!-- 行动号召 -->
         <div class="epilogue-cta">
           <p class="cta-text">传承河海精神，共筑水利梦想</p>
-          <router-link to="/wishes" class="cta-button">
+          <router-link to="/blessings" class="cta-button">
             写下你的祝福
             <span class="button-arrow">→</span>
           </router-link>

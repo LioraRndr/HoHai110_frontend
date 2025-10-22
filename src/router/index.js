@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/pages/Home.vue'
+import { $message } from '@/utils/message.js'
 
 const routes = [
   {
@@ -25,20 +26,14 @@ const routes = [
     component: () => import('@/pages/Timeline.vue')
   },
   {
-    path: '/relay',
-    name: 'Relay',
-    component: () => import('@/pages/Relay.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/maxims',
-    name: 'Maxims',
-    component: () => import('@/pages/Maxims.vue')
-  },
-  {
     path: '/culture',
     name: 'Culture',
     component: () => import('@/pages/Culture.vue')
+  },
+  {
+    path: '/people',
+    name: 'People',
+    component: () => import('@/pages/People.vue')
   },
   {
     path: '/poster',
@@ -101,23 +96,35 @@ router.beforeEach((to, from, next) => {
   const isLoggedIn = !!token
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
-  // 需要登录的页面
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next({ name: 'Login', query: { redirect: to.fullPath } })
+  // 需要管理员权限的页面(需要同时登录且是管理员)
+  if (to.meta.requiresAdmin) {
+    if (!isLoggedIn) {
+      // 未登录,重定向到登录页
+      next({ name: 'Login', query: { redirect: to.fullPath } })
+      return
+    }
+    if (user.role !== 'admin') {
+      // 已登录但不是管理员
+      // 延迟显示消息,确保路由跳转完成后再显示
+      setTimeout(() => {
+        $message.error('需要管理员权限才能访问此页面')
+      }, 100)
+      next({ name: 'Home' })
+      return
+    }
   }
-  // 需要管理员权限的页面
-  else if (to.meta.requiresAdmin && user.role !== 'admin') {
-    // 使用浏览器原生alert，因为此时消息服务可能还未初始化
-    alert('需要管理员权限才能访问此页面')
-    next({ name: 'Home' })
+  // 需要登录的页面
+  else if (to.meta.requiresAuth && !isLoggedIn) {
+    next({ name: 'Login', query: { redirect: to.fullPath } })
+    return
   }
   // 已登录用户访问登录/注册页面,重定向到首页
   else if (to.meta.requiresGuest && isLoggedIn) {
     next({ name: 'Home' })
+    return
   }
-  else {
-    next()
-  }
+
+  next()
 })
 
 export default router

@@ -387,6 +387,7 @@ onMounted(() => {
 .page-header {
   text-align: center;
   margin-bottom: 3rem;
+  margin-top:60px;
 }
 
 .page-header h1 {
@@ -401,28 +402,29 @@ onMounted(() => {
 
 .subtitle {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
 }
 
 section {
   margin-bottom: 3rem;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 section h2 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #333;
   margin-bottom: 1.5rem;
 }
 
 .loading-text {
   text-align: center;
   padding: 2rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: #999;
 }
 
 .stats-grid {
@@ -436,15 +438,16 @@ section h2 {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(74, 144, 226, 0.3);
+  border-color: #4A90E2;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
 }
 
 .stat-icon {
@@ -459,20 +462,20 @@ section h2 {
 
 .stat-label {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
 }
 
 .tabs {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #e0e0e0;
 }
 
 .tab-btn {
   padding: 0.8rem 1.5rem;
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
@@ -483,7 +486,7 @@ section h2 {
 }
 
 .tab-btn:hover {
-  color: #ffffff;
+  color: #333;
 }
 
 .tab-btn.active {
@@ -500,13 +503,13 @@ section h2 {
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #999;
 }
 
 .content-item {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
 }
 
@@ -519,16 +522,16 @@ section h2 {
 
 .user-name {
   font-weight: 600;
-  color: #ffffff;
+  color: #333;
 }
 
 .item-date {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #999;
 }
 
 .item-content {
-  color: rgba(255, 255, 255, 0.9);
+  color: #333;
   line-height: 1.6;
   margin-bottom: 0.75rem;
   white-space: pre-wrap;
@@ -538,7 +541,7 @@ section h2 {
   display: flex;
   gap: 1rem;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666;
   margin-bottom: 1rem;
 }
 
@@ -586,9 +589,9 @@ section h2 {
 .search-input {
   flex: 1;
   padding: 0.7rem 1rem;
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #d0d0d0;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -624,25 +627,25 @@ table {
 }
 
 thead {
-  background: rgba(255, 255, 255, 0.05);
+  background: #f5f5f5;
 }
 
 th {
   padding: 1rem;
   text-align: left;
-  color: rgba(255, 255, 255, 0.8);
+  color: #555;
   font-weight: 600;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #e0e0e0;
 }
 
 td {
   padding: 1rem;
-  color: rgba(255, 255, 255, 0.9);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: #f8f9fa;
 }
 
 .role-badge {
@@ -681,7 +684,7 @@ tbody tr:hover {
 }
 
 .protected {
-  color: rgba(255, 255, 255, 0.3);
+  color: #ccc;
 }
 
 .pagination {
@@ -694,16 +697,17 @@ tbody tr:hover {
 
 .page-btn {
   padding: 0.6rem 1.2rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #d0d0d0;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .page-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
+  background: #f0f0f0;
+  border-color: #4A90E2;
 }
 
 .page-btn:disabled {
@@ -712,7 +716,7 @@ tbody tr:hover {
 }
 
 .page-info {
-  color: rgba(255, 255, 255, 0.8);
+  color: #555;
   font-size: 0.9rem;
 }
 

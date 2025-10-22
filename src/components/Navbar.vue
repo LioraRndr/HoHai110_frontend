@@ -14,22 +14,19 @@
           <router-link to="/" class="menu-link">首页</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/timeline" class="menu-link">时间线</router-link>
+          <router-link to="/timeline" class="menu-link">校史长河</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/articles" class="menu-link">文章</router-link>
+          <router-link to="/culture" class="menu-link">使命担当</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/blessings" class="menu-link">祝福墙</router-link>
+          <router-link to="/people" class="menu-link">河海英华</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/relay" class="menu-link">接力</router-link>
+          <router-link to="/blessings" class="menu-link">薪传接力</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/maxims" class="menu-link">格言</router-link>
-        </li>
-        <li class="menu-item">
-          <router-link to="/culture" class="menu-link">文化</router-link>
+          <router-link to="/articles" class="menu-link">共话百十</router-link>
         </li>
         <li class="menu-item">
           <router-link to="/about" class="menu-link">关于</router-link>
@@ -39,6 +36,14 @@
       <!-- 用户区域 -->
       <div class="navbar-user">
         <div v-if="userStore.isLoggedIn" class="user-info">
+          <!-- 管理员标识 -->
+          <router-link v-if="userStore.isAdmin" to="/admin" class="admin-badge" title="管理后台">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            <span>管理</span>
+          </router-link>
           <div class="user-avatar">
             {{ userStore.userName.charAt(0).toUpperCase() }}
           </div>
@@ -72,22 +77,19 @@
           <router-link to="/" class="mobile-menu-link" @click="closeMobileMenu">首页</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/timeline" class="mobile-menu-link" @click="closeMobileMenu">时间线</router-link>
+          <router-link to="/timeline" class="mobile-menu-link" @click="closeMobileMenu">校史长河</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/articles" class="mobile-menu-link" @click="closeMobileMenu">文章</router-link>
+          <router-link to="/culture" class="mobile-menu-link" @click="closeMobileMenu">使命担当</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/blessings" class="mobile-menu-link" @click="closeMobileMenu">祝福墙</router-link>
+          <router-link to="/people" class="mobile-menu-link" @click="closeMobileMenu">河海英华</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/relay" class="mobile-menu-link" @click="closeMobileMenu">接力</router-link>
+          <router-link to="/blessings" class="mobile-menu-link" @click="closeMobileMenu">薪传接力</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/maxims" class="mobile-menu-link" @click="closeMobileMenu">格言</router-link>
-        </li>
-        <li class="mobile-menu-item">
-          <router-link to="/culture" class="mobile-menu-link" @click="closeMobileMenu">文化</router-link>
+          <router-link to="/articles" class="mobile-menu-link" @click="closeMobileMenu">共话百十</router-link>
         </li>
         <li class="mobile-menu-item">
           <router-link to="/about" class="mobile-menu-link" @click="closeMobileMenu">关于</router-link>
@@ -101,6 +103,14 @@
             {{ userStore.userName.charAt(0).toUpperCase() }}
           </div>
           <span class="mobile-user-name">{{ userStore.userName }}</span>
+          <!-- 管理员入口 -->
+          <router-link v-if="userStore.isAdmin" to="/admin" class="mobile-admin-link" @click="closeMobileMenu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            <span>管理后台</span>
+          </router-link>
           <button class="mobile-logout-button" @click="handleMobileLogout">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -303,6 +313,32 @@ onUnmounted(() => {
   backdrop-filter: blur(10px);
 }
 
+/* 管理员标识 */
+.admin-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.admin-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.5);
+}
+
+.admin-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
 .user-avatar {
   width: 32px;
   height: 32px;
@@ -490,6 +526,35 @@ onUnmounted(() => {
   font-size: var(--text-xl);
   font-weight: 600;
   text-align: center;
+}
+
+/* 移动端管理员链接 */
+.mobile-admin-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  border: 1px solid rgba(255, 152, 0, 0.5);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  margin-top: var(--spacing-sm);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.mobile-admin-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.5);
+}
+
+.mobile-admin-link svg {
+  width: 18px;
+  height: 18px;
 }
 
 .mobile-logout-button {

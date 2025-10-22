@@ -13,6 +13,8 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = computed(() => !!token.value && !!user.value)
   const userName = computed(() => user.value?.username || '')
   const userEmail = computed(() => user.value?.email || '')
+  const userRole = computed(() => user.value?.role || 'user')
+  const isAdmin = computed(() => user.value?.role === 'admin')
 
   // 初始化用户信息
   const initUser = () => {
@@ -147,6 +149,8 @@ export const useUserStore = defineStore('user', () => {
     isLoggedIn,
     userName,
     userEmail,
+    userRole,
+    isAdmin,
 
     // 方法
     login,

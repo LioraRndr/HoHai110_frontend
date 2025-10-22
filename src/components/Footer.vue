@@ -6,15 +6,20 @@
           <h3>河海大学110周年</h3>
           <p>百十薪传,续页青春</p>
         </div>
+
         <div class="footer-section">
-          <h4>快速链接</h4>
+          <h4>快速导航</h4>
           <ul>
             <li><router-link to="/">首页</router-link></li>
-            <li><router-link to="/timeline">时间线</router-link></li>
-            <li><router-link to="/relay">薪传接力</router-link></li>
-            <li><router-link to="/maxims">校训精神</router-link></li>
+            <li><router-link to="/timeline">校史长河</router-link></li>
+            <li><router-link to="/culture">使命担当</router-link></li>
+            <li><router-link to="/people">河海英华</router-link></li>
+            <li><router-link to="/blessings">薪传接力</router-link></li>
+            <li><router-link to="/articles">共话百十</router-link></li>
+            <li><router-link to="/about">关于</router-link></li>
           </ul>
         </div>
+
         <div class="footer-section">
           <h4>联系我们</h4>
           <p>南京市江宁区佛城西路8号</p>
