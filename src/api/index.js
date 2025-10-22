@@ -326,6 +326,19 @@ export const adminAPI = {
   }
 }
 
+// 火炬传递API
+export const torchAPI = {
+  // 获取火炬数量
+  getTorchCount: async () => {
+    return await apiClient.get('/torch/get')
+  },
+
+  // 传递火炬（增加火炬数量）
+  passTorch: async (count = 1) => {
+    return await apiClient.post('/torch/add', { count })
+  }
+}
+
 // 论坛API
 export const forumAPI = {
   // 板块相关
@@ -446,5 +459,6 @@ export default {
   visitor: visitorAPI,
   futureMessage: futureMessageAPI,
   admin: adminAPI,
-  forum: forumAPI
+  forum: forumAPI,
+  torch: torchAPI
 }

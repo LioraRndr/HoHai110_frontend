@@ -17,6 +17,15 @@
           <p class="section-subtitle">校史长河时间轴</p>
         </div>
         <HistoryTimeline />
+        <!-- 导航按钮 -->
+        <div class="section-navigation">
+          <router-link to="/timeline" class="nav-button">
+            <span>探索完整时间轴</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </router-link>
+        </div>
       </div>
     </section>
 
@@ -28,6 +37,15 @@
           <p class="section-subtitle">治水报国精神阐释</p>
         </div>
         <MissionSpirit />
+        <!-- 导航按钮 -->
+        <div class="section-navigation">
+          <router-link to="/culture" class="nav-button">
+            <span>了解更多河海文化</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </router-link>
+        </div>
       </div>
     </section>
 
@@ -39,6 +57,15 @@
           <p class="section-subtitle">河海英华校友风采</p>
         </div>
         <AlumniStories />
+        <!-- 导航按钮 -->
+        <div class="section-navigation">
+          <router-link to="/people" class="nav-button">
+            <span>查看更多杰出校友</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </router-link>
+        </div>
       </div>
     </section>
 
@@ -67,11 +94,34 @@
           <h2 class="logo-year">2025.10.27</h2>
           <p class="logo-text">共赴百十之约</p>
         </div>
+        <!-- 两个导航按钮 -->
+        <div class="finale-buttons">
+          <router-link to="/blessings" class="finale-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <span class="button-title">薪传接力</span>
+              <span class="button-subtitle">传递河海精神</span>
+            </div>
+          </router-link>
+          <router-link to="/articles" class="finale-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <span class="button-title">共话百十</span>
+              <span class="button-subtitle">分享你的格言</span>
+            </div>
+          </router-link>
+        </div>
       </div>
     </section>
 
     <!-- 页脚 -->
-    <footer class="footer">
+    <Footer />
+    <!-- 旧版页脚，已弃用。目前应当使用全局页脚 -->
+    <!-- <footer class="footer">
       <div class="container">
         <div class="footer-content">
           <div class="footer-section">
@@ -98,8 +148,9 @@
           <p>&copy; 2025 河海大学. All rights reserved. | 百十薪传，续页青春</p>
         </div>
       </div>
-    </footer>
+    </footer> -->
   </div>
+  
 </template>
 
 <script setup>
@@ -110,6 +161,8 @@ import MissionSpirit from '@/components/MissionSpirit.vue'
 import AlumniStories from '@/components/AlumniStories.vue'
 import FutureMessage from '@/components/FutureMessage.vue'
 import SideNav from '@/components/SideNav.vue'
+import Footer from '@/components/Footer.vue'
+
 </script>
 
 <style scoped>
@@ -186,6 +239,25 @@ import SideNav from '@/components/SideNav.vue'
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加背景图片层 */
+.finale-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b564be482.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.08;
+  z-index: 0;
+  filter: grayscale(30%);
 }
 
 .finale-content {
@@ -193,6 +265,8 @@ import SideNav from '@/components/SideNav.vue'
   max-width: 900px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+  position: relative;
+  z-index: 1;
 }
 
 .finale-quote {
@@ -299,6 +373,100 @@ import SideNav from '@/components/SideNav.vue'
   opacity: 0.6;
 }
 
+/* Section导航按钮 */
+.section-navigation {
+  text-align: center;
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-xl);
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background: var(--gradient-river);
+  color: white;
+  font-size: var(--text-lg);
+  font-family: var(--font-title);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(10, 106, 184, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(10, 106, 184, 0.5);
+  color: white;
+}
+
+.nav-button svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.nav-button:hover svg {
+  transform: translateX(4px);
+}
+
+/* Finale按钮 */
+.finale-buttons {
+  display: flex;
+  gap: var(--spacing-2xl);
+  justify-content: center;
+  margin-top: var(--spacing-3xl);
+  animation: fadeInUp 1.6s ease-out;
+}
+
+.finale-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  background: linear-gradient(135deg, rgba(10, 106, 184, 0.95) 0%, rgba(255, 122, 26, 0.95) 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(10, 106, 184, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 240px;
+}
+
+.finale-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(10, 106, 184, 0.5);
+  color: white;
+}
+
+.finale-button svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.finale-button > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.button-title {
+  font-size: var(--text-xl);
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.button-subtitle {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  font-weight: 500;
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
   .section {
@@ -332,6 +500,22 @@ import SideNav from '@/components/SideNav.vue'
   .footer-content {
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);
+  }
+
+  .finale-buttons {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding: 0 var(--spacing-md);
+  }
+
+  .finale-button {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .nav-button {
+    font-size: var(--text-base);
+    padding: var(--spacing-sm) var(--spacing-lg);
   }
 }
 </style>

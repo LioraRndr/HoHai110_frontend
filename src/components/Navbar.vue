@@ -4,7 +4,12 @@
       <!-- Logo -->
       <div class="navbar-logo">
         <router-link to="/" class="logo-link">
-          <span class="logo-text">河海110周年</span>
+          <!-- <span class="logo-text">河海110周年</span> -->
+          <img
+            src="https://img.assets.five-plus-one.com/2025/10/bfcbcc5e69acfca18b07cf42e1dd24ee.png"
+            alt="河海大学110周年"
+            class="logo-image"
+          >
         </router-link>
       </div>
 
@@ -130,11 +135,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const isScrolled = ref(false)
@@ -182,12 +188,48 @@ const handleMobileLogout = async () => {
   router.push('/')
 }
 
+// 确保用户状态在组件挂载时正确初始化
+const initUserState = () => {
+  // 检查 localStorage 中是否有 token 和 user
+  const token = localStorage.getItem('token')
+  const userStr = localStorage.getItem('user')
+
+  console.log('[Navbar] Checking user state...', {
+    hasToken: !!token,
+    hasUserStr: !!userStr,
+    storeHasUser: !!userStore.user,
+    storeHasToken: !!userStore.token,
+    isLoggedIn: userStore.isLoggedIn
+  })
+
+  if (token && userStr && !userStore.user) {
+    // 如果 localStorage 有数据但 store 没有，手动触发初始化
+    try {
+      const userData = JSON.parse(userStr)
+      userStore.user = userData
+      userStore.token = token
+      console.log('[Navbar] Manually initialized user state:', userData)
+    } catch (e) {
+      console.error('Failed to initialize user state:', e)
+    }
+  }
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  // 初始化用户状态
+  console.log('[Navbar] Component mounted')
+  initUserState()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+})
+
+// 监听路由变化，确保用户状态保持同步
+watch(() => route.path, (newPath) => {
+  console.log('[Navbar] Route changed to:', newPath)
+  initUserState()
 })
 </script>
 
@@ -240,6 +282,17 @@ onUnmounted(() => {
   color: white;
   letter-spacing: 0.05em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.logo-image {
+  height: 45px;
+  transform: scale(1.5);
+  transform-origin: left center;
+  transition: transform var(--transition-base);
+}
+
+.logo-image:hover {
+  transform: scale(1.6);
 }
 
 .navbar-menu {

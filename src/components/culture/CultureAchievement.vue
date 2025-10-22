@@ -1,5 +1,5 @@
 <template>
-  <section class="achievement-section">
+  <section id="achievement" class="achievement-section">
     <div class="section-container">
       <h2 class="section-title">辉煌成就</h2>
       <p class="section-desc">河海人在重大工程中的贡献</p>

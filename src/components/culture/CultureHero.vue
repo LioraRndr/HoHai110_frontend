@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-section">
+  <section id="hero" class="hero-section">
     <div class="hero-background">
       <div class="wave-animation"></div>
       <div class="particles"></div>
@@ -36,6 +36,22 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+/* 添加历史照片背景 */
+.hero-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8c23d5744b.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.08;
+  filter: grayscale(80%);
+  z-index: 0;
 }
 
 .wave-animation {

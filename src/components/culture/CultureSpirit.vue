@@ -1,5 +1,5 @@
 <template>
-  <section class="spirit-section">
+  <section id="spirit" class="spirit-section">
     <div class="section-container">
       <h2 class="section-title">河海精神</h2>
       <p class="section-desc">艰苦朴素 · 实事求是 · 严格要求 · 勇于探索</p>
@@ -42,12 +42,51 @@ const emit = defineEmits(['update:hover-index'])
 <style scoped>
 .spirit-section {
   background: rgba(255, 255, 255, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加历史照片背景装饰 */
+.spirit-section::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: -5%;
+  width: 350px;
+  height: 280px;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b155758b4.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.03;
+  filter: grayscale(100%);
+  transform: rotate(-8deg);
+  border-radius: 8px;
+  z-index: 0;
+}
+
+.spirit-section::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: -3%;
+  width: 320px;
+  height: 250px;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b1ecbcd96.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.03;
+  filter: grayscale(100%);
+  transform: rotate(6deg);
+  border-radius: 8px;
+  z-index: 0;
 }
 
 .section-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .section-title {

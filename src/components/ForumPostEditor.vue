@@ -63,7 +63,7 @@
           :disabled="!canSubmit || submitting"
           class="submit-btn"
         >
-          {{ submitting ? '发布中...' : '发布' }}
+          {{ submitting ? (isEditMode ? '保存中...' : '发布中...') : (isEditMode ? '保存' : '发布') }}
         </button>
       </div>
     </div>
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { forumAPI, uploadAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 
@@ -83,10 +83,14 @@ const props = defineProps({
   title: {
     type: String,
     default: '发表新帖'
+  },
+  post: {
+    type: Object,
+    default: null
   }
 })
 
-const emit = defineEmits(['close', 'posted'])
+const emit = defineEmits(['close', 'posted', 'updated'])
 
 const postData = ref({
   title: '',
@@ -96,8 +100,21 @@ const postData = ref({
 
 const submitting = ref(false)
 
+const isEditMode = computed(() => !!props.post)
+
 const canSubmit = computed(() => {
   return postData.value.title.trim() && postData.value.content.trim()
+})
+
+// 初始化编辑数据
+onMounted(() => {
+  if (props.post) {
+    postData.value = {
+      title: props.post.title || '',
+      content: props.post.content || '',
+      images: props.post.images || []
+    }
+  }
 })
 
 // 处理图片上传
@@ -143,17 +160,29 @@ const handleSubmit = async () => {
   submitting.value = true
 
   try {
-    await forumAPI.createPost({
-      forumId: props.forumId,
-      title: postData.value.title.trim(),
-      content: postData.value.content.trim(),
-      images: postData.value.images
-    })
-
-    emit('posted')
+    if (isEditMode.value) {
+      // 更新帖子
+      await forumAPI.updatePost(props.post.id, {
+        title: postData.value.title.trim(),
+        content: postData.value.content.trim(),
+        images: postData.value.images
+      })
+      $message.success('帖子更新成功！')
+      emit('updated')
+    } else {
+      // 创建新帖子
+      await forumAPI.createPost({
+        forumId: props.forumId,
+        title: postData.value.title.trim(),
+        content: postData.value.content.trim(),
+        images: postData.value.images
+      })
+      $message.success('帖子发布成功！')
+      emit('posted')
+    }
   } catch (error) {
-    console.error('发帖失败:', error)
-    $message.error('发帖失败: ' + error.message)
+    console.error('操作失败:', error)
+    $message.error((isEditMode.value ? '更新' : '发布') + '失败: ' + error.message)
   } finally {
     submitting.value = false
   }

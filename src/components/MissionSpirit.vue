@@ -376,6 +376,43 @@ onUnmounted(() => {
   border-radius: var(--radius-lg);
   margin: 0 var(--spacing-lg);
   animation: fadeInUp 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加历史照片背景装饰 */
+.mission-detail-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b1a1681e4.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.05;
+  border-radius: var(--radius-lg);
+  transform: rotate(10deg) translateX(20%) translateY(-10%);
+  z-index: 0;
+  filter: grayscale(60%);
+}
+
+.mission-detail-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 250px;
+  height: 250px;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b155758b4.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.04;
+  border-radius: var(--radius-lg);
+  transform: rotate(-8deg) translateX(-15%) translateY(15%);
+  z-index: 0;
+  filter: grayscale(60%);
 }
 
 @keyframes fadeInUp {
@@ -392,6 +429,8 @@ onUnmounted(() => {
 .detail-container {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .detail-header {

@@ -109,14 +109,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const isLoggedIn = !!token
-  let user = {}
-
-  try {
-    user = JSON.parse(localStorage.getItem('user') || '{}')
-  } catch (e) {
-    console.error('Failed to parse user data:', e)
-    localStorage.removeItem('user')
-  }
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   // 需要管理员权限的页面(需要同时登录且是管理员)
   if (to.meta.requiresAdmin) {

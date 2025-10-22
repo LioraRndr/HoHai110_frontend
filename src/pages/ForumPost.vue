@@ -64,6 +64,21 @@
             >
               🗑 删除
             </button>
+            <!-- 管理员功能 -->
+            <button
+              v-if="isAdmin"
+              @click="toggleSticky"
+              :class="['action-btn', 'admin-btn', { active: post.isSticky }]"
+            >
+              📌 {{ post.isSticky ? '取消置顶' : '置顶' }}
+            </button>
+            <button
+              v-if="isAdmin"
+              @click="toggleHighlight"
+              :class="['action-btn', 'admin-btn', { active: post.isHighlighted }]"
+            >
+              ⭐ {{ post.isHighlighted ? '取消精华' : '设为精华' }}
+            </button>
           </div>
         </div>
 
@@ -91,7 +106,7 @@
           </div>
 
           <div v-else-if="!isLoggedIn" class="login-tip">
-            <router-link to="/login">登录</router-link> 后才能发表回复
+            <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }">登录</router-link> 后才能发表回复
           </div>
 
           <div v-else-if="post.status === 'locked'" class="locked-tip">
@@ -189,15 +204,26 @@
         </div>
       </div>
     </div>
+
+    <!-- 编辑帖子模态框 -->
+    <ForumPostEditor
+      v-if="showEditModal"
+      :forum-id="post.forumId"
+      :post="post"
+      title="编辑帖子"
+      @close="showEditModal = false"
+      @updated="handlePostUpdated"
+    />
   </PageLayout>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { forumAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import PageLayout from '@/components/PageLayout.vue'
+import ForumPostEditor from '@/components/ForumPostEditor.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -210,6 +236,7 @@ const repliesLoading = ref(true)
 const newReplyContent = ref('')
 const replyPage = ref(1)
 const replyTotalPages = ref(1)
+const showEditModal = ref(false)
 
 const isLoggedIn = computed(() => !!localStorage.getItem('token'))
 const currentUser = computed(() => JSON.parse(localStorage.getItem('user') || '{}'))
@@ -267,8 +294,8 @@ const submitReply = async () => {
     })
     newReplyContent.value = ''
     $message.success('回复成功！')
-    await loadPost()
-    await loadReplies()
+    // 并行加载数据避免抽搐
+    await Promise.all([loadPost(), loadReplies()])
   } catch (error) {
     console.error('发表回复失败:', error)
     $message.error('发表回复失败: ' + error.message)
@@ -278,7 +305,17 @@ const submitReply = async () => {
 // 回复楼中楼
 const replyToReply = (reply) => {
   newReplyContent.value = `@${reply.user?.username} `
-  document.querySelector('.reply-textarea')?.focus()
+  // 使用 nextTick 确保 DOM 更新后再操作
+  nextTick(() => {
+    const textarea = document.querySelector('.reply-textarea')
+    if (textarea) {
+      textarea.focus()
+      // 将光标移到末尾
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length)
+      // 平滑滚动到输入框
+      textarea.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  })
 }
 
 // 切换点赞
@@ -329,7 +366,13 @@ const toggleReplyLike = async (reply) => {
 
 // 删除帖子
 const deletePost = async () => {
-  if (!confirm('确定要删除这个帖子吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '确定要删除这个帖子吗？此操作不可恢复。',
+    '删除帖子',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
 
   try {
     await forumAPI.deletePost(postId.value)
@@ -343,7 +386,13 @@ const deletePost = async () => {
 
 // 删除回复
 const deleteReply = async (replyId) => {
-  if (!confirm('确定要删除这条回复吗？')) return
+  const confirmed = await $message.confirm(
+    '确定要删除这条回复吗？',
+    '删除回复',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
 
   try {
     await forumAPI.deleteReply(replyId)
@@ -358,8 +407,56 @@ const deleteReply = async (replyId) => {
 
 // 编辑帖子
 const editPost = () => {
-  // TODO: 实现编辑功能
-  $message.info('编辑功能开发中')
+  showEditModal.value = true
+}
+
+// 处理帖子更新
+const handlePostUpdated = () => {
+  showEditModal.value = false
+  loadPost()
+  $message.success('帖子更新成功！')
+}
+
+// 管理员功能：置顶/取消置顶
+const toggleSticky = async () => {
+  const newStatus = !post.value.isSticky
+  const confirmed = await $message.confirm(
+    `确定要${newStatus ? '置顶' : '取消置顶'}这个帖子吗？`,
+    newStatus ? '置顶帖子' : '取消置顶',
+    { type: 'info', confirmText: '确定', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
+
+  try {
+    await forumAPI.toggleSticky(postId.value, newStatus)
+    post.value.isSticky = newStatus
+    $message.success(newStatus ? '置顶成功！' : '已取消置顶')
+  } catch (error) {
+    console.error('置顶操作失败:', error)
+    $message.error('操作失败: ' + error.message)
+  }
+}
+
+// 管理员功能：加精/取消加精
+const toggleHighlight = async () => {
+  const newStatus = !post.value.isHighlighted
+  const confirmed = await $message.confirm(
+    `确定要${newStatus ? '设为精华' : '取消精华'}这个帖子吗？`,
+    newStatus ? '设为精华' : '取消精华',
+    { type: 'info', confirmText: '确定', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
+
+  try {
+    await forumAPI.toggleHighlight(postId.value, newStatus)
+    post.value.isHighlighted = newStatus
+    $message.success(newStatus ? '已设为精华！' : '已取消精华')
+  } catch (error) {
+    console.error('精华操作失败:', error)
+    $message.error('操作失败: ' + error.message)
+  }
 }
 
 // 切换回复页码
@@ -367,7 +464,15 @@ const changeReplyPage = (page) => {
   if (page < 1 || page > replyTotalPages.value) return
   replyPage.value = page
   loadReplies()
-  document.querySelector('.replies-section')?.scrollIntoView({ behavior: 'smooth' })
+  // 平滑滚动到回复区域顶部
+  nextTick(() => {
+    const repliesSection = document.querySelector('.replies-section')
+    if (repliesSection) {
+      const yOffset = -100 // 偏移量，避免被导航栏遮挡
+      const y = repliesSection.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  })
 }
 
 // 返回板块
@@ -612,6 +717,26 @@ onMounted(() => {
 
 .delete-btn:hover {
   background: rgba(158, 158, 158, 0.2);
+}
+
+.admin-btn {
+  background: rgba(255, 193, 7, 0.1);
+  color: #f57c00;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.admin-btn:hover {
+  background: rgba(255, 193, 7, 0.2);
+}
+
+.admin-btn.active {
+  background: rgba(76, 175, 80, 0.15);
+  color: #388e3c;
+  border-color: rgba(76, 175, 80, 0.4);
+}
+
+.admin-btn.active:hover {
+  background: rgba(76, 175, 80, 0.25);
 }
 
 .replies-section {

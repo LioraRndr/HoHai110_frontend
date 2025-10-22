@@ -2,6 +2,12 @@
   <div class="timeline-container" ref="containerRef">
     <!-- 背景装饰层 (视差效果) -->
     <div class="background-layer" ref="bgLayerRef">
+      <!-- 历史照片装饰 -->
+      <div class="historic-photo photo-1"></div>
+      <div class="historic-photo photo-2"></div>
+      <div class="historic-photo photo-3"></div>
+      <div class="historic-photo photo-4"></div>
+
       <!-- 水墨渐变云 -->
       <div class="ink-cloud cloud-1"></div>
       <div class="ink-cloud cloud-2"></div>
@@ -24,7 +30,7 @@
     </div>
 
     <!-- 时间线头部 -->
-    <div class="timeline-header">
+    <div id="timeline-header" class="timeline-header">
       <h1 class="timeline-title">
         <span class="title-main">时光之河</span>
         <span class="title-sub">百十年河海征程</span>
@@ -42,7 +48,7 @@
     </div>
 
     <!-- 时间线主体 -->
-    <div class="timeline-main" ref="timelineRef">
+    <div id="timeline-main" class="timeline-main" ref="timelineRef">
       <TimelineNode
         v-for="(node, index) in timelineData"
         :key="node.id"
@@ -52,7 +58,7 @@
     </div>
 
     <!-- 结语 -->
-    <div class="timeline-epilogue" v-if="epilogue">
+    <div id="timeline-epilogue" class="timeline-epilogue" v-if="epilogue">
       <div class="epilogue-content">
         <h2 class="epilogue-title">{{ epilogue.title }}</h2>
         <div class="epilogue-verses">
@@ -238,6 +244,62 @@ onUnmounted(() => {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+}
+
+/* 历史照片装饰 */
+.historic-photo {
+  position: absolute;
+  width: 400px;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.04;
+  border-radius: 8px;
+  filter: grayscale(100%) sepia(20%);
+  animation: float-photo 25s ease-in-out infinite;
+}
+
+.photo-1 {
+  top: 15%;
+  left: 5%;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b088cbd5f.jpg');
+  transform: rotate(-5deg);
+  animation-delay: 0s;
+}
+
+.photo-2 {
+  top: 45%;
+  right: 8%;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b1a1681e4.jpg');
+  transform: rotate(4deg);
+  animation-delay: -8s;
+}
+
+.photo-3 {
+  bottom: 25%;
+  left: 10%;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b39a9d71f.jpg');
+  transform: rotate(-3deg);
+  animation-delay: -16s;
+}
+
+.photo-4 {
+  top: 60%;
+  right: 15%;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b1de050d1.jpg');
+  transform: rotate(6deg);
+  animation-delay: -12s;
+}
+
+@keyframes float-photo {
+  0%, 100% {
+    transform: translate(0, 0) rotate(var(--initial-rotation, 0deg));
+    opacity: 0.04;
+  }
+  50% {
+    transform: translate(20px, -20px) rotate(calc(var(--initial-rotation, 0deg) + 2deg));
+    opacity: 0.06;
+  }
 }
 
 /* 水墨云 */

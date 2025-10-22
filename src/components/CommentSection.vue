@@ -21,7 +21,7 @@
       </div>
     </div>
     <div v-else class="login-prompt">
-      <p>请 <router-link to="/login">登录</router-link> 后发表评论</p>
+      <p>请 <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }">登录</router-link> 后发表评论</p>
     </div>
 
     <!-- 评论列表 -->
@@ -85,9 +85,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { commentAPI } from '@/api'
 import CommentItem from './CommentItem.vue'
-import { showError, showSuccess } from '@/utils/message'
+import { showError, showSuccess, $message } from '@/utils/message'
+
+const route = useRoute()
 
 const props = defineProps({
   articleId: {
@@ -187,7 +190,13 @@ const submitReply = async () => {
 
 // 删除评论
 const handleDelete = async (commentId) => {
-  if (!confirm('确定要删除这条评论吗？')) return
+  const confirmed = await $message.confirm(
+    '确定要删除这条评论吗？',
+    '删除评论',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
 
   try {
     await commentAPI.deleteComment(commentId)

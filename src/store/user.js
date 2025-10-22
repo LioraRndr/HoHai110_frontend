@@ -19,13 +19,27 @@ export const useUserStore = defineStore('user', () => {
   // 初始化用户信息
   const initUser = () => {
     const storedUser = localStorage.getItem('user')
+    const storedToken = localStorage.getItem('token')
+
+    console.log('[UserStore] Initializing user...', {
+      hasStoredUser: !!storedUser,
+      hasStoredToken: !!storedToken
+    })
+
     if (storedUser) {
       try {
         user.value = JSON.parse(storedUser)
+        console.log('[UserStore] User initialized from localStorage:', user.value)
       } catch (e) {
         console.error('Failed to parse stored user:', e)
         localStorage.removeItem('user')
       }
+    }
+
+    // 确保 token 也被正确初始化
+    if (storedToken && !token.value) {
+      token.value = storedToken
+      console.log('[UserStore] Token initialized from localStorage')
     }
   }
 
@@ -37,21 +51,51 @@ export const useUserStore = defineStore('user', () => {
     try {
       const response = await authAPI.login(credentials)
 
-      if (response.code === 0 && response.data) {
-        const { token: newToken, user: userData } = response.data
+      console.log('[UserStore] Login response:', response)
 
-        // 保存token和用户信息
-        token.value = newToken
-        user.value = userData
+      if (response.code === 0) {
+        // 尝试从不同位置获取 token 和 user 数据
+        let tokenData, userData
 
-        localStorage.setItem('token', newToken)
-        localStorage.setItem('user', JSON.stringify(userData))
+        // 情况1: 数据在 response.data 中
+        if (response.data && typeof response.data === 'object' && response.data.token) {
+          tokenData = response.data.token
+          userData = response.data.user
+        }
+        // 情况2: 数据在 response.message 中（后端可能把数据放错位置）
+        else if (response.message && typeof response.message === 'object' && response.message.token) {
+          tokenData = response.message.token
+          userData = response.message.user
+        }
+        // 情况3: token 和 user 直接在 response 中
+        else if (response.token && response.user) {
+          tokenData = response.token
+          userData = response.user
+        }
 
-        return { success: true }
+        if (tokenData && userData) {
+          // 保存token和用户信息
+          token.value = tokenData
+          user.value = userData
+
+          localStorage.setItem('token', tokenData)
+          localStorage.setItem('user', JSON.stringify(userData))
+
+          console.log('[UserStore] Login successful, user saved:', {
+            token: tokenData,
+            user: userData
+          })
+
+          return { success: true }
+        } else {
+          console.error('[UserStore] Token or user data not found in response:', response)
+          throw new Error('登录响应数据格式错误')
+        }
       } else {
         throw new Error(response.message || '登录失败')
       }
     } catch (err) {
+      console.error('[UserStore] Login error:', err)
       error.value = err.message
       return { success: false, message: err.message }
     } finally {

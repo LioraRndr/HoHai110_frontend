@@ -46,7 +46,7 @@
       </div>
       <div v-else class="login-prompt">
         <div class="prompt-icon">🔒</div>
-        <p>请 <router-link to="/login" class="login-link">登录</router-link> 后发表祝福</p>
+        <p>请 <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }" class="login-link">登录</router-link> 后发表祝福</p>
       </div>
     </transition>
 
@@ -143,10 +143,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { blessingAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import BlessingCard from './BlessingCard.vue'
 
+const route = useRoute()
 const emit = defineEmits(['update:total'])
 
 const blessings = ref([])
@@ -214,8 +216,19 @@ const submitBlessing = async () => {
 // 点赞祝福
 const handleLike = async (blessingId) => {
   try {
-    await blessingAPI.likeBlessing(blessingId)
-    await loadBlessings()
+    const response = await blessingAPI.likeBlessing(blessingId)
+
+    // 只更新当前项的点赞状态，避免重新加载整个列表
+    const blessing = blessings.value.find(b => b.id === blessingId)
+    if (blessing) {
+      blessing.isLiked = true
+      blessing.likes = (blessing.likes || 0) + 1
+
+      // 如果 API 返回了新的点赞数，使用 API 返回的值
+      if (response.data && response.data.likes !== undefined) {
+        blessing.likes = response.data.likes
+      }
+    }
   } catch (error) {
     console.error('点赞失败:', error)
     $message.error('点赞失败: ' + error.message)
@@ -225,8 +238,19 @@ const handleLike = async (blessingId) => {
 // 取消点赞
 const handleUnlike = async (blessingId) => {
   try {
-    await blessingAPI.unlikeBlessing(blessingId)
-    await loadBlessings()
+    const response = await blessingAPI.unlikeBlessing(blessingId)
+
+    // 只更新当前项的点赞状态，避免重新加载整个列表
+    const blessing = blessings.value.find(b => b.id === blessingId)
+    if (blessing) {
+      blessing.isLiked = false
+      blessing.likes = Math.max((blessing.likes || 0) - 1, 0)
+
+      // 如果 API 返回了新的点赞数，使用 API 返回的值
+      if (response.data && response.data.likes !== undefined) {
+        blessing.likes = response.data.likes
+      }
+    }
   } catch (error) {
     console.error('取消点赞失败:', error)
     $message.error('取消点赞失败: ' + error.message)
@@ -235,7 +259,13 @@ const handleUnlike = async (blessingId) => {
 
 // 删除祝福
 const handleDelete = async (blessingId) => {
-  if (!$message.confirm('确定要删除这条祝福吗？')) return
+  const confirmed = await $message.confirm(
+    '确定要删除这条祝福吗？',
+    '删除祝福',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
 
   try {
     await blessingAPI.deleteBlessing(blessingId)

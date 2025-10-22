@@ -3,11 +3,11 @@
     <!-- 顶部导航栏 -->
     <nav class="auth-navbar">
       <div class="auth-navbar-container">
-        <router-link to="/" class="back-button">
+        <router-link :to="backPath" class="back-button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span>返回首页</span>
+          <span>{{ backText }}</span>
         </router-link>
 
         <div class="navbar-logo">
@@ -131,11 +131,12 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const formData = reactive({
@@ -147,6 +148,17 @@ const formData = reactive({
 const showPassword = ref(false)
 const isLoading = ref(false)
 const error = ref('')
+
+// 计算返回按钮的路径和文本
+const backPath = computed(() => {
+  const redirect = route.query.redirect
+  return redirect || '/'
+})
+
+const backText = computed(() => {
+  const redirect = route.query.redirect
+  return redirect ? '返回' : '返回首页'
+})
 
 const handleSubmit = async () => {
   error.value = ''
@@ -176,8 +188,24 @@ const handleSubmit = async () => {
     })
 
     if (result.success) {
-      // 登录成功,跳转到首页
-      router.push('/')
+      // 登录成功,检查是否有重定向路径
+      // 优先使用路由 query 参数，其次是 localStorage
+      const redirectPath = route.query.redirect || localStorage.getItem('redirectAfterLogin')
+
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterLogin')
+      }
+
+      // 等待下一个 tick，确保 store 状态已完全更新
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      // 使用 router.replace 而不是 window.location，避免页面刷新
+      if (redirectPath) {
+        await router.replace(redirectPath)
+      } else {
+        // 没有重定向路径,跳转到首页
+        await router.replace('/')
+      }
     } else {
       error.value = result.message || '登录失败,请检查用户名和密码'
     }

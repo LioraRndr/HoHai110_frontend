@@ -2,11 +2,17 @@
 class MessageService {
   constructor() {
     this.toastComponent = null
+    this.confirmComponent = null
   }
 
   // 设置 Toast 组件实例
   setToastComponent(component) {
     this.toastComponent = component
+  }
+
+  // 设置确认框组件实例
+  setConfirmComponent(component) {
+    this.confirmComponent = component
   }
 
   // 显示成功消息
@@ -82,8 +88,29 @@ class MessageService {
 
   // 确认对话框（需要用户确认的操作）
   confirm(message, title = '确认', options = {}) {
-    // 使用原生 confirm，保持功能性
-    return window.confirm(`${title}\n\n${message}`)
+    const {
+      type = 'warning',
+      confirmText = '确定',
+      cancelText = '取消'
+    } = options
+
+    // 如果自定义确认框组件已注册，使用自定义确认框
+    if (this.confirmComponent) {
+      return new Promise((resolve) => {
+        this.confirmComponent.showConfirm({
+          title,
+          message,
+          type,
+          confirmText,
+          cancelText,
+          onConfirm: () => resolve(true),
+          onCancel: () => resolve(false)
+        })
+      })
+    }
+
+    // 降级到原生 confirm
+    return Promise.resolve(window.confirm(`${title}\n\n${message}`))
   }
 
   // 提示输入框

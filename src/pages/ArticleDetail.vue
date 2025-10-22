@@ -93,7 +93,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { articleAPI } from '@/api'
 import PageLayout from '@/components/PageLayout.vue'
 import CommentSection from '@/components/CommentSection.vue'
-import { showError, showSuccess } from '@/utils/message'
+import { showError, showSuccess, $message } from '@/utils/message'
 
 const route = useRoute()
 const router = useRouter()
@@ -177,7 +177,13 @@ const editArticle = () => {
 
 // 删除文章
 const deleteArticle = async () => {
-  if (!confirm('确定要删除这篇文章吗？此操作不可恢复。')) return
+  const confirmed = await $message.confirm(
+    '确定要删除这篇文章吗？此操作不可恢复。',
+    '删除文章',
+    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+  )
+
+  if (!confirmed) return
 
   try {
     await articleAPI.deleteArticle(articleId.value)

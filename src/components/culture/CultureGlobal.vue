@@ -1,5 +1,5 @@
 <template>
-  <section class="global-section">
+  <section id="global" class="global-section">
     <div class="section-container">
       <h2 class="section-title">国际影响</h2>
       <p class="section-desc">中国水利智慧惠及全球</p>

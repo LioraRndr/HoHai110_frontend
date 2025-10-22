@@ -1,5 +1,5 @@
 <template>
-  <section class="people-section">
+  <section id="people-grid" class="people-section">
     <div class="people-container">
       <div class="people-grid">
         <div
@@ -67,11 +67,50 @@ defineEmits(['select-person'])
 .people-section {
   padding: 6rem 2rem;
   background: linear-gradient(180deg, #0a0e1a 0%, #1a1f35 50%, #0a0e1a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 添加历史照片背景装饰 */
+.people-section::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: -8%;
+  width: 450px;
+  height: 350px;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b1de050d1.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.02;
+  filter: grayscale(100%);
+  transform: rotate(-12deg);
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.people-section::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: -5%;
+  width: 400px;
+  height: 320px;
+  background-image: url('https://s1.img.five-plus-one.com/2025/10/22/68f8b58f75b72.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.025;
+  filter: grayscale(100%);
+  transform: rotate(8deg);
+  border-radius: 12px;
+  z-index: 0;
 }
 
 .people-container {
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .people-grid {

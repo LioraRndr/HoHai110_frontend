@@ -3,11 +3,11 @@
     <!-- 顶部导航栏 -->
     <nav class="auth-navbar">
       <div class="auth-navbar-container">
-        <router-link to="/" class="back-button">
+        <router-link :to="backPath" class="back-button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span>返回首页</span>
+          <span>{{ backText }}</span>
         </router-link>
 
         <div class="navbar-logo">
@@ -196,10 +196,11 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const formData = reactive({
@@ -215,6 +216,17 @@ const showConfirmPassword = ref(false)
 const isLoading = ref(false)
 const error = ref('')
 const success = ref(false)
+
+// 计算返回按钮的路径和文本
+const backPath = computed(() => {
+  const redirect = route.query.redirect
+  return redirect || '/'
+})
+
+const backText = computed(() => {
+  const redirect = route.query.redirect
+  return redirect ? '返回' : '返回首页'
+})
 
 // 密码强度计算
 const passwordStrength = computed(() => {
@@ -293,9 +305,17 @@ const handleSubmit = async () => {
 
     if (result.success) {
       success.value = true
-      // 3秒后跳转到登录页
+      // 3秒后跳转到登录页,保留重定向路径
       setTimeout(() => {
-        router.push('/login')
+        // 检查是否有重定向路径
+        const redirectPath = localStorage.getItem('redirectAfterLogin') || router.currentRoute.value.query.redirect
+
+        if (redirectPath) {
+          // 保留重定向路径到登录页
+          router.push({ path: '/login', query: { redirect: redirectPath } })
+        } else {
+          router.push('/login')
+        }
       }, 3000)
     } else {
       error.value = result.message || '注册失败,请稍后重试'
