@@ -14,12 +14,12 @@
         </div>
         <div class="author-details-wrapper">
           <span class="author-name">
-            {{ blessing.isAnonymous ? '匿名校友' : blessing.authorName }}
+            {{ blessing.isAnonymous ? blessingCard.anonymous : blessing.authorName }}
           </span>
           <div v-if="!blessing.isAnonymous" class="author-details">
             <span v-if="blessing.graduationYear" class="graduation-year">
               <span class="detail-icon">🎓</span>
-              {{ blessing.graduationYear }}届
+              {{ blessing.graduationYear }}{{ blessingCard.graduationYear }}
             </span>
             <span v-if="blessing.department" class="department">
               <span class="detail-icon">🏫</span>
@@ -29,10 +29,10 @@
         </div>
       </div>
       <div v-if="canModify" class="card-actions">
-        <button @click="$emit('edit', blessing)" class="action-btn edit-btn" title="编辑">
+        <button @click="$emit('edit', blessing)" class="action-btn edit-btn" :title="blessingCard.editTitle">
           <span class="btn-icon">✏️</span>
         </button>
-        <button @click="$emit('delete', blessing.id)" class="action-btn delete-btn" title="删除">
+        <button @click="$emit('delete', blessing.id)" class="action-btn delete-btn" :title="blessingCard.deleteTitle">
           <span class="btn-icon">🗑️</span>
         </button>
       </div>
@@ -94,6 +94,11 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useBlessingsData } from '@/composables/useBlessingsData'
+
+const { locale } = useI18n()
+const { blessingCard } = useBlessingsData()
 
 const props = defineProps({
   blessing: {
@@ -114,12 +119,7 @@ const canModify = computed(() => {
 })
 
 const statusText = computed(() => {
-  const statusMap = {
-    pending: '待审核',
-    rejected: '已拒绝',
-    approved: '已通过'
-  }
-  return statusMap[props.blessing.status] || props.blessing.status
+  return blessingCard.value.status[props.blessing.status] || props.blessing.status
 })
 
 const statusIcon = computed(() => {
@@ -133,7 +133,7 @@ const statusIcon = computed(() => {
 
 const getAvatarText = computed(() => {
   if (props.blessing.isAnonymous) {
-    return '匿'
+    return locale.value === 'zh' ? '匿' : 'A'
   }
   return props.blessing.authorName ? props.blessing.authorName.charAt(0) : '?'
 })
@@ -148,19 +148,19 @@ const formatDate = (dateString) => {
   const days = Math.floor(hours / 24)
 
   if (days > 7) {
-    return date.toLocaleDateString('zh-CN', {
+    return date.toLocaleDateString(locale.value === 'zh' ? 'zh-CN' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     })
   } else if (days > 0) {
-    return `${days}天前`
+    return `${days} ${blessingCard.value.timeFormat.daysAgo}`
   } else if (hours > 0) {
-    return `${hours}小时前`
+    return `${hours} ${blessingCard.value.timeFormat.hoursAgo}`
   } else if (minutes > 0) {
-    return `${minutes}分钟前`
+    return `${minutes} ${blessingCard.value.timeFormat.minutesAgo}`
   } else {
-    return '刚刚'
+    return blessingCard.value.timeFormat.justNow
   }
 }
 

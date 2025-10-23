@@ -2,13 +2,13 @@
   <PageLayout>
     <div class="forum-page">
       <div class="page-header">
-        <h1>共话百十 · 校友论坛</h1>
-        <p class="subtitle">分享记忆，交流想法，共建河海社区</p>
+        <h1>{{ $t('forum.pageTitle') }}</h1>
+        <p class="subtitle">{{ $t('forum.pageSubtitle') }}</p>
       </div>
 
       <div v-if="loading" class="loading">
         <div class="spinner"></div>
-        <p>加载中...</p>
+        <p>{{ $t('forum.loading') }}</p>
       </div>
 
       <div v-else class="forums-container">
@@ -26,17 +26,17 @@
           <div class="forum-stats">
             <div class="stat-item">
               <span class="stat-value">{{ forum.postCount }}</span>
-              <span class="stat-label">帖子</span>
+              <span class="stat-label">{{ $t('forum.stats.posts') }}</span>
             </div>
             <div class="stat-item">
               <span class="stat-value">{{ forum.replyCount }}</span>
-              <span class="stat-label">回复</span>
+              <span class="stat-label">{{ $t('forum.stats.replies') }}</span>
             </div>
           </div>
         </div>
 
         <div v-if="forums.length === 0" class="empty-state">
-          <p>暂无板块</p>
+          <p>{{ $t('forum.noBoards') }}</p>
         </div>
       </div>
     </div>
@@ -46,11 +46,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { forumAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import PageLayout from '@/components/PageLayout.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 const forums = ref([])
 const loading = ref(true)
 
@@ -62,7 +64,7 @@ const loadForums = async () => {
     forums.value = response.data.forums || []
   } catch (error) {
     console.error('加载板块失败:', error)
-    $message.error('加载板块失败: ' + error.message)
+    $message.error(t('forum.loadingBoardsFailed') + ': ' + error.message)
   } finally {
     loading.value = false
   }

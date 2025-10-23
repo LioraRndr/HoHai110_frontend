@@ -7,11 +7,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span>返回登录</span>
+          <span>{{ $t('passwordReset.backToLogin') }}</span>
         </router-link>
 
         <div class="navbar-logo">
-          <span class="logo-text">河海110周年</span>
+          <span class="logo-text">{{ $t('home.hero.title') }}</span>
         </div>
       </div>
     </nav>
@@ -20,9 +20,9 @@
       <!-- 左侧装饰 -->
       <div class="auth-decoration">
         <div class="decoration-content">
-          <h1 class="decoration-title">找回密码</h1>
-          <h2 class="decoration-subtitle">河海大学110周年</h2>
-          <p class="decoration-text">通过邮箱验证找回您的账户</p>
+          <h1 class="decoration-title">{{ $t('passwordReset.forgotPassword') }}</h1>
+          <h2 class="decoration-subtitle">{{ $t('footer.title') }}</h2>
+          <p class="decoration-text">{{ $t('passwordReset.forgotPasswordDescription') }}</p>
           <div class="decoration-wave">
             <svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,50 C300,100 400,0 600,50 C800,100 900,0 1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/>
@@ -34,8 +34,8 @@
       <!-- 右侧表单 -->
       <div class="auth-form-wrapper">
         <div class="auth-form">
-          <h2 class="form-title">找回密码</h2>
-          <p class="form-subtitle">输入您的邮箱地址，我们将发送验证码</p>
+          <h2 class="form-title">{{ $t('passwordReset.forgotPassword') }}</h2>
+          <p class="form-subtitle">{{ $t('passwordReset.forgotPasswordSubtitle') }}</p>
 
           <!-- 成功提示 -->
           <transition name="fade">
@@ -44,7 +44,7 @@
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
-              验证码已发送到您的邮箱,正在跳转到重置密码页面...
+              {{ $t('passwordReset.codeSent') }}
             </div>
           </transition>
 
@@ -63,13 +63,13 @@
           <form @submit.prevent="handleSubmit">
             <!-- 邮箱 -->
             <div class="form-group">
-              <label for="email" class="form-label">邮箱地址</label>
+              <label for="email" class="form-label">{{ $t('profile.emailAddress') }}</label>
               <input
                 id="email"
                 v-model="formData.email"
                 type="email"
                 class="form-input"
-                placeholder="请输入您注册时使用的邮箱"
+                :placeholder="$t('passwordReset.emailPlaceholder')"
                 required
                 :disabled="isLoading"
               />
@@ -81,19 +81,19 @@
               class="submit-button"
               :disabled="isLoading"
             >
-              <span v-if="!isLoading">发送验证码</span>
+              <span v-if="!isLoading">{{ $t('passwordReset.sendCode') }}</span>
               <span v-else class="loading-spinner">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                 </svg>
-                发送中...
+                {{ $t('profile.sending') }}
               </span>
             </button>
           </form>
 
           <!-- 返回登录链接 -->
           <div class="auth-footer">
-            想起密码了? <router-link to="/login" class="auth-link">立即登录</router-link>
+            {{ $t('passwordReset.rememberPassword') }} <router-link to="/login" class="auth-link">{{ $t('auth.loginNow') }}</router-link>
           </div>
         </div>
       </div>
@@ -104,9 +104,11 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { userAPI } from '@/api'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const formData = reactive({
   email: ''
@@ -122,7 +124,7 @@ const handleSubmit = async () => {
   // 表单验证
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(formData.email)) {
-    error.value = '请输入有效的邮箱地址'
+    error.value = t('auth.errors.emailInvalid')
     return
   }
 
@@ -142,7 +144,7 @@ const handleSubmit = async () => {
       })
     }, 2000)
   } catch (err) {
-    error.value = err.response?.data?.message || '发送失败,请稍后重试'
+    error.value = err.response?.data?.message || t('passwordReset.errors.sendFailed')
   } finally {
     isLoading.value = false
   }

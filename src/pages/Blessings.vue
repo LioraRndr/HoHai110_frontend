@@ -3,8 +3,8 @@
     <div class="blessings-page">
       <!-- 页面标题 -->
       <div class="page-header">
-        <h1 class="page-title">薪传接力</h1>
-        <p class="page-subtitle">河海精神，代代相传</p>
+        <h1 class="page-title">{{ pageHeader.title }}</h1>
+        <p class="page-subtitle">{{ pageHeader.subtitle }}</p>
       </div>
 
       <!-- 火炬传递区域 -->
@@ -21,10 +21,12 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useBlessingsData } from '@/composables/useBlessingsData'
 import PageLayout from '@/components/PageLayout.vue'
 import BlessingWall from '@/components/BlessingWall.vue'
 import TorchDisplay from '@/components/TorchDisplay.vue'
 
+const { pageHeader } = useBlessingsData()
 const total = ref(0)
 </script>
 

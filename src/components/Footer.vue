@@ -3,31 +3,31 @@
     <div class="container">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>河海大学110周年</h3>
-          <p>百十薪传,续页青春</p>
+          <h3>{{ $t('footer.title') }}</h3>
+          <p>{{ $t('footer.slogan') }}</p>
         </div>
 
         <div class="footer-section">
-          <h4>快速导航</h4>
+          <h4>{{ $t('footer.quickLinks') }}</h4>
           <ul>
-            <li><router-link to="/">首页</router-link></li>
-            <li><router-link to="/timeline">校史长河</router-link></li>
-            <li><router-link to="/culture">使命担当</router-link></li>
-            <li><router-link to="/people">河海英华</router-link></li>
-            <li><router-link to="/blessings">薪传接力</router-link></li>
-            <li><router-link to="/articles">共话百十</router-link></li>
-            <li><router-link to="/about">关于</router-link></li>
+            <li><router-link to="/">{{ $t('nav.home') }}</router-link></li>
+            <li><router-link to="/timeline">{{ $t('nav.timeline') }}</router-link></li>
+            <li><router-link to="/culture">{{ $t('nav.culture') }}</router-link></li>
+            <li><router-link to="/people">{{ $t('nav.people') }}</router-link></li>
+            <li><router-link to="/blessings">{{ $t('nav.blessings') }}</router-link></li>
+            <li><router-link to="/articles">{{ $t('nav.articles') }}</router-link></li>
+            <li><router-link to="/about">{{ $t('nav.about') }}</router-link></li>
           </ul>
         </div>
 
         <div class="footer-section">
-          <h4>联系我们</h4>
-          <p>南京市江宁区佛城西路8号</p>
-          <p>邮编: 211100</p>
+          <h4>{{ $t('footer.contact') }}</h4>
+          <p>{{ $t('footer.address') }}</p>
+          <p>{{ $t('footer.postcode') }}</p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025. All rights reserved.</p>
+        <p>&copy; 2025. {{ $t('footer.allRightsReserved') }}</p>
       </div>
     </div>
   </footer>

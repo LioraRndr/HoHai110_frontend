@@ -5,11 +5,11 @@
       <div class="particles"></div>
     </div>
     <div class="hero-content">
-      <h1 class="hero-title">人物篇</h1>
+      <h1 class="hero-title">{{ ui.heroTitle }}</h1>
       <p class="hero-subtitle">{{ introduction.title }}</p>
       <p class="hero-description">{{ introduction.description }}</p>
       <div class="scroll-indicator">
-        <span>向下探索</span>
+        <span>{{ ui.scrollIndicator }}</span>
         <div class="scroll-arrow">↓</div>
       </div>
     </div>
@@ -17,12 +17,16 @@
 </template>
 
 <script setup>
+import { usePeopleData } from '@/composables/usePeopleData'
+
 defineProps({
   introduction: {
     type: Object,
     required: true
   }
 })
+
+const { ui } = usePeopleData()
 </script>
 
 <style scoped>

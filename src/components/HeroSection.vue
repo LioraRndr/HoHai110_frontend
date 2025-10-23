@@ -10,7 +10,7 @@
       playsinline
     >
       <source src="https://img.assets.five-plus-one.com/2025/10/7961f94a5105311ae23f3b8f447d67a5.mp4" type="video/mp4">
-      您的浏览器不支持视频播放
+      {{ $t('hero.browserNotSupported') }}
     </video>
 
     <!-- 视频蒙版 -->
@@ -72,11 +72,11 @@
       <!-- 访客数统计 -->
       <div class="visitor-count" :style="{ animationDelay: `${totalChars * 0.03 + 0.5}s` }">
         <p class="welcome-text">
-          <span>欢迎你，第</span>
+          <span>{{ $t('hero.welcomeVisitor') }}</span>
           <span class="visitor-number">{{ visitorCount }}</span>
-          <span>位传承者</span>
+          <span>{{ $t('hero.visitorNumber') }}</span>
         </p>
-        <p class="fire-text">请触碰这团百年之火——</p>
+        <p class="fire-text">{{ $t('hero.touchFire') }}</p>
       </div>
 
       <!-- 火种按钮 -->
@@ -90,13 +90,13 @@
             <path d="M12 2c1.5 3.5 3.5 5.5 5.5 7.5 1.5 1.5 2.5 3.5 2.5 5.5 0 4.4-3.6 8-8 8s-8-3.6-8-8c0-2 1-4 2.5-5.5C8.5 7.5 10.5 5.5 12 2z"/>
           </svg>
         </div>
-        <span>点燃薪火</span>
+        <span>{{ $t('hero.igniteFire') }}</span>
       </button>
     </div>
 
     <!-- 滚动提示 -->
     <div class="scroll-hint" :class="{ hidden: scrollHintHidden }">
-      <span>向下探索百十时光</span>
+      <span>{{ $t('hero.scrollHint') }}</span>
       <div class="scroll-arrow">↓</div>
     </div>
   </div>
@@ -104,8 +104,11 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import { visitorAPI } from '../api'
+
+const { t } = useI18n()
 
 const heroRef = ref(null)
 const videoRef = ref(null)
@@ -115,12 +118,12 @@ const visitorCount = ref('000000')
 const visitorNumber = ref(null)
 const contentHidden = ref(false) // 追踪内容是否已隐藏
 
-// 文字内容
-const quoteLine1 = ref('「百十载,不过长河一瞬;但每一瞬,都有星火燃起。」')
-const historyPara1 = ref('他们曾以笔墨为锚,在动荡年代定住洪流的方向;')
-const historyDetail1 = ref('——1915年,张謇先生怀揣"治水兴邦"之志,创立河海工程专门学校,许肇南作为首任校长,于开学典礼上誓言"俟河之清,人寿几何?凡我同胞,速起图之"。李仪祉教授在此传道,将西方水利科学与中国治水传统相融合,奠定了中国现代水利教育的基石。')
-const modernPara1 = ref('我们今以代码为舟,于数字纪元传递不灭的微光。')
-const modernDetail1 = ref('——2025年,河海大学迎来百十华诞,亦是中国水利高等教育百十庆典。全球校友通过"云点亮"活动汇聚祝福,见证学校从秦淮河畔走向世界水舞台的辉煌历程。')
+// 文字内容 - 使用 i18n
+const quoteLine1 = computed(() => t('hero.quote'))
+const historyPara1 = computed(() => t('hero.historyParagraph'))
+const historyDetail1 = computed(() => t('hero.historyDetail'))
+const modernPara1 = computed(() => t('hero.modernParagraph'))
+const modernDetail1 = computed(() => t('hero.modernDetail'))
 
 // 计算总字符数
 const totalChars = computed(() => {

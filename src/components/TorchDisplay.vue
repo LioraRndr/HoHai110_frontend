@@ -16,7 +16,7 @@
         <div class="torch-handle"></div>
         <div class="torch-base">
           <div class="torch-count">{{ displayCount }}</div>
-          <div class="torch-label">火炬已点燃</div>
+          <div class="torch-label">{{ torch.label }}</div>
         </div>
       </div>
     </div>
@@ -28,15 +28,18 @@
       :disabled="isLoading"
     >
       <div class="button-flame">🔥</div>
-      <span>{{ isLoading ? '传递中...' : '传递火炬' }}</span>
+      <span>{{ isLoading ? torch.passingButton : torch.passButton }}</span>
     </button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useBlessingsData } from '@/composables/useBlessingsData'
 import { torchAPI } from '@/api'
 import { $message } from '@/utils/message.js'
+
+const { torch } = useBlessingsData()
 
 // 响应式状态
 const canvasRef = ref(null)
@@ -197,7 +200,7 @@ const handlePassTorch = async () => {
 
     if (newCount !== null) {
       torchCount.value = newCount
-      $message.success('火炬传递成功！')
+      $message.success(torch.value.passSuccess)
 
       // 创建庆祝粒子效果
       if (canvas) {
@@ -209,7 +212,7 @@ const handlePassTorch = async () => {
       console.warn('API 返回数据格式异常:', response)
       // 乐观更新：如果 API 没有返回新值，手动增加
       torchCount.value = torchCount.value + 1
-      $message.success('火炬传递成功！')
+      $message.success(torch.value.passSuccess)
 
       if (canvas) {
         const centerX = canvas.width / 2
@@ -219,7 +222,7 @@ const handlePassTorch = async () => {
     }
   } catch (error) {
     console.error('传递火炬失败:', error)
-    $message.error('传递火炬失败: ' + (error.message || '请稍后再试'))
+    $message.error(torch.value.passFailed + ': ' + (error.message || ''))
   } finally {
     isLoading.value = false
   }

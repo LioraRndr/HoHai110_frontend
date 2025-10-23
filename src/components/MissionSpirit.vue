@@ -1,7 +1,7 @@
 <template>
   <div class="mission-spirit">
     <div class="mission-header">
-      <p class="mission-intro">「我们继承的,不是答案,而是那份'向水而行'的勇气。」</p>
+      <p class="mission-intro">{{ $t('missionSpirit.intro') }}</p>
     </div>
 
     <!-- 横向滚动的使命展示 -->
@@ -59,17 +59,17 @@
         <div class="detail-stats">
           <div class="stat-item">
             <div class="stat-icon">🏆</div>
-            <div class="stat-label">影响力</div>
+            <div class="stat-label">{{ $t('missionSpirit.stats.impact') }}</div>
             <div class="stat-value">{{ missions[activeMission].impact }}</div>
           </div>
           <div class="stat-item">
             <div class="stat-icon">👥</div>
-            <div class="stat-label">参与人数</div>
+            <div class="stat-label">{{ $t('missionSpirit.stats.participants') }}</div>
             <div class="stat-value">{{ missions[activeMission].participants }}</div>
           </div>
           <div class="stat-item">
             <div class="stat-icon">📅</div>
-            <div class="stat-label">建设周期</div>
+            <div class="stat-label">{{ $t('missionSpirit.stats.duration') }}</div>
             <div class="stat-value">{{ missions[activeMission].duration }}</div>
           </div>
         </div>
@@ -79,58 +79,61 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const activeMission = ref(0)
 const scrollTrack = ref(null)
 const canScrollLeft = ref(false)
 const canScrollRight = ref(true)
 
-const missions = ref([
+const missions = computed(() => [
   {
-    title: '三峡工程',
-    subtitle: '工地院士的坚守',
-    description: '郑守仁先生作为三峡工程设计总负责人,在坝区一间18平方米的宿舍里坚守27年,突破20多项世界之最。三峡工程是当今世界最大的水利枢纽工程,总装机容量2250万千瓦,年发电量近1000亿千瓦时,为长江中下游防洪、发电、航运、水资源利用作出了巨大贡献。',
-    quote: '三峡是中华民族的世纪梦想,河海人必须扛起这个担子。——郑守仁',
-    impact: '世界级',
-    participants: '10万+',
-    duration: '17年'
+    title: t('missionSpirit.missions.sanxia.title'),
+    subtitle: t('missionSpirit.missions.sanxia.subtitle'),
+    description: t('missionSpirit.missions.sanxia.description'),
+    quote: t('missionSpirit.missions.sanxia.quote'),
+    impact: t('missionSpirit.missions.sanxia.impact'),
+    participants: t('missionSpirit.missions.sanxia.participants'),
+    duration: t('missionSpirit.missions.sanxia.duration')
   },
   {
-    title: '南水北调',
-    subtitle: '让水往高处流的奇迹',
-    description: '张建云院士用40年踏遍千山万水,擘画四横三纵国家水网。东线工程从长江下游扬州抽水,利用13级泵站逐级提水,跨越黄河,送水到山东、天津、河北。这一工程解决了北方严重缺水问题,惠及1亿多人口。',
-    quote: '青年要眼里有光、脚下有路。——张建云',
-    impact: '国家级',
-    participants: '50万+',
-    duration: '50年规划'
+    title: t('missionSpirit.missions.nanshui.title'),
+    subtitle: t('missionSpirit.missions.nanshui.subtitle'),
+    description: t('missionSpirit.missions.nanshui.description'),
+    quote: t('missionSpirit.missions.nanshui.quote'),
+    impact: t('missionSpirit.missions.nanshui.impact'),
+    participants: t('missionSpirit.missions.nanshui.participants'),
+    duration: t('missionSpirit.missions.nanshui.duration')
   },
   {
-    title: '白鹤滩水电站',
-    subtitle: '在地球褶皱里筑坝',
-    description: '设计总工程师徐建荣扎根高山峡谷20年,在印度洋与亚欧板块碰撞的断裂带上,筑起窄坝身、大厂房的超级工程。白鹤滩水电站装机容量1600万千瓦,仅次于三峡工程,采用百万千瓦级水轮发电机组,代表了世界水电建设的最高水平。',
-    quote: '每一次地质勘测都如履薄冰,但河海人艰苦朴素的校训让我们扎稳了根。——徐建荣',
-    impact: '世界级',
-    participants: '8万+',
-    duration: '10年'
+    title: t('missionSpirit.missions.baihetan.title'),
+    subtitle: t('missionSpirit.missions.baihetan.subtitle'),
+    description: t('missionSpirit.missions.baihetan.description'),
+    quote: t('missionSpirit.missions.baihetan.quote'),
+    impact: t('missionSpirit.missions.baihetan.impact'),
+    participants: t('missionSpirit.missions.baihetan.participants'),
+    duration: t('missionSpirit.missions.baihetan.duration')
   },
   {
-    title: '海上风电',
-    subtitle: '御风而行的中国智慧',
-    description: '国家卓越工程师林毅峰带领团队研发"八爪鱼"桩基与"海上漂不倒翁"技术,让50层楼高的风机抵御17级台风。中国海上风电装机容量已超过3000万千瓦,居世界第一,为国家"双碳"目标贡献重要力量。',
-    quote: '海风无常,但为国奉献的初心不移。——林毅峰',
-    impact: '世界第一',
-    participants: '5万+',
-    duration: '持续建设'
+    title: t('missionSpirit.missions.offshore.title'),
+    subtitle: t('missionSpirit.missions.offshore.subtitle'),
+    description: t('missionSpirit.missions.offshore.description'),
+    quote: t('missionSpirit.missions.offshore.quote'),
+    impact: t('missionSpirit.missions.offshore.impact'),
+    participants: t('missionSpirit.missions.offshore.participants'),
+    duration: t('missionSpirit.missions.offshore.duration')
   },
   {
-    title: '国际水利',
-    subtitle: '以水为媒,惠泽全球',
-    description: '从顾兆勋教授1958年获越南友谊勋章,到余钟波教授2021年当选联合国教科文组织国际水文计划首位中国籍主席;从柬埔寨甘再水电站到西非海域监测,河海人将中国标准带向世界,在"一带一路"沿线30多个国家留下深深足迹。',
-    quote: '水是世界的语言,合作是人类的未来。——余钟波',
-    impact: '国际影响',
-    participants: '3万+',
-    duration: '60余年'
+    title: t('missionSpirit.missions.international.title'),
+    subtitle: t('missionSpirit.missions.international.subtitle'),
+    description: t('missionSpirit.missions.international.description'),
+    quote: t('missionSpirit.missions.international.quote'),
+    impact: t('missionSpirit.missions.international.impact'),
+    participants: t('missionSpirit.missions.international.participants'),
+    duration: t('missionSpirit.missions.international.duration')
   }
 ])
 

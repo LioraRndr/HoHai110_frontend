@@ -11,7 +11,7 @@
         </router-link>
 
         <div class="navbar-logo">
-          <span class="logo-text">河海110周年</span>
+          <span class="logo-text">{{ $t('home.hero.title') }}</span>
         </div>
       </div>
     </nav>
@@ -20,9 +20,9 @@
       <!-- 左侧装饰 -->
       <div class="auth-decoration">
         <div class="decoration-content">
-          <h1 class="decoration-title">河海大学</h1>
-          <h2 class="decoration-subtitle">110周年校庆</h2>
-          <p class="decoration-text">百十薪传 · 续页青春</p>
+          <h1 class="decoration-title">{{ $t('home.hero.title').split('110')[0] }}</h1>
+          <h2 class="decoration-subtitle">{{ $t('home.hero.title').includes('110') ? '110' + $t('home.hero.title').split('110')[1] : '' }}</h2>
+          <p class="decoration-text">{{ $t('home.hero.subtitle') }}</p>
           <div class="decoration-wave">
             <svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,50 C300,100 400,0 600,50 C800,100 900,0 1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/>
@@ -34,8 +34,8 @@
       <!-- 右侧表单 -->
       <div class="auth-form-wrapper">
         <div class="auth-form">
-          <h2 class="form-title">欢迎回来</h2>
-          <p class="form-subtitle">登录您的账户</p>
+          <h2 class="form-title">{{ $t('auth.welcome') }}</h2>
+          <p class="form-subtitle">{{ $t('auth.loginToAccount') }}</p>
 
           <!-- 错误提示 -->
           <transition name="fade">
@@ -52,13 +52,13 @@
           <form @submit.prevent="handleSubmit">
             <!-- 用户名/邮箱 -->
             <div class="form-group">
-              <label for="username" class="form-label">用户名或邮箱</label>
+              <label for="username" class="form-label">{{ $t('auth.usernameOrEmail') }}</label>
               <input
                 id="username"
                 v-model="formData.username"
                 type="text"
                 class="form-input"
-                placeholder="请输入用户名或邮箱"
+                :placeholder="$t('auth.placeholders.usernameOrEmail')"
                 required
                 :disabled="isLoading"
               />
@@ -66,14 +66,14 @@
 
             <!-- 密码 -->
             <div class="form-group">
-              <label for="password" class="form-label">密码</label>
+              <label for="password" class="form-label">{{ $t('auth.password') }}</label>
               <div class="password-input-wrapper">
                 <input
                   id="password"
                   v-model="formData.password"
                   :type="showPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请输入密码"
+                  :placeholder="$t('auth.placeholders.password')"
                   required
                   :disabled="isLoading"
                 />
@@ -99,9 +99,9 @@
             <div class="form-options">
               <label class="checkbox-label">
                 <input v-model="formData.remember" type="checkbox">
-                <span>记住我</span>
+                <span>{{ $t('auth.rememberMe') }}</span>
               </label>
-              <router-link to="/forgot-password" class="forgot-link">忘记密码?</router-link>
+              <router-link to="/forgot-password" class="forgot-link">{{ $t('auth.forgotPassword') }}</router-link>
             </div>
 
             <!-- 提交按钮 -->
@@ -110,19 +110,19 @@
               class="submit-button"
               :disabled="isLoading"
             >
-              <span v-if="!isLoading">登录</span>
+              <span v-if="!isLoading">{{ $t('common.login') }}</span>
               <span v-else class="loading-spinner">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                 </svg>
-                登录中...
+                {{ $t('auth.loggingIn') }}
               </span>
             </button>
           </form>
 
           <!-- 注册链接 -->
           <div class="auth-footer">
-            还没有账户? <router-link to="/register" class="auth-link">立即注册</router-link>
+            {{ $t('auth.noAccount') }} <router-link to="/register" class="auth-link">{{ $t('auth.registerNow') }}</router-link>
           </div>
         </div>
       </div>
@@ -134,10 +134,12 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const { t } = useI18n()
 
 const formData = reactive({
   username: '',
@@ -157,7 +159,7 @@ const backPath = computed(() => {
 
 const backText = computed(() => {
   const redirect = route.query.redirect
-  return redirect ? '返回' : '返回首页'
+  return redirect ? t('common.back') : t('common.backToHome')
 })
 
 const handleSubmit = async () => {
@@ -165,17 +167,17 @@ const handleSubmit = async () => {
 
   // 表单验证
   if (!formData.username.trim()) {
-    error.value = '请输入用户名或邮箱'
+    error.value = t('auth.errors.usernameOrEmailRequired')
     return
   }
 
   if (!formData.password) {
-    error.value = '请输入密码'
+    error.value = t('auth.errors.passwordRequired')
     return
   }
 
   if (formData.password.length < 6) {
-    error.value = '密码长度至少为6位'
+    error.value = t('auth.errors.passwordMinLength')
     return
   }
 
@@ -207,10 +209,10 @@ const handleSubmit = async () => {
         await router.replace('/')
       }
     } else {
-      error.value = result.message || '登录失败,请检查用户名和密码'
+      error.value = result.message || t('auth.errors.loginFailed')
     }
   } catch (err) {
-    error.value = err.message || '登录失败,请稍后重试'
+    error.value = err.message || t('auth.errors.loginFailed')
   } finally {
     isLoading.value = false
   }

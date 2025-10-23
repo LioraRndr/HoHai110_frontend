@@ -5,8 +5,8 @@
     <div class="about-container">
       <!-- 页面头部 -->
       <div id="hero" class="page-hero">
-        <h1 class="hero-title">河海大学110周年</h1>
-        <p class="hero-subtitle">纪念网站</p>
+        <h1 class="hero-title">{{ hero.title }}</h1>
+        <p class="hero-subtitle">{{ hero.subtitle }}</p>
         <div class="hero-decoration">
           <div class="decoration-circle"></div>
           <div class="decoration-circle"></div>
@@ -16,249 +16,118 @@
 
       <!-- 关于学校 -->
       <section id="about-school" class="about-section">
-        <h2 class="section-title">关于河海大学</h2>
+        <h2 class="section-title">{{ aboutSchool.title }}</h2>
         <div class="content-card">
-          <p>
-            河海大学是一所有着110年办学历史,以水利为特色,工科为主,多学科协调发展的教育部直属全国重点大学,
-            是实施国家"211工程"重点建设、国家优势学科创新平台建设、"双一流"建设以及教育部批准设立研究生院的高校。
-          </p>
-          <p>
-            一百多年来,学校在治水兴邦的奋斗历程中创造了无数个"第一":
-            中国第一所水利高等学府、第一个水利本科专业、第一位水利学科的中国工程院院士、第一个水利工程博士点。
-          </p>
+          <p>{{ aboutSchool.paragraph1 }}</p>
+          <p>{{ aboutSchool.paragraph2 }}</p>
         </div>
       </section>
 
       <!-- 发展历程 -->
       <section id="milestone" class="about-section">
-        <h2 class="section-title">发展历程</h2>
+        <h2 class="section-title">{{ milestones.title }}</h2>
         <div class="milestone-grid">
-          <div class="milestone-card">
-            <div class="milestone-year">1915</div>
-            <div class="milestone-title">创立</div>
-            <p>河海工程专门学校成立,中国水利高等教育开启</p>
-          </div>
-          <div class="milestone-card">
-            <div class="milestone-year">1952</div>
-            <div class="milestone-title">重组</div>
-            <p>华东水利学院成立,新中国水利人才培养基地</p>
-          </div>
-          <div class="milestone-card">
-            <div class="milestone-year">1985</div>
-            <div class="milestone-title">复名</div>
-            <p>恢复"河海大学"校名,邓小平同志亲笔题写</p>
-          </div>
-          <div class="milestone-card">
-            <div class="milestone-year">2017</div>
-            <div class="milestone-title">双一流</div>
-            <p>水利工程学科入选"双一流"建设学科</p>
+          <div v-for="event in milestones.events" :key="event.year" class="milestone-card">
+            <div class="milestone-year">{{ event.year }}</div>
+            <div class="milestone-title">{{ event.title }}</div>
+            <p>{{ event.description }}</p>
           </div>
         </div>
       </section>
 
       <!-- 办学成就 -->
       <section id="achievements" class="about-section">
-        <h2 class="section-title">办学成就</h2>
+        <h2 class="section-title">{{ achievements.title }}</h2>
         <div class="achievements-grid">
-          <div class="achievement-card">
-            <div class="achievement-icon">🎓</div>
-            <div class="achievement-number">20万+</div>
-            <div class="achievement-label">培养毕业生</div>
-          </div>
-          <div class="achievement-card">
-            <div class="achievement-icon">🏆</div>
-            <div class="achievement-number">全国第一</div>
-            <div class="achievement-label">水利工程学科</div>
-          </div>
-          <div class="achievement-card">
-            <div class="achievement-icon">🔬</div>
-            <div class="achievement-number">20+</div>
-            <div class="achievement-label">国家级科研平台</div>
-          </div>
-          <div class="achievement-card">
-            <div class="achievement-icon">🌏</div>
-            <div class="achievement-number">5万+</div>
-            <div class="achievement-label">在读学生</div>
+          <div v-for="(stat, index) in achievements.stats" :key="index" class="achievement-card">
+            <div class="achievement-icon">{{ stat.icon }}</div>
+            <div class="achievement-number">{{ stat.number }}</div>
+            <div class="achievement-label">{{ stat.label }}</div>
           </div>
         </div>
       </section>
 
       <!-- 关于项目 -->
       <section id="project" class="about-section">
-        <h2 class="section-title">关于本项目</h2>
+        <h2 class="section-title">{{ project.title }}</h2>
         <div class="content-card project-card">
-          <h3>项目简介</h3>
-          <p>
-            河海大学110周年纪念网站是一个富有交互性和创意的全栈应用，旨在通过现代化的Web技术展现河海大学110年的辉煌历程。
-            项目采用前后端分离架构，前端使用Vue 3 + Vite构建，后端基于Node.js + Express + MySQL，提供流畅的用户体验和精美的视觉效果。
-          </p>
+          <h3>{{ project.introduction.title }}</h3>
+          <p>{{ project.introduction.content }}</p>
 
-          <h3>主要亮点</h3>
+          <h3>{{ project.highlights.title }}</h3>
           <ul class="feature-list highlight-list">
-            <li>🎨 精美的动画效果和交互体验</li>
-            <li>📱 完善的响应式设计，支持多端访问</li>
-            <li>⚡ 高性能加载和渲染优化</li>
-            <li>🔐 完整的用户认证和权限管理系统</li>
-            <li>💬 丰富的社区互动功能</li>
+            <li v-for="(item, index) in project.highlights.items" :key="index">{{ item }}</li>
           </ul>
 
-          <h3>前端技术栈</h3>
+          <h3>{{ project.frontend.title }}</h3>
           <div class="tech-section">
             <div class="tech-category">
-              <h4>核心框架</h4>
+              <h4>{{ project.frontend.core.title }}</h4>
               <div class="tech-stack">
-                <span class="tech-tag frontend">Vue 3.5.22</span>
-                <span class="tech-tag frontend">Vite 7.1.10</span>
-                <span class="tech-tag frontend">Vue Router 4.6.3</span>
-                <span class="tech-tag frontend">Pinia 3.0.3</span>
+                <span v-for="tech in project.frontend.core.items" :key="tech.name" :class="['tech-tag', tech.type]">{{ tech.name }}</span>
               </div>
             </div>
             <div class="tech-category">
-              <h4>核心库</h4>
+              <h4>{{ project.frontend.libraries.title }}</h4>
               <div class="tech-stack">
-                <span class="tech-tag frontend">GSAP 3.13.0</span>
-                <span class="tech-tag frontend">Three.js 0.180.0</span>
-                <span class="tech-tag frontend">Axios 1.12.2</span>
-                <span class="tech-tag frontend">Socket.IO 4.8.1</span>
-                <span class="tech-tag frontend">@vueuse/core 13.9.0</span>
+                <span v-for="tech in project.frontend.libraries.items" :key="tech.name" :class="['tech-tag', tech.type]">{{ tech.name }}</span>
               </div>
             </div>
           </div>
 
-          <h3>后端技术栈</h3>
+          <h3>{{ project.backend.title }}</h3>
           <div class="tech-section">
             <div class="tech-category">
-              <h4>核心框架</h4>
+              <h4>{{ project.backend.core.title }}</h4>
               <div class="tech-stack">
-                <span class="tech-tag backend">Node.js 14+</span>
-                <span class="tech-tag backend">Express 5.x</span>
-                <span class="tech-tag backend">Sequelize 6.x</span>
-                <span class="tech-tag backend">MySQL 8.0+</span>
+                <span v-for="tech in project.backend.core.items" :key="tech.name" :class="['tech-tag', tech.type]">{{ tech.name }}</span>
               </div>
             </div>
             <div class="tech-category">
-              <h4>核心功能</h4>
+              <h4>{{ project.backend.features.title }}</h4>
               <div class="tech-stack">
-                <span class="tech-tag backend">JWT 认证</span>
-                <span class="tech-tag backend">Socket.IO 实时通信</span>
-                <span class="tech-tag backend">Nodemailer 邮件服务</span>
-                <span class="tech-tag backend">Multer 文件上传</span>
-                <span class="tech-tag backend">bcrypt 密码加密</span>
+                <span v-for="tech in project.backend.features.items" :key="tech.name" :class="['tech-tag', tech.type]">{{ tech.name }}</span>
               </div>
             </div>
           </div>
 
-          <h3>核心功能模块</h3>
+          <h3>{{ project.features.title }}</h3>
           <div class="features-grid">
-            <div class="feature-category">
-              <div class="category-icon">📖</div>
-              <h4>内容展示</h4>
+            <div v-for="category in project.features.categories" :key="category.title" class="feature-category">
+              <div class="category-icon">{{ category.icon }}</div>
+              <h4>{{ category.title }}</h4>
               <ul>
-                <li>首页 - 校庆主题内容展示与导航</li>
-                <li>历史时间线 - 河海大学110年发展历程</li>
-                <li>文化展示 - 河海精神与文化内涵</li>
-                <li>河海人物 - 杰出校友和重要人物介绍</li>
-              </ul>
-            </div>
-
-            <div class="feature-category">
-              <div class="category-icon">🎨</div>
-              <h4>互动体验</h4>
-              <ul>
-                <!-- <li>海报生成 - 个性化校庆纪念海报制作</li> -->
-                <!-- <li>照片墙 - 校友照片马赛克拼图展示</li> -->
-                <li>祝福墙 - 师生校友留言祝福互动</li>
-                <li>寄语未来 - 校友寄语征集与展示</li>
-                <li>火炬传递 - 全局火炬传递计数器</li>
-              </ul>
-            </div>
-
-            <div class="feature-category">
-              <div class="category-icon">💬</div>
-              <h4>社区功能</h4>
-              <ul>
-                <li>论坛系统 - 多板块讨论区，支持发帖、回复、点赞</li>
-                <li>文章专栏 - 校庆相关文章发布与阅读</li>
-                <li>评论互动 - 文章和帖子的评论功能</li>
-                <!-- <li>接力活动 - 校庆接力活动参与和分享</li> -->
-              </ul>
-            </div>
-
-            <div class="feature-category">
-              <div class="category-icon">👤</div>
-              <h4>用户系统</h4>
-              <ul>
-                <li>用户认证 - 登录、注册、密码重置</li>
-                <li>个人中心 - 用户信息管理和个性化设置</li>
-                <li>权限管理 - 基于角色的访问控制</li>
-                <li>管理后台 - 管理员内容管理界面</li>
+                <li v-for="(item, index) in category.items" :key="index">{{ item }}</li>
               </ul>
             </div>
           </div>
 
-          <h3>技术特性</h3>
+          <h3>{{ project.techFeatures.title }}</h3>
           <div class="tech-features">
-            <div class="tech-feature-item">
-              <div class="feature-icon">🎬</div>
+            <div v-for="feature in project.techFeatures.items" :key="feature.title" class="tech-feature-item">
+              <div class="feature-icon">{{ feature.icon }}</div>
               <div class="feature-content">
-                <h4>动画效果</h4>
-                <p>GSAP驱动的高性能滚动触发动画、基于Three.js的3D视觉效果、GPU加速的动画渲染</p>
-              </div>
-            </div>
-            <div class="tech-feature-item">
-              <div class="feature-icon">📱</div>
-              <div class="feature-content">
-                <h4>响应式设计</h4>
-                <p>移动优先的设计理念、灵活的栅格布局系统、自适应字体和间距、触摸友好的交互设计</p>
-              </div>
-            </div>
-            <div class="tech-feature-item">
-              <div class="feature-icon">⚡</div>
-              <div class="feature-content">
-                <h4>性能优化</h4>
-                <p>路由级别的代码分割和懒加载、组件异步加载、资源预加载和缓存策略、优化的包体积和加载速度</p>
-              </div>
-            </div>
-            <div class="tech-feature-item">
-              <div class="feature-icon">🔒</div>
-              <div class="feature-content">
-                <h4>安全特性</h4>
-                <p>JWT令牌认证、路由守卫和权限验证、XSS和CSRF防护、安全的数据传输、速率限制保护</p>
+                <h4>{{ feature.title }}</h4>
+                <p>{{ feature.description }}</p>
               </div>
             </div>
           </div>
 
-          <h3>项目规模</h3>
+          <h3>{{ project.stats.title }}</h3>
           <div class="project-stats">
-            <div class="stat-item">
-              <div class="stat-number">80+</div>
-              <div class="stat-label">API接口</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">21</div>
-              <div class="stat-label">数据表</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">20+</div>
-              <div class="stat-label">页面路由</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">15+</div>
-              <div class="stat-label">后端控制器</div>
+            <div v-for="stat in project.stats.items" :key="stat.label" class="stat-item">
+              <div class="stat-number">{{ stat.number }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
             </div>
           </div>
 
-          <h3>系统架构</h3>
+          <h3>{{ project.architecture.title }}</h3>
           <div class="architecture-info">
-            <p>
-              本项目采用前后端分离的现代化架构设计：
-            </p>
+            <p>{{ project.architecture.description }}</p>
             <ul>
-              <li><strong>前端层：</strong>Vue 3 + Composition API，组件化开发，响应式状态管理</li>
-              <li><strong>接口层：</strong>RESTful API设计，统一的请求/响应格式，完善的错误处理</li>
-              <li><strong>业务层：</strong>Express路由和控制器，业务逻辑分层，中间件机制</li>
-              <li><strong>数据层：</strong>Sequelize ORM，MySQL关系型数据库，数据模型关联</li>
-              <li><strong>实时通信：</strong>Socket.IO实现WebSocket双向通信，支持在线状态和实时消息</li>
+              <li v-for="layer in project.architecture.layers" :key="layer.name">
+                <strong>{{ layer.name }}：</strong>{{ layer.description }}
+              </li>
             </ul>
           </div>
         </div>
@@ -266,43 +135,27 @@
 
       <!-- 团队信息 -->
       <section id="team" class="about-section">
-        <h2 class="section-title">开发团队</h2>
+        <h2 class="section-title">{{ team.title }}</h2>
         <div class="content-card">
-          <p class="team-desc">
-            本作品为河海大学第十一届网页设计大赛参赛作品<br>
-            由计算机与软件学院计算机科学与技术2班王煜冉 & 李子睿共同设计制作
-          </p>
+          <p class="team-desc" style="white-space: pre-line;">{{ team.description }}</p>
 
           <div class="team-members">
-            <div class="member-card">
-              <div class="member-name">王煜冉</div>
-              <div class="member-role">前端开发 & 后端开发</div>
-              <div class="member-links">
-                <a href="http://r-l.ink/home" target="_blank" rel="noopener noreferrer" class="member-link">
-                  <span class="link-icon">🏠</span>
-                  <span>个人主页</span>
-                </a>
-                <a href="https://r-l.ink/about" target="_blank" rel="noopener noreferrer" class="member-link">
-                  <span class="link-icon">📧</span>
-                  <span>联系方式</span>
+            <div v-for="member in team.members" :key="member.name" class="member-card">
+              <div class="member-name">{{ member.name }}</div>
+              <div class="member-role">{{ member.role }}</div>
+              <div v-if="member.links.length > 0" class="member-links">
+                <a v-for="link in member.links" :key="link.url" :href="link.url" target="_blank" rel="noopener noreferrer" class="member-link">
+                  <span class="link-icon">{{ link.icon }}</span>
+                  <span>{{ link.text }}</span>
                 </a>
               </div>
-            </div>
-
-            <div class="member-card">
-              <div class="member-name">李子睿</div>
-              <div class="member-role">设计 & 测试</div>
             </div>
           </div>
 
           <div class="contact-info">
-            <!-- <div class="contact-item">
-              <strong>参赛单位:</strong>
-              <span>河海大学计算机与软件学院</span>
-            </div> -->
             <div class="contact-item">
-              <strong>版本:</strong>
-              <span>v1.0.0</span>
+              <strong>{{ team.contact.version.label }}:</strong>
+              <span>{{ team.contact.version.value }}</span>
             </div>
           </div>
         </div>
@@ -315,17 +168,24 @@
 </template>
 
 <script setup>
-import { h, onMounted } from 'vue'
+import { h, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import Navbar from '@/components/Navbar.vue'
 import PageNav from '@/components/PageNav.vue'
 import Footer from '@/components/Footer.vue'
+import { useAboutData } from '@/composables/useAboutData'
+
+const { t } = useI18n()
+
+// 使用 composable 获取数据
+const { hero, aboutSchool, milestones, achievements, project, team } = useAboutData()
 
 // 导航项配置
-const navItems = [
+const navItems = computed(() => [
   {
     id: 'hero',
-    label: '首页',
+    label: t('aboutPage.pageNav.hero'),
     icon: () => h('svg', {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -340,7 +200,7 @@ const navItems = [
   },
   {
     id: 'about-school',
-    label: '关于学校',
+    label: t('aboutPage.pageNav.aboutSchool'),
     icon: () => h('svg', {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -355,7 +215,7 @@ const navItems = [
   },
   {
     id: 'milestone',
-    label: '发展历程',
+    label: t('aboutPage.pageNav.milestone'),
     icon: () => h('svg', {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -370,7 +230,7 @@ const navItems = [
   },
   {
     id: 'achievements',
-    label: '办学成就',
+    label: t('aboutPage.pageNav.achievements'),
     icon: () => h('svg', {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -389,7 +249,7 @@ const navItems = [
   },
   {
     id: 'project',
-    label: '关于项目',
+    label: t('aboutPage.pageNav.project'),
     icon: () => h('svg', {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -404,7 +264,7 @@ const navItems = [
   },
   {
     id: 'team',
-    label: '开发团队',
+    label: t('aboutPage.pageNav.team'),
     icon: () => h('svg', {
       viewBox: '0 0 24 24',
       fill: 'none',
@@ -419,7 +279,7 @@ const navItems = [
       h('path', { d: 'M16 3.13a4 4 0 0 1 0 7.75' })
     ])
   }
-]
+])
 
 onMounted(() => {
   // 入场动画

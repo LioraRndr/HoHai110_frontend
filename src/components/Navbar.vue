@@ -16,38 +16,49 @@
       <!-- 导航链接 -->
       <ul class="navbar-menu">
         <li class="menu-item">
-          <router-link to="/" class="menu-link">首页</router-link>
+          <router-link to="/" class="menu-link">{{ $t('nav.home') }}</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/timeline" class="menu-link">校史长河</router-link>
+          <router-link to="/timeline" class="menu-link">{{ $t('nav.timeline') }}</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/culture" class="menu-link">使命担当</router-link>
+          <router-link to="/culture" class="menu-link">{{ $t('nav.culture') }}</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/people" class="menu-link">河海英华</router-link>
+          <router-link to="/people" class="menu-link">{{ $t('nav.people') }}</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/blessings" class="menu-link">薪传接力</router-link>
+          <router-link to="/blessings" class="menu-link">{{ $t('nav.blessings') }}</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/articles" class="menu-link">共话百十</router-link>
+          <router-link to="/articles" class="menu-link">{{ $t('nav.articles') }}</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/about" class="menu-link">关于</router-link>
+          <router-link to="/about" class="menu-link">{{ $t('nav.about') }}</router-link>
         </li>
       </ul>
 
       <!-- 用户区域 -->
       <div class="navbar-user">
+        <!-- 语言切换按钮 -->
+        <div class="language-switcher">
+          <button @click="toggleLanguage" class="language-button" :title="currentLocale === 'zh' ? '切换到英文' : 'Switch to Chinese'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span class="language-text">{{ currentLocale === 'zh' ? '中文' : 'EN' }}</span>
+          </button>
+        </div>
+
         <div v-if="userStore.isLoggedIn" class="user-info">
           <!-- 管理员标识 -->
-          <router-link v-if="userStore.isAdmin" to="/admin" class="admin-badge" title="管理后台">
+          <router-link v-if="userStore.isAdmin" to="/admin" class="admin-badge" :title="$t('common.adminPanel')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               <path d="M9 12l2 2 4-4"/>
             </svg>
-            <span>管理</span>
+            <span>{{ $t('common.admin') }}</span>
           </router-link>
 
           <!-- 用户头像下拉菜单 -->
@@ -67,7 +78,7 @@
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
                 </svg>
-                <span>个人中心</span>
+                <span>{{ $t('common.profile') }}</span>
               </router-link>
               <button class="dropdown-item" @click="handleLogout">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -75,14 +86,14 @@
                   <polyline points="16 17 21 12 16 7"/>
                   <line x1="21" y1="12" x2="9" y2="12"/>
                 </svg>
-                <span>退出登录</span>
+                <span>{{ $t('common.logout') }}</span>
               </button>
             </div>
           </div>
         </div>
         <div v-else class="auth-buttons">
-          <router-link to="/login" class="auth-link login-link">登录</router-link>
-          <router-link to="/register" class="auth-link register-link">注册</router-link>
+          <router-link to="/login" class="auth-link login-link">{{ $t('common.login') }}</router-link>
+          <router-link to="/register" class="auth-link register-link">{{ $t('common.register') }}</router-link>
         </div>
       </div>
 
@@ -98,30 +109,40 @@
     <div class="mobile-menu" :class="{ active: isMobileMenuOpen }">
       <ul class="mobile-menu-list">
         <li class="mobile-menu-item">
-          <router-link to="/" class="mobile-menu-link" @click="closeMobileMenu">首页</router-link>
+          <router-link to="/" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.home') }}</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/timeline" class="mobile-menu-link" @click="closeMobileMenu">校史长河</router-link>
+          <router-link to="/timeline" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.timeline') }}</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/culture" class="mobile-menu-link" @click="closeMobileMenu">使命担当</router-link>
+          <router-link to="/culture" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.culture') }}</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/people" class="mobile-menu-link" @click="closeMobileMenu">河海英华</router-link>
+          <router-link to="/people" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.people') }}</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/blessings" class="mobile-menu-link" @click="closeMobileMenu">薪传接力</router-link>
+          <router-link to="/blessings" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.blessings') }}</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/articles" class="mobile-menu-link" @click="closeMobileMenu">共话百十</router-link>
+          <router-link to="/articles" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.articles') }}</router-link>
         </li>
         <li class="mobile-menu-item">
-          <router-link to="/about" class="mobile-menu-link" @click="closeMobileMenu">关于</router-link>
+          <router-link to="/about" class="mobile-menu-link" @click="closeMobileMenu">{{ $t('nav.about') }}</router-link>
         </li>
       </ul>
 
       <!-- 移动端用户区域 -->
       <div class="mobile-user-section">
+        <!-- 语言切换按钮 - 移动端 -->
+        <button class="mobile-language-button" @click="toggleLanguage">
+          <svg class="language-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span class="mobile-language-text">{{ currentLocale === 'zh' ? '中文' : 'English' }}</span>
+        </button>
+
         <div v-if="userStore.isLoggedIn" class="mobile-user-info">
           <div class="mobile-user-avatar">
             {{ userStore.userName.charAt(0).toUpperCase() }}
@@ -133,7 +154,7 @@
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <span>个人中心</span>
+            <span>{{ $t('common.profile') }}</span>
           </router-link>
           <!-- 管理员入口 -->
           <router-link v-if="userStore.isAdmin" to="/admin" class="mobile-admin-link" @click="closeMobileMenu">
@@ -141,7 +162,7 @@
               <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
               <path d="M9 12l2 2 4-4"/>
             </svg>
-            <span>管理后台</span>
+            <span>{{ $t('common.adminPanel') }}</span>
           </router-link>
           <button class="mobile-logout-button" @click="handleMobileLogout">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -149,12 +170,12 @@
               <polyline points="16 17 21 12 16 7"/>
               <line x1="21" y1="12" x2="9" y2="12"/>
             </svg>
-            <span>退出登录</span>
+            <span>{{ $t('common.logout') }}</span>
           </button>
         </div>
         <div v-else class="mobile-auth-buttons">
-          <router-link to="/login" class="mobile-auth-link mobile-login-link" @click="closeMobileMenu">登录</router-link>
-          <router-link to="/register" class="mobile-auth-link mobile-register-link" @click="closeMobileMenu">注册</router-link>
+          <router-link to="/login" class="mobile-auth-link mobile-login-link" @click="closeMobileMenu">{{ $t('common.login') }}</router-link>
+          <router-link to="/register" class="mobile-auth-link mobile-register-link" @click="closeMobileMenu">{{ $t('common.register') }}</router-link>
         </div>
       </div>
     </div>
@@ -165,19 +186,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const { locale, t } = useI18n()
 
 const isScrolled = ref(false)
 const isHidden = ref(false)
 const isMobileMenuOpen = ref(false)
 const showUserMenu = ref(false)
 let lastScrollY = 0
+
+// 当前语言
+const currentLocale = computed(() => locale.value)
+
+// 切换语言
+const toggleLanguage = () => {
+  const newLocale = locale.value === 'zh' ? 'en' : 'zh'
+  locale.value = newLocale
+  localStorage.setItem('locale', newLocale)
+}
 
 const handleScroll = () => {
   const currentScrollY = window.scrollY
@@ -404,6 +437,44 @@ watch(() => route.path, (newPath) => {
   align-items: center;
   gap: var(--spacing-md);
   margin-left: var(--spacing-lg);
+}
+
+/* 语言切换按钮 */
+.language-switcher {
+  display: flex;
+  align-items: center;
+}
+
+.language-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.language-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.language-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.language-text {
+  min-width: 24px;
+  text-align: center;
 }
 
 .user-info {
@@ -730,6 +801,32 @@ watch(() => route.path, (newPath) => {
   padding: var(--spacing-xl);
   border-top: 2px solid rgba(255, 255, 255, 0.15);
   margin-top: var(--spacing-lg);
+}
+
+/* 移动端语言切换按钮 */
+.mobile-language-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: var(--text-base);
+  font-weight: 600;
+  transition: all var(--transition-base);
+}
+
+.mobile-language-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-language-button .language-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .mobile-user-info {

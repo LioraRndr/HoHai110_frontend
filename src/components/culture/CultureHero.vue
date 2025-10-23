@@ -5,10 +5,10 @@
       <div class="particles"></div>
     </div>
     <div class="hero-content">
-      <h1 class="hero-title">河海文化</h1>
-      <p class="hero-subtitle">百十载薪火相传 · 治水报国使命</p>
+      <h1 class="hero-title">{{ ui.heroTitle }}</h1>
+      <p class="hero-subtitle">{{ ui.heroSubtitle }}</p>
       <div class="scroll-indicator">
-        <span>向下探索</span>
+        <span>{{ ui.scrollIndicator }}</span>
         <div class="scroll-arrow">↓</div>
       </div>
     </div>
@@ -16,7 +16,9 @@
 </template>
 
 <script setup>
-// Hero section component - 首屏展示
+import { useCultureData } from '@/composables/useCultureData'
+
+const { ui } = useCultureData()
 </script>
 
 <style scoped>

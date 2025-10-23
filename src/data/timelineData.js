@@ -1,6 +1,7 @@
 /**
  * 河海大学110周年时间线数据
  * 每个节点包含：年份、标题、历史现场、关键人物、数据、故事等
+ * 注意：结语(epilogue)内容已移至i18n翻译文件中
  */
 
 export const timelineData = [
@@ -254,18 +255,7 @@ export const timelineData = [
 ]
 
 /**
- * 结语内容
+ * 结语内容已移至i18n翻译文件
+ * @see src/i18n/locales/timelineData.zh.js
+ * @see src/i18n/locales/timelineData.en.js
  */
-export const epilogue = {
-  title: '传承,是什么?',
-  verses: [
-    '是1915年油灯下的第一堂课',
-    '是1952年工地上的青春热血',
-    '是1977年图书馆前的排队长龙',
-    '是2025年大国工程的坚定身影',
-    '',
-    '是百十年前的星火,从未熄灭',
-    '是跨越时空的问答,在此刻共鸣',
-    '是分叉的起点,终将在结局交汇'
-  ]
-}

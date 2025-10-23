@@ -1,7 +1,7 @@
 <template>
   <div class="history-timeline">
     <div class="timeline-header">
-      <p class="timeline-intro">「每一次点击,都是一次回望;每一次回望,都是为了更好地前往。」</p>
+      <p class="timeline-intro">{{ $t('historyTimeline.intro') }}</p>
     </div>
 
     <div class="timeline-container">
@@ -52,88 +52,91 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const { t } = useI18n()
+
 const activeEvent = ref(null)
 
-const timelineEvents = ref([
+const timelineEvents = computed(() => [
   {
     year: '1915',
-    title: '「治水兴邦,此吾辈之责!」',
-    description: '张謇、黄炎培等先贤以教育救国为宏愿,在民族危难中播下中国水利高等教育的火种。',
-    detail: '首任校长许肇南带领首批学子,在陋室青灯下研读《水工结构》,其手绘的《河道整治图》至今珍藏于校史馆。',
+    title: t('historyTimeline.events.1915.title'),
+    description: t('historyTimeline.events.1915.description'),
+    detail: t('historyTimeline.events.1915.detail'),
     images: [
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b088cbd5f.jpg',
-        caption: '1915年3月15日开校典礼'
+        caption: t('historyTimeline.events.1915.imageCaption1')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b155758b4.jpg',
-        caption: '1916年学生在水利实验室做实验'
+        caption: t('historyTimeline.events.1915.imageCaption2')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b1a1681e4.jpg',
-        caption: '1916年学生在南通县测量实习'
+        caption: t('historyTimeline.events.1915.imageCaption3')
       }
     ]
   },
   {
     year: '1952',
-    title: '「河海一滴水,报国一生情!」',
-    description: '华东水利学院时期,严恺院士自荷兰学成归国,投身百废待兴的水利建设。',
-    detail: '他主持天津塘沽新港回淤研究,参与长江口整治,并带领师生奔赴淮河治理一线,佛子岭水库、梅山水库的蓝图上浸透了河海人的汗水。',
+    title: t('historyTimeline.events.1952.title'),
+    description: t('historyTimeline.events.1952.description'),
+    detail: t('historyTimeline.events.1952.detail'),
     images: [
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b381e9ed4.jpg',
-        caption: '1915年租借江苏省咨议局房屋为校址'
+        caption: t('historyTimeline.events.1952.imageCaption1')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b39a9d71f.jpg',
-        caption: '1952年华东水利学院校门'
+        caption: t('historyTimeline.events.1952.imageCaption2')
       }
     ]
   },
   {
     year: '1985',
-    title: '「恢复"河海"校名,承前启后,继往开来!」',
-    description: '学校正式恢复"河海大学"校名,学科体系不断完善。',
-    detail: '同年,钱正英部长在校庆大会上发表《祖国在召唤你们》讲话,指出"在遍布我国江河湖海的水利建设中,到处都可以看到河海所培育的人才"。',
+    title: t('historyTimeline.events.1985.title'),
+    description: t('historyTimeline.events.1985.description'),
+    detail: t('historyTimeline.events.1985.detail'),
     images: [
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b3f68054e.jpg',
-        caption: '70周年校庆,河海大学揭牌仪式'
+        caption: t('historyTimeline.events.1985.imageCaption1')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b564be482.jpg',
-        caption: '邓小平同志亲笔题写的河海大学校名'
+        caption: t('historyTimeline.events.1985.imageCaption2')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b435c6755.jpg',
-        caption: '河海大学"211工程"建设立项'
+        caption: t('historyTimeline.events.1985.imageCaption3')
       }
     ]
   },
   {
     year: '2025',
-    title: '「前辈,这盛世水利,如您所愿。」',
-    description: '从三峡工程到南水北调,从白鹤滩水电站到黄河古贤水利枢纽,新一代河海人活跃在大国工程一线。',
-    detail: '2025年"把青春华章写在祖国大地上"活动中,校长郑金海与师生齐诵"我饮河海一滴水,我献祖国一生情",接力先辈誓言。',
+    title: t('historyTimeline.events.2025.title'),
+    description: t('historyTimeline.events.2025.description'),
+    detail: t('historyTimeline.events.2025.detail'),
     images: [
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b5b4089fc.jpg',
-        caption: '河海大学80周年校庆'
+        caption: t('historyTimeline.events.2025.imageCaption1')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b5ed5861a.jpg',
-        caption: '河海大学90周年校庆'
+        caption: t('historyTimeline.events.2025.imageCaption2')
       },
       {
         url: 'https://s1.img.five-plus-one.com/2025/10/22/68f8b61058c9b.png',
-        caption: '河海大学110周年校庆'
+        caption: t('historyTimeline.events.2025.imageCaption3')
       }
     ]
   }

@@ -5,12 +5,12 @@
     <transition name="fade-slide">
       <div v-if="isLoggedIn" class="blessing-input-section">
         <div class="input-header">
-          <h3><span class="emoji-icon">✍️</span> 写下你的祝福</h3>
+          <h3><span class="emoji-icon">✍️</span> {{ blessingWall.input.sectionTitle }}</h3>
         </div>
         <div class="input-wrapper">
           <textarea
             v-model="newBlessing"
-            placeholder="在此写下对河海大学的美好祝福..."
+            :placeholder="blessingWall.input.placeholder"
             class="blessing-textarea"
             rows="4"
             maxlength="500"
@@ -25,7 +25,7 @@
               <input type="checkbox" v-model="isAnonymous" />
               <span class="checkbox-label">
                 <span class="checkbox-icon">{{ isAnonymous ? '✓' : '' }}</span>
-                匿名发表
+                {{ blessingWall.input.anonymousLabel }}
               </span>
             </label>
             <span class="char-count" :class="{ warning: newBlessing.length > 450 }">
@@ -39,30 +39,30 @@
           >
             <span class="btn-content">
               <span class="btn-icon">{{ submitting ? '⏳' : '💌' }}</span>
-              {{ submitting ? '发送中...' : '发表祝福' }}
+              {{ submitting ? blessingWall.input.submittingButton : blessingWall.input.submitButton }}
             </span>
           </button>
         </div>
       </div>
       <div v-else class="login-prompt">
         <div class="prompt-icon">🔒</div>
-        <p>请 <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }" class="login-link">登录</router-link> 后发表祝福</p>
+        <p>{{ blessingWall.loginPrompt.prefix }} <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }" class="login-link">{{ blessingWall.loginPrompt.loginLink }}</router-link> {{ blessingWall.loginPrompt.suffix }}</p>
       </div>
     </transition>
 
     <!-- 精选祝福标题 -->
     <div class="section-title">
-      <h3>✨ 精选祝福</h3>
+      <h3>✨ {{ blessingWall.featured.title }}</h3>
     </div>
 
     <!-- 祝福列表 -->
     <div v-if="loading" class="loading-container">
       <div class="loading-spinner"></div>
-      <p class="loading-text">加载祝福中...</p>
+      <p class="loading-text">{{ blessingWall.loading.text }}</p>
     </div>
     <div v-else-if="blessings.length === 0" class="no-blessings">
       <div class="empty-icon">📝</div>
-      <p>暂无祝福，快来发表第一条祝福吧！</p>
+      <p>{{ blessingWall.empty.text }}</p>
     </div>
     <transition-group
       v-else
@@ -90,7 +90,7 @@
           class="page-btn prev-btn"
         >
           <span class="btn-arrow">«</span>
-          上一页
+          {{ blessingWall.pagination.previous }}
         </button>
         <div class="page-info">
           <span class="current-page">{{ page }}</span>
@@ -102,7 +102,7 @@
           :disabled="page === totalPages"
           class="page-btn next-btn"
         >
-          下一页
+          {{ blessingWall.pagination.next }}
           <span class="btn-arrow">»</span>
         </button>
       </div>
@@ -113,7 +113,7 @@
       <div v-if="editTarget" class="edit-modal" @click.self="cancelEdit">
         <div class="edit-modal-content">
           <button class="modal-close" @click="cancelEdit">✕</button>
-          <h4><span class="modal-icon">✏️</span> 编辑祝福</h4>
+          <h4><span class="modal-icon">✏️</span> {{ blessingWall.editModal.title }}</h4>
           <div class="modal-input-wrapper">
             <textarea
               v-model="editContent"
@@ -125,14 +125,14 @@
           </div>
           <div class="modal-actions">
             <button @click="cancelEdit" class="cancel-btn">
-              <span>取消</span>
+              <span>{{ blessingWall.editModal.cancelButton }}</span>
             </button>
             <button
               @click="submitEdit"
               :disabled="!editContent.trim() || submitting"
               class="submit-btn"
             >
-              <span>{{ submitting ? '保存中...' : '保存' }}</span>
+              <span>{{ submitting ? blessingWall.editModal.savingButton : blessingWall.editModal.saveButton }}</span>
             </button>
           </div>
         </div>
@@ -144,10 +144,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useBlessingsData } from '@/composables/useBlessingsData'
 import { blessingAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import BlessingCard from './BlessingCard.vue'
 
+const { blessingWall } = useBlessingsData()
 const route = useRoute()
 const emit = defineEmits(['update:total'])
 
@@ -184,7 +186,7 @@ const loadBlessings = async () => {
     emit('update:total', response.data.total)
   } catch (error) {
     console.error('加载祝福失败:', error)
-    $message.error('加载祝福失败: ' + error.message)
+    $message.error(blessingWall.value.loading.failed + ': ' + error.message)
   } finally {
     loading.value = false
   }
@@ -204,10 +206,10 @@ const submitBlessing = async () => {
     isAnonymous.value = false
     page.value = 1
     await loadBlessings()
-    $message.success('祝福发表成功！感谢您的祝福。')
+    $message.success(blessingWall.value.input.submitSuccess)
   } catch (error) {
     console.error('发表祝福失败:', error)
-    $message.error('发表祝福失败: ' + error.message)
+    $message.error(blessingWall.value.input.submitFailed + ': ' + error.message)
   } finally {
     submitting.value = false
   }
@@ -231,7 +233,7 @@ const handleLike = async (blessingId) => {
     }
   } catch (error) {
     console.error('点赞失败:', error)
-    $message.error('点赞失败: ' + error.message)
+    $message.error(blessingWall.value.like.likeFailed + ': ' + error.message)
   }
 }
 
@@ -253,16 +255,16 @@ const handleUnlike = async (blessingId) => {
     }
   } catch (error) {
     console.error('取消点赞失败:', error)
-    $message.error('取消点赞失败: ' + error.message)
+    $message.error(blessingWall.value.like.unlikeFailed + ': ' + error.message)
   }
 }
 
 // 删除祝福
 const handleDelete = async (blessingId) => {
   const confirmed = await $message.confirm(
-    '确定要删除这条祝福吗？',
-    '删除祝福',
-    { type: 'danger', confirmText: '删除', cancelText: '取消' }
+    blessingWall.value.deleteConfirm.message,
+    blessingWall.value.deleteConfirm.title,
+    { type: 'danger', confirmText: blessingWall.value.deleteConfirm.confirmButton, cancelText: blessingWall.value.deleteConfirm.cancelButton }
   )
 
   if (!confirmed) return
@@ -270,10 +272,10 @@ const handleDelete = async (blessingId) => {
   try {
     await blessingAPI.deleteBlessing(blessingId)
     await loadBlessings()
-    $message.success('删除成功！')
+    $message.success(blessingWall.value.deleteConfirm.deleteSuccess)
   } catch (error) {
     console.error('删除祝福失败:', error)
-    $message.error('删除祝福失败: ' + error.message)
+    $message.error(blessingWall.value.deleteConfirm.deleteFailed + ': ' + error.message)
   }
 }
 
@@ -300,10 +302,10 @@ const submitEdit = async () => {
     })
     cancelEdit()
     await loadBlessings()
-    $message.success('编辑成功！')
+    $message.success(blessingWall.value.editModal.editSuccess)
   } catch (error) {
     console.error('编辑祝福失败:', error)
-    $message.error('编辑祝福失败: ' + error.message)
+    $message.error(blessingWall.value.editModal.editFailed + ': ' + error.message)
   } finally {
     submitting.value = false
   }

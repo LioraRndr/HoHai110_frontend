@@ -7,11 +7,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <span>返回登录</span>
+          <span>{{ $t('passwordReset.backToLogin') }}</span>
         </router-link>
 
         <div class="navbar-logo">
-          <span class="logo-text">河海110周年</span>
+          <span class="logo-text">{{ $t('home.hero.title') }}</span>
         </div>
       </div>
     </nav>
@@ -20,9 +20,9 @@
       <!-- 左侧装饰 -->
       <div class="auth-decoration">
         <div class="decoration-content">
-          <h1 class="decoration-title">重置密码</h1>
-          <h2 class="decoration-subtitle">河海大学110周年</h2>
-          <p class="decoration-text">设置您的新密码</p>
+          <h1 class="decoration-title">{{ $t('passwordReset.title') }}</h1>
+          <h2 class="decoration-subtitle">{{ $t('footer.title') }}</h2>
+          <p class="decoration-text">{{ $t('passwordReset.subtitle') }}</p>
           <div class="decoration-wave">
             <svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,50 C300,100 400,0 600,50 C800,100 900,0 1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/>
@@ -34,8 +34,8 @@
       <!-- 右侧表单 -->
       <div class="auth-form-wrapper">
         <div class="auth-form">
-          <h2 class="form-title">重置密码</h2>
-          <p class="form-subtitle">请输入验证码和新密码</p>
+          <h2 class="form-title">{{ $t('passwordReset.title') }}</h2>
+          <p class="form-subtitle">{{ $t('passwordReset.enterVerificationCode') }}</p>
 
           <!-- 成功提示 -->
           <transition name="fade">
@@ -44,7 +44,7 @@
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
-              密码重置成功!正在跳转到登录页面...
+              {{ $t('passwordReset.resetSuccess') }}
             </div>
           </transition>
 
@@ -63,7 +63,7 @@
           <form @submit.prevent="handleSubmit">
             <!-- 邮箱 (只读) -->
             <div class="form-group">
-              <label for="email" class="form-label">邮箱地址</label>
+              <label for="email" class="form-label">{{ $t('profile.emailAddress') }}</label>
               <input
                 id="email"
                 v-model="formData.email"
@@ -75,13 +75,13 @@
 
             <!-- 验证码 -->
             <div class="form-group">
-              <label for="code" class="form-label">验证码</label>
+              <label for="code" class="form-label">{{ $t('profile.verificationCode') }}</label>
               <input
                 id="code"
                 v-model="formData.code"
                 type="text"
                 class="form-input"
-                placeholder="请输入邮箱中收到的6位验证码"
+                :placeholder="$t('passwordReset.codePlaceholder')"
                 required
                 :disabled="isLoading"
                 maxlength="6"
@@ -90,14 +90,14 @@
 
             <!-- 新密码 -->
             <div class="form-group">
-              <label for="password" class="form-label">新密码</label>
+              <label for="password" class="form-label">{{ $t('profile.newPassword') }}</label>
               <div class="password-input-wrapper">
                 <input
                   id="password"
                   v-model="formData.newPassword"
                   :type="showPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请输入新密码 (至少6个字符)"
+                  :placeholder="$t('passwordReset.newPasswordPlaceholder')"
                   required
                   :disabled="isLoading"
                   minlength="6"
@@ -122,14 +122,14 @@
 
             <!-- 确认新密码 -->
             <div class="form-group">
-              <label for="confirmPassword" class="form-label">确认新密码</label>
+              <label for="confirmPassword" class="form-label">{{ $t('auth.confirmPassword') }}</label>
               <div class="password-input-wrapper">
                 <input
                   id="confirmPassword"
                   v-model="formData.confirmPassword"
                   :type="showConfirmPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请再次输入新密码"
+                  :placeholder="$t('passwordReset.confirmNewPasswordPlaceholder')"
                   required
                   :disabled="isLoading"
                 />
@@ -157,19 +157,19 @@
               class="submit-button"
               :disabled="isLoading"
             >
-              <span v-if="!isLoading">重置密码</span>
+              <span v-if="!isLoading">{{ $t('passwordReset.resetPassword') }}</span>
               <span v-else class="loading-spinner">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                 </svg>
-                重置中...
+                {{ $t('passwordReset.resetting') }}
               </span>
             </button>
           </form>
 
           <!-- 返回登录链接 -->
           <div class="auth-footer">
-            <router-link to="/forgot-password" class="auth-link">重新发送验证码</router-link>
+            <router-link to="/forgot-password" class="auth-link">{{ $t('passwordReset.resendCode') }}</router-link>
           </div>
         </div>
       </div>
@@ -180,10 +180,12 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { userAPI } from '@/api'
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const formData = reactive({
   email: '',
@@ -210,17 +212,17 @@ onMounted(() => {
 
 const validateForm = () => {
   if (!formData.code || formData.code.length !== 6) {
-    error.value = '请输入6位验证码'
+    error.value = t('passwordReset.errors.codeLength')
     return false
   }
 
   if (formData.newPassword.length < 6) {
-    error.value = '密码长度至少为6个字符'
+    error.value = t('auth.errors.passwordMinLength')
     return false
   }
 
   if (formData.newPassword !== formData.confirmPassword) {
-    error.value = '两次输入的密码不一致'
+    error.value = t('auth.errors.passwordsNotMatch')
     return false
   }
 
@@ -249,7 +251,7 @@ const handleSubmit = async () => {
       router.push('/login')
     }, 2000)
   } catch (err) {
-    error.value = err.response?.data?.message || '重置失败,请检查验证码是否正确'
+    error.value = err.response?.data?.message || t('passwordReset.errors.codeIncorrect')
   } finally {
     isLoading.value = false
   }

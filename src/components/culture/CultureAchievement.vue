@@ -1,8 +1,8 @@
 <template>
   <section id="achievement" class="achievement-section">
     <div class="section-container">
-      <h2 class="section-title">辉煌成就</h2>
-      <p class="section-desc">河海人在重大工程中的贡献</p>
+      <h2 class="section-title">{{ ui.achievementTitle }}</h2>
+      <p class="section-desc">{{ ui.achievementDescription }}</p>
 
       <div class="achievement-grid">
         <div
@@ -16,17 +16,17 @@
           </div>
           <div class="achievement-stats">
             <div class="stat-item">
-              <span class="stat-label">参与校友</span>
+              <span class="stat-label">{{ labels.alumni }}</span>
               <span class="stat-value">{{ achievement.alumni }}+</span>
             </div>
             <div class="stat-item">
-              <span class="stat-label">工程地位</span>
+              <span class="stat-label">{{ labels.rank }}</span>
               <span class="stat-value">{{ achievement.rank }}</span>
             </div>
           </div>
           <p class="achievement-desc">{{ achievement.description }}</p>
           <button class="learn-more-btn" @click="emit('open-modal', achievement)">
-            了解更多
+            {{ ui.learnMore }}
           </button>
         </div>
       </div>
@@ -35,6 +35,8 @@
 </template>
 
 <script setup>
+import { useCultureData } from '@/composables/useCultureData'
+
 defineProps({
   achievements: {
     type: Array,
@@ -43,6 +45,8 @@ defineProps({
 })
 
 const emit = defineEmits(['open-modal'])
+
+const { labels, ui } = useCultureData()
 </script>
 
 <style scoped>

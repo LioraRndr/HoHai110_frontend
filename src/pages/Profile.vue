@@ -2,8 +2,8 @@
   <PageLayout>
     <div class="profile-page">
       <div class="page-header">
-        <h1>个人中心</h1>
-        <p class="subtitle">管理您的个人信息</p>
+        <h1>{{ $t('profile.title') }}</h1>
+        <p class="subtitle">{{ $t('profile.subtitle') }}</p>
       </div>
 
       <div class="profile-container">
@@ -26,91 +26,91 @@
         <main class="main-content">
           <!-- 基本信息 -->
           <section v-if="activeTab === 'basic'" class="content-section">
-            <h2>基本信息</h2>
-            <div v-if="loading" class="loading-text">加载中...</div>
+            <h2>{{ $t('profile.basicInfo') }}</h2>
+            <div v-if="loading" class="loading-text">{{ $t('common.loading') }}</div>
             <div v-else class="form-container">
               <div class="form-group">
-                <label>头像</label>
+                <label>{{ $t('profile.avatar') }}</label>
                 <div class="avatar-upload">
-                  <img :src="profile.avatar || '/default-avatar.png'" alt="头像" class="avatar-preview" />
-                  <button @click="showAvatarDialog = true" class="upload-btn">更换头像</button>
+                  <img :src="profile.avatar || '/default-avatar.png'" :alt="$t('profile.avatar')" class="avatar-preview" />
+                  <button @click="showAvatarDialog = true" class="upload-btn">{{ $t('profile.changeAvatar') }}</button>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>用户名</label>
+                <label>{{ $t('auth.username') }}</label>
                 <input v-model="profile.username" type="text" class="form-input" />
               </div>
 
               <div class="form-group">
-                <label>个人简介</label>
-                <textarea v-model="profile.bio" class="form-textarea" rows="4" placeholder="介绍一下自己..."></textarea>
+                <label>{{ $t('profile.bio') }}</label>
+                <textarea v-model="profile.bio" class="form-textarea" rows="4" :placeholder="$t('profile.bioPlaceholder')"></textarea>
               </div>
 
               <div class="form-group">
-                <label>毕业年份</label>
-                <input v-model.number="profile.graduationYear" type="number" class="form-input" placeholder="例如: 2020" />
+                <label>{{ $t('profile.graduationYear') }}</label>
+                <input v-model.number="profile.graduationYear" type="number" class="form-input" :placeholder="$t('profile.graduationYearPlaceholder')" />
               </div>
 
               <div class="form-group">
-                <label>院系</label>
-                <input v-model="profile.department" type="text" class="form-input" placeholder="例如: 计算机学院" />
+                <label>{{ $t('profile.department') }}</label>
+                <input v-model="profile.department" type="text" class="form-input" :placeholder="$t('profile.departmentPlaceholder')" />
               </div>
 
               <button @click="updateBasicInfo" class="save-btn" :disabled="saving">
-                {{ saving ? '保存中...' : '保存更改' }}
+                {{ saving ? $t('profile.saving') : $t('profile.saveChanges') }}
               </button>
             </div>
           </section>
 
           <!-- 账户安全 -->
           <section v-if="activeTab === 'security'" class="content-section">
-            <h2>账户安全</h2>
+            <h2>{{ $t('profile.accountSecurity') }}</h2>
             <div class="security-container">
               <!-- 邮箱验证 -->
               <div class="security-item">
                 <div class="security-info">
-                  <h3>邮箱地址</h3>
+                  <h3>{{ $t('profile.emailAddress') }}</h3>
                   <p>{{ profile.email }}</p>
                 </div>
-                <button @click="showEmailDialog = true" class="action-btn">更换邮箱</button>
+                <button @click="showEmailDialog = true" class="action-btn">{{ $t('profile.changeEmail') }}</button>
               </div>
 
               <!-- 修改密码 -->
               <div class="security-item">
                 <div class="security-info">
-                  <h3>登录密码</h3>
-                  <p>定期更换密码可以提高账户安全性</p>
+                  <h3>{{ $t('profile.loginPassword') }}</h3>
+                  <p>{{ $t('profile.passwordSecurityTip') }}</p>
                 </div>
-                <button @click="showPasswordDialog = true" class="action-btn">修改密码</button>
+                <button @click="showPasswordDialog = true" class="action-btn">{{ $t('profile.changePassword') }}</button>
               </div>
             </div>
           </section>
 
           <!-- 我的活动 -->
           <section v-if="activeTab === 'activities'" class="content-section">
-            <h2>我的活动</h2>
-            <div v-if="loading" class="loading-text">加载中...</div>
+            <h2>{{ $t('profile.myActivities') }}</h2>
+            <div v-if="loading" class="loading-text">{{ $t('common.loading') }}</div>
             <div v-else class="stats-grid">
               <div class="stat-card">
                 <div class="stat-icon">🎉</div>
                 <div class="stat-info">
                   <div class="stat-value">{{ profile.contributions?.maxims || 0 }}</div>
-                  <div class="stat-label">格言贡献</div>
+                  <div class="stat-label">{{ $t('profile.contributions.maxims') }}</div>
                 </div>
               </div>
               <div class="stat-card">
                 <div class="stat-icon">🏃</div>
                 <div class="stat-info">
                   <div class="stat-value">{{ profile.contributions?.relayParticipations || 0 }}</div>
-                  <div class="stat-label">接力参与</div>
+                  <div class="stat-label">{{ $t('profile.contributions.relayParticipations') }}</div>
                 </div>
               </div>
               <div class="stat-card">
                 <div class="stat-icon">🎨</div>
                 <div class="stat-info">
                   <div class="stat-value">{{ profile.contributions?.mosaicCompleted || 0 }}</div>
-                  <div class="stat-label">拼图完成</div>
+                  <div class="stat-label">{{ $t('profile.contributions.mosaicCompleted') }}</div>
                 </div>
               </div>
             </div>
@@ -122,21 +122,21 @@
       <div v-if="showAvatarDialog" class="dialog-overlay" @click.self="showAvatarDialog = false">
         <div class="dialog">
           <div class="dialog-header">
-            <h3>更换头像</h3>
+            <h3>{{ $t('profile.changeAvatar') }}</h3>
             <button @click="showAvatarDialog = false" class="close-btn">×</button>
           </div>
           <div class="dialog-body">
             <div class="form-group">
-              <label>头像URL</label>
-              <input v-model="newAvatar" type="text" class="form-input" placeholder="请输入图片URL" />
+              <label>{{ $t('profile.avatarUrl') }}</label>
+              <input v-model="newAvatar" type="text" class="form-input" :placeholder="$t('profile.avatarUrlPlaceholder')" />
             </div>
             <div v-if="newAvatar" class="avatar-preview-container">
-              <img :src="newAvatar" alt="预览" class="avatar-preview" />
+              <img :src="newAvatar" :alt="$t('profile.preview')" class="avatar-preview" />
             </div>
           </div>
           <div class="dialog-footer">
-            <button @click="showAvatarDialog = false" class="cancel-btn">取消</button>
-            <button @click="updateAvatar" class="confirm-btn">确认</button>
+            <button @click="showAvatarDialog = false" class="cancel-btn">{{ $t('common.cancel') }}</button>
+            <button @click="updateAvatar" class="confirm-btn">{{ $t('common.confirm') }}</button>
           </div>
         </div>
       </div>
@@ -145,22 +145,22 @@
       <div v-if="showPasswordDialog" class="dialog-overlay" @click.self="showPasswordDialog = false">
         <div class="dialog">
           <div class="dialog-header">
-            <h3>修改密码</h3>
+            <h3>{{ $t('profile.changePassword') }}</h3>
             <button @click="showPasswordDialog = false" class="close-btn">×</button>
           </div>
           <div class="dialog-body">
             <div class="form-group">
-              <label>旧密码</label>
+              <label>{{ $t('profile.oldPassword') }}</label>
               <input v-model="passwordForm.oldPassword" type="password" class="form-input" />
             </div>
             <div class="form-group">
-              <label>新密码</label>
+              <label>{{ $t('profile.newPassword') }}</label>
               <input v-model="passwordForm.newPassword" type="password" class="form-input" />
             </div>
           </div>
           <div class="dialog-footer">
-            <button @click="showPasswordDialog = false" class="cancel-btn">取消</button>
-            <button @click="changePassword" class="confirm-btn">确认</button>
+            <button @click="showPasswordDialog = false" class="cancel-btn">{{ $t('common.cancel') }}</button>
+            <button @click="changePassword" class="confirm-btn">{{ $t('common.confirm') }}</button>
           </div>
         </div>
       </div>
@@ -169,27 +169,27 @@
       <div v-if="showEmailDialog" class="dialog-overlay" @click.self="showEmailDialog = false">
         <div class="dialog">
           <div class="dialog-header">
-            <h3>更换邮箱</h3>
+            <h3>{{ $t('profile.changeEmail') }}</h3>
             <button @click="showEmailDialog = false" class="close-btn">×</button>
           </div>
           <div class="dialog-body">
             <div class="form-group">
-              <label>新邮箱地址</label>
+              <label>{{ $t('profile.newEmailAddress') }}</label>
               <input v-model="emailForm.newEmail" type="email" class="form-input" />
             </div>
             <div class="form-group">
-              <label>验证码</label>
+              <label>{{ $t('profile.verificationCode') }}</label>
               <div class="code-input-group">
-                <input v-model="emailForm.code" type="text" class="form-input" placeholder="请输入验证码" />
+                <input v-model="emailForm.code" type="text" class="form-input" :placeholder="$t('profile.verificationCodePlaceholder')" />
                 <button @click="sendEmailCode" :disabled="codeSending || countdown > 0" class="code-btn">
-                  {{ countdown > 0 ? `${countdown}秒后重试` : codeSending ? '发送中...' : '发送验证码' }}
+                  {{ countdown > 0 ? `${countdown}${$t('profile.retryAfter')}` : codeSending ? $t('profile.sending') : $t('profile.sendVerificationCode') }}
                 </button>
               </div>
             </div>
           </div>
           <div class="dialog-footer">
-            <button @click="showEmailDialog = false" class="cancel-btn">取消</button>
-            <button @click="changeEmail" class="confirm-btn">确认</button>
+            <button @click="showEmailDialog = false" class="cancel-btn">{{ $t('common.cancel') }}</button>
+            <button @click="changeEmail" class="confirm-btn">{{ $t('common.confirm') }}</button>
           </div>
         </div>
       </div>
@@ -198,11 +198,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { userAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import PageLayout from '@/components/PageLayout.vue'
 
+const { t } = useI18n()
 const activeTab = ref('basic')
 const loading = ref(true)
 const saving = ref(false)
@@ -222,9 +224,9 @@ const profile = reactive({
 })
 
 const menuItems = [
-  { id: 'basic', icon: '👤', label: '基本信息' },
-  { id: 'security', icon: '🔒', label: '账户安全' },
-  { id: 'activities', icon: '📊', label: '我的活动' }
+  { id: 'basic', icon: '👤', label: computed(() => t('profile.basicInfo')) },
+  { id: 'security', icon: '🔒', label: computed(() => t('profile.accountSecurity')) },
+  { id: 'activities', icon: '📊', label: computed(() => t('profile.myActivities')) }
 ]
 
 // 对话框状态
@@ -258,7 +260,7 @@ const loadProfile = async () => {
     Object.assign(profile, userData)
   } catch (error) {
     console.error('加载个人信息失败:', error)
-    $message.error('加载失败')
+    $message.error(t('profile.messages.loadFailed'))
   } finally {
     loading.value = false
   }
@@ -274,10 +276,10 @@ const updateBasicInfo = async () => {
       graduationYear: profile.graduationYear,
       department: profile.department
     })
-    $message.success('保存成功')
+    $message.success(t('profile.messages.saveSuccess'))
   } catch (error) {
     console.error('保存失败:', error)
-    $message.error(error.response?.data?.message || '保存失败')
+    $message.error(error.response?.data?.message || t('profile.messages.saveFailed'))
   } finally {
     saving.value = false
   }
@@ -286,7 +288,7 @@ const updateBasicInfo = async () => {
 // 更新头像
 const updateAvatar = async () => {
   if (!newAvatar.value) {
-    $message.error('请输入头像URL')
+    $message.error(t('profile.messages.avatarRequired'))
     return
   }
 
@@ -295,22 +297,22 @@ const updateAvatar = async () => {
     profile.avatar = newAvatar.value
     showAvatarDialog.value = false
     newAvatar.value = ''
-    $message.success('头像更新成功')
+    $message.success(t('profile.messages.avatarUpdateSuccess'))
   } catch (error) {
     console.error('更新头像失败:', error)
-    $message.error('更新失败')
+    $message.error(t('profile.messages.avatarUpdateFailed'))
   }
 }
 
 // 修改密码
 const changePassword = async () => {
   if (!passwordForm.oldPassword || !passwordForm.newPassword) {
-    $message.error('请填写完整')
+    $message.error(t('profile.messages.fillComplete'))
     return
   }
 
   if (passwordForm.newPassword.length < 6) {
-    $message.error('新密码至少6位')
+    $message.error(t('profile.messages.passwordMinLength'))
     return
   }
 
@@ -322,17 +324,17 @@ const changePassword = async () => {
     showPasswordDialog.value = false
     passwordForm.oldPassword = ''
     passwordForm.newPassword = ''
-    $message.success('密码修改成功')
+    $message.success(t('profile.messages.passwordChangeSuccess'))
   } catch (error) {
     console.error('修改密码失败:', error)
-    $message.error(error.response?.data?.message || '修改失败')
+    $message.error(error.response?.data?.message || t('profile.messages.passwordChangeFailed'))
   }
 }
 
 // 发送邮箱验证码
 const sendEmailCode = async () => {
   if (!emailForm.newEmail) {
-    $message.error('请输入新邮箱地址')
+    $message.error(t('profile.messages.emailRequired'))
     return
   }
 
@@ -342,7 +344,7 @@ const sendEmailCode = async () => {
       email: emailForm.newEmail,
       type: 'email_change'
     })
-    $message.success('验证码已发送')
+    $message.success(t('profile.messages.codeSent'))
 
     // 开始倒计时
     countdown.value = 60
@@ -354,7 +356,7 @@ const sendEmailCode = async () => {
     }, 1000)
   } catch (error) {
     console.error('发送验证码失败:', error)
-    $message.error(error.response?.data?.message || '发送失败')
+    $message.error(error.response?.data?.message || t('profile.messages.codeSendFailed'))
   } finally {
     codeSending.value = false
   }
@@ -363,7 +365,7 @@ const sendEmailCode = async () => {
 // 更换邮箱
 const changeEmail = async () => {
   if (!emailForm.newEmail || !emailForm.code) {
-    $message.error('请填写完整')
+    $message.error(t('profile.messages.fillComplete'))
     return
   }
 
@@ -376,10 +378,10 @@ const changeEmail = async () => {
     showEmailDialog.value = false
     emailForm.newEmail = ''
     emailForm.code = ''
-    $message.success('邮箱更换成功')
+    $message.success(t('profile.messages.emailChangeSuccess'))
   } catch (error) {
     console.error('更换邮箱失败:', error)
-    $message.error(error.response?.data?.message || '更换失败')
+    $message.error(error.response?.data?.message || t('profile.messages.emailChangeFailed'))
   }
 }
 

@@ -4,7 +4,7 @@
       <!-- 板块头部 -->
       <div class="board-header">
         <div class="header-content">
-          <button @click="goBack" class="back-btn">← 返回</button>
+          <button @click="goBack" class="back-btn">← {{ $t('forum.board.back') }}</button>
           <div class="board-info">
             <h1>{{ forum.name }}</h1>
             <p class="board-description">{{ forum.description }}</p>
@@ -14,7 +14,7 @@
             @click="showNewPostModal = true"
             class="new-post-btn"
           >
-            发表新帖
+            {{ $t('forum.board.newPost') }}
           </button>
         </div>
       </div>
@@ -34,10 +34,10 @@
       </div>
 
       <!-- 帖子列表 -->
-      <div v-if="loading" class="loading">加载中...</div>
+      <div v-if="loading" class="loading">{{ $t('forum.loading') }}</div>
 
       <div v-else-if="posts.length === 0" class="empty-state">
-        <p>暂无帖子，快来发表第一篇吧！</p>
+        <p>{{ $t('forum.board.noPosts') }}</p>
       </div>
 
       <div v-else class="posts-list">
@@ -48,15 +48,15 @@
           @click="goToPost(post.id)"
         >
           <div class="post-tags">
-            <span v-if="post.isSticky" class="tag sticky-tag">置顶</span>
-            <span v-if="post.isHighlighted" class="tag highlight-tag">精华</span>
-            <span v-if="post.status === 'locked'" class="tag lock-tag">已锁定</span>
+            <span v-if="post.isSticky" class="tag sticky-tag">{{ $t('forum.board.tags.sticky') }}</span>
+            <span v-if="post.isHighlighted" class="tag highlight-tag">{{ $t('forum.board.tags.highlighted') }}</span>
+            <span v-if="post.status === 'locked'" class="tag lock-tag">{{ $t('forum.board.tags.locked') }}</span>
           </div>
 
           <div class="post-main">
             <h3 class="post-title">{{ post.title }}</h3>
             <div class="post-meta">
-              <span class="author">{{ post.user?.username || '匿名用户' }}</span>
+              <span class="author">{{ post.user?.username || $t('forum.board.anonymousUser') }}</span>
               <span class="separator">•</span>
               <span class="time">{{ formatTime(post.createdAt) }}</span>
             </div>
@@ -86,7 +86,7 @@
           :disabled="currentPage === 1"
           class="page-btn"
         >
-          上一页
+          {{ $t('forum.board.pagination.prev') }}
         </button>
         <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
         <button
@@ -94,7 +94,7 @@
           :disabled="currentPage === totalPages"
           class="page-btn"
         >
-          下一页
+          {{ $t('forum.board.pagination.next') }}
         </button>
       </div>
 
@@ -112,6 +112,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { forumAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import PageLayout from '@/components/PageLayout.vue'
@@ -119,6 +120,7 @@ import ForumPostEditor from '@/components/ForumPostEditor.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { t, locale } = useI18n()
 
 const forumId = computed(() => parseInt(route.params.id))
 const forum = ref({})
@@ -131,12 +133,12 @@ const showNewPostModal = ref(false)
 
 const isLoggedIn = computed(() => !!localStorage.getItem('token'))
 
-const sortOptions = [
-  { label: '最新', value: 'latest' },
-  { label: '热门', value: 'hot' },
-  { label: '精华', value: 'highlighted' },
-  { label: '活跃', value: 'active' }
-]
+const sortOptions = computed(() => [
+  { label: t('forum.board.sort.latest'), value: 'latest' },
+  { label: t('forum.board.sort.hot'), value: 'hot' },
+  { label: t('forum.board.sort.highlighted'), value: 'highlighted' },
+  { label: t('forum.board.sort.active'), value: 'active' }
+])
 
 // 加载板块信息
 const loadForum = async () => {
@@ -145,7 +147,7 @@ const loadForum = async () => {
     forum.value = response.data.forum || {}
   } catch (error) {
     console.error('加载板块信息失败:', error)
-    $message.error('加载板块信息失败')
+    $message.error(t('forum.board.loadingBoardFailed'))
   }
 }
 
@@ -163,7 +165,7 @@ const loadPosts = async () => {
     totalPages.value = response.data.totalPages || 1
   } catch (error) {
     console.error('加载帖子列表失败:', error)
-    $message.error('加载帖子列表失败')
+    $message.error(t('forum.board.loadingPostsFailed'))
   } finally {
     loading.value = false
   }
@@ -199,7 +201,7 @@ const handleNewPost = () => {
   showNewPostModal.value = false
   currentPage.value = 1
   loadPosts()
-  $message.success('发帖成功！')
+  $message.success(t('forum.board.postSuccess'))
 }
 
 // 格式化时间
@@ -212,12 +214,12 @@ const formatTime = (dateString) => {
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
 
-  if (minutes < 1) return '刚刚'
-  if (minutes < 60) return `${minutes}分钟前`
-  if (hours < 24) return `${hours}小时前`
-  if (days < 7) return `${days}天前`
+  if (minutes < 1) return t('forum.board.time.justNow')
+  if (minutes < 60) return `${minutes}${t('forum.board.time.minutesAgo')}`
+  if (hours < 24) return `${hours}${t('forum.board.time.hoursAgo')}`
+  if (days < 7) return `${days}${t('forum.board.time.daysAgo')}`
 
-  return date.toLocaleDateString('zh-CN', {
+  return date.toLocaleDateString(locale.value === 'zh' ? 'zh-CN' : 'en-US', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'

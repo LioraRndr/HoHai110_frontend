@@ -1,8 +1,8 @@
 <template>
   <section id="global" class="global-section">
     <div class="section-container">
-      <h2 class="section-title">国际影响</h2>
-      <p class="section-desc">中国水利智慧惠及全球</p>
+      <h2 class="section-title">{{ ui.globalTitle }}</h2>
+      <p class="section-desc">{{ ui.globalDescription }}</p>
 
       <div class="global-stats">
         <div
@@ -19,7 +19,7 @@
       <div class="global-map">
         <div class="map-placeholder">
           <p>🌍</p>
-          <span>河海足迹遍布全球</span>
+          <span>{{ ui.mapPlaceholder }}</span>
         </div>
       </div>
     </div>
@@ -27,12 +27,16 @@
 </template>
 
 <script setup>
+import { useCultureData } from '@/composables/useCultureData'
+
 defineProps({
   stats: {
     type: Array,
     required: true
   }
 })
+
+const { ui } = useCultureData()
 </script>
 
 <style scoped>

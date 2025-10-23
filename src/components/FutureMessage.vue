@@ -1,41 +1,41 @@
 <template>
   <div class="future-message">
     <div class="message-header">
-      <p class="message-intro">「现在,轮到你了,后来的火种。」</p>
-      <p class="message-subtitle">你的每一次探索,都在为这条奔涌的长河,注入新的流向。</p>
-      <p class="message-call">请在此处,留下你的名字与誓言。它将被铭刻于学校的数字星空,与万千前辈,一同闪耀。</p>
+      <p class="message-intro">{{ $t('future.intro') }}</p>
+      <p class="message-subtitle">{{ $t('future.subtitle') }}</p>
+      <p class="message-call">{{ $t('future.call') }}</p>
     </div>
 
     <div class="message-form-container">
       <form @submit.prevent="handleSubmit" class="pledge-form">
         <div class="form-group">
-          <label for="name">姓名</label>
+          <label for="name">{{ $t('future.form.name') }}</label>
           <input
             type="text"
             id="name"
             v-model="formData.name"
-            placeholder="请输入您的姓名"
+            :placeholder="$t('future.form.namePlaceholder')"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="class">届别/单位</label>
+          <label for="class">{{ $t('future.form.grade') }}</label>
           <input
             type="text"
             id="class"
             v-model="formData.class"
-            placeholder="如: 2018级水利工程 或 河海校友"
+            :placeholder="$t('future.form.gradePlaceholder')"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="pledge">您的誓言</label>
+          <label for="pledge">{{ $t('future.form.pledge') }}</label>
           <textarea
             id="pledge"
             v-model="formData.pledge"
-            placeholder="请写下您对河海、对未来的承诺与期许..."
+            :placeholder="$t('future.form.pledgePlaceholder')"
             rows="6"
             required
           ></textarea>
@@ -43,8 +43,8 @@
         </div>
 
         <button type="submit" class="submit-btn" :disabled="submitting">
-          <span v-if="!submitting">点亮星火</span>
-          <span v-else>提交中...</span>
+          <span v-if="!submitting">{{ $t('future.form.submit') }}</span>
+          <span v-else>{{ $t('future.form.submitting') }}</span>
           <div class="btn-flame" v-if="!submitting">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2c1.5 3.5 3.5 5.5 5.5 7.5 1.5 1.5 2.5 3.5 2.5 5.5 0 4.4-3.6 8-8 8s-8-3.6-8-8c0-2 1-4 2.5-5.5C8.5 7.5 10.5 5.5 12 2z"/>
@@ -55,7 +55,7 @@
 
       <!-- 最新星火 - 弹幕效果 -->
       <div class="recent-pledges">
-        <h3 class="pledges-title">最新星火</h3>
+        <h3 class="pledges-title">{{ $t('future.recent') }}</h3>
         <div class="danmaku-container" ref="danmakuContainer">
           <div
             v-for="item in danmakuItems"
@@ -82,9 +82,9 @@
             <path d="M12 2c1.5 3.5 3.5 5.5 5.5 7.5 1.5 1.5 2.5 3.5 2.5 5.5 0 4.4-3.6 8-8 8s-8-3.6-8-8c0-2 1-4 2.5-5.5C8.5 7.5 10.5 5.5 12 2z"/>
           </svg>
         </div>
-        <h3 class="modal-title">「你的星火,已汇入河海百十星河。」</h3>
-        <p class="modal-message">感谢您的参与,您的誓言已被永久铭记!</p>
-        <button @click="closeModal" class="modal-btn">继续探索</button>
+        <h3 class="modal-title">{{ $t('future.successTitle') }}</h3>
+        <p class="modal-message">{{ $t('future.successMessage') }}</p>
+        <button @click="closeModal" class="modal-btn">{{ $t('future.continueExplore') }}</button>
       </div>
     </div>
   </div>
@@ -92,8 +92,11 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { futureMessageAPI } from '@/api'
 import { showError, showWarning, showInfo } from '@/utils/message'
+
+const { t } = useI18n()
 
 const formData = ref({
   name: '',
@@ -372,7 +375,7 @@ const fetchRecentPledges = async () => {
 // 提交表单
 const handleSubmit = async () => {
   if (formData.value.pledge.length > 500) {
-    showWarning('誓言内容不能超过500字')
+    showWarning(t('future.errors.pledgeTooLong'))
     return
   }
 
@@ -402,7 +405,7 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.error('提交失败:', error)
-    showError('提交失败,请稍后重试：' + error.message)
+    showError(t('future.errors.submitFailed') + error.message)
   } finally {
     submitting.value = false
   }

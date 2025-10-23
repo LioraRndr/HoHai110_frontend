@@ -11,7 +11,7 @@
         </router-link>
 
         <div class="navbar-logo">
-          <span class="logo-text">河海110周年</span>
+          <span class="logo-text">{{ $t('auth.welcome') }}</span>
         </div>
       </div>
     </nav>
@@ -20,9 +20,9 @@
       <!-- 左侧装饰 -->
       <div class="auth-decoration">
         <div class="decoration-content">
-          <h1 class="decoration-title">加入我们</h1>
-          <h2 class="decoration-subtitle">河海大学110周年</h2>
-          <p class="decoration-text">共同见证百十薪传的历史时刻</p>
+          <h1 class="decoration-title">{{ $t('auth.joinUs') }}</h1>
+          <h2 class="decoration-subtitle">{{ $t('footer.title') }}</h2>
+          <p class="decoration-text">{{ $t('auth.witnessHistory') }}</p>
           <div class="decoration-wave">
             <svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,50 C300,100 400,0 600,50 C800,100 900,0 1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/>
@@ -34,8 +34,8 @@
       <!-- 右侧表单 -->
       <div class="auth-form-wrapper">
         <div class="auth-form">
-          <h2 class="form-title">创建账户</h2>
-          <p class="form-subtitle">填写信息开始您的旅程</p>
+          <h2 class="form-title">{{ $t('auth.createAccount') }}</h2>
+          <p class="form-subtitle">{{ $t('auth.fillInfo') }}</p>
 
           <!-- 成功提示 -->
           <transition name="fade">
@@ -44,7 +44,7 @@
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
-              注册成功!正在跳转到登录页面...
+              {{ $t('auth.registerSuccess') }}
             </div>
           </transition>
 
@@ -63,13 +63,13 @@
           <form @submit.prevent="handleSubmit">
             <!-- 用户名 -->
             <div class="form-group">
-              <label for="username" class="form-label">用户名</label>
+              <label for="username" class="form-label">{{ $t('auth.username') }}</label>
               <input
                 id="username"
                 v-model="formData.username"
                 type="text"
                 class="form-input"
-                placeholder="请输入用户名 (3-20个字符)"
+                :placeholder="$t('auth.placeholders.usernameLength')"
                 required
                 :disabled="isLoading"
                 minlength="3"
@@ -79,13 +79,13 @@
 
             <!-- 邮箱 -->
             <div class="form-group">
-              <label for="email" class="form-label">邮箱</label>
+              <label for="email" class="form-label">{{ $t('auth.email') }}</label>
               <input
                 id="email"
                 v-model="formData.email"
                 type="email"
                 class="form-input"
-                placeholder="请输入邮箱地址"
+                :placeholder="$t('auth.placeholders.email')"
                 required
                 :disabled="isLoading"
               />
@@ -93,14 +93,14 @@
 
             <!-- 密码 -->
             <div class="form-group">
-              <label for="password" class="form-label">密码</label>
+              <label for="password" class="form-label">{{ $t('auth.password') }}</label>
               <div class="password-input-wrapper">
                 <input
                   id="password"
                   v-model="formData.password"
                   :type="showPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请输入密码 (至少6个字符)"
+                  :placeholder="$t('auth.placeholders.passwordLength')"
                   required
                   :disabled="isLoading"
                   minlength="6"
@@ -131,14 +131,14 @@
 
             <!-- 确认密码 -->
             <div class="form-group">
-              <label for="confirmPassword" class="form-label">确认密码</label>
+              <label for="confirmPassword" class="form-label">{{ $t('auth.confirmPassword') }}</label>
               <div class="password-input-wrapper">
                 <input
                   id="confirmPassword"
                   v-model="formData.confirmPassword"
                   :type="showConfirmPassword ? 'text' : 'password'"
                   class="form-input"
-                  placeholder="请再次输入密码"
+                  :placeholder="$t('auth.placeholders.confirmPassword')"
                   required
                   :disabled="isLoading"
                 />
@@ -167,14 +167,14 @@
                 <line x1="12" y1="9" x2="12" y2="13"/>
                 <line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
-              系统当前不允许新用户注册,请稍后再试或联系管理员。
+              {{ $t('auth.errors.registrationClosed') }}
             </div>
 
             <!-- 用户协议 -->
             <div class="form-group">
               <label class="checkbox-label">
                 <input v-model="formData.agreeToTerms" type="checkbox" required>
-                <span>我已阅读并同意 <router-link to="/terms" class="terms-link" target="_blank">用户协议</router-link> 和 <router-link to="/privacy" class="terms-link" target="_blank">隐私政策</router-link></span>
+                <span>{{ $t('auth.agreeToTerms') || '我已阅读并同意' }} <router-link to="/terms" class="terms-link" target="_blank">{{ $t('auth.userAgreement') || '用户协议' }}</router-link> {{ $t('auth.and') || '和' }} <router-link to="/privacy" class="terms-link" target="_blank">{{ $t('auth.privacyPolicy') || '隐私政策' }}</router-link></span>
               </label>
             </div>
 
@@ -184,19 +184,19 @@
               class="submit-button"
               :disabled="isLoading || !formData.agreeToTerms"
             >
-              <span v-if="!isLoading">注册</span>
+              <span v-if="!isLoading">{{ $t('common.register') }}</span>
               <span v-else class="loading-spinner">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                 </svg>
-                注册中...
+                {{ $t('auth.registering') }}
               </span>
             </button>
           </form>
 
           <!-- 登录链接 -->
           <div class="auth-footer">
-            已有账户? <router-link to="/login" class="auth-link">立即登录</router-link>
+            {{ $t('auth.hasAccount') }} <router-link to="/login" class="auth-link">{{ $t('auth.loginNow') }}</router-link>
           </div>
         </div>
       </div>
@@ -207,9 +207,11 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/store/user'
 import { authAPI } from '@/api'
 
+const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
@@ -247,7 +249,7 @@ const backPath = computed(() => {
 
 const backText = computed(() => {
   const redirect = route.query.redirect
-  return redirect ? '返回' : '返回首页'
+  return redirect ? t('common.back') : t('common.backToHome')
 })
 
 // 密码强度计算
@@ -262,45 +264,45 @@ const passwordStrength = computed(() => {
   if (/\d/.test(password)) strength++
   if (/[^a-zA-Z0-9]/.test(password)) strength++
 
-  if (strength <= 1) return { class: 'weak', width: '33%', text: '弱' }
-  if (strength <= 3) return { class: 'medium', width: '66%', text: '中' }
-  return { class: 'strong', width: '100%', text: '强' }
+  if (strength <= 1) return { class: 'weak', width: '33%', text: t('common.weak') || '弱' }
+  if (strength <= 3) return { class: 'medium', width: '66%', text: t('common.medium') || '中' }
+  return { class: 'strong', width: '100%', text: t('common.strong') || '强' }
 })
 
 const validateForm = () => {
   // 用户名验证
   if (formData.username.length < 3 || formData.username.length > 20) {
-    error.value = '用户名长度必须在3-20个字符之间'
+    error.value = t('auth.errors.usernameLength') || '用户名长度必须在3-20个字符之间'
     return false
   }
 
   if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-    error.value = '用户名只能包含字母、数字和下划线'
+    error.value = t('auth.errors.usernameFormat') || '用户名只能包含字母、数字和下划线'
     return false
   }
 
   // 邮箱验证
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(formData.email)) {
-    error.value = '请输入有效的邮箱地址'
+    error.value = t('auth.errors.emailInvalid')
     return false
   }
 
   // 密码验证
   if (formData.password.length < 6) {
-    error.value = '密码长度至少为6个字符'
+    error.value = t('auth.errors.passwordMinLength')
     return false
   }
 
   // 确认密码验证
   if (formData.password !== formData.confirmPassword) {
-    error.value = '两次输入的密码不一致'
+    error.value = t('auth.errors.passwordsNotMatch')
     return false
   }
 
   // 用户协议验证
   if (!formData.agreeToTerms) {
-    error.value = '请阅读并同意用户协议和隐私政策'
+    error.value = t('auth.errors.termsRequired') || '请阅读并同意用户协议和隐私政策'
     return false
   }
 
@@ -312,7 +314,7 @@ const handleSubmit = async () => {
 
   // 检查注册是否关闭
   if (registrationClosed.value) {
-    error.value = '系统当前不允许新用户注册'
+    error.value = t('auth.errors.registrationClosed') || '系统当前不允许新用户注册'
     return
   }
 
@@ -346,10 +348,10 @@ const handleSubmit = async () => {
         }
       }, 3000)
     } else {
-      error.value = result.message || '注册失败,请稍后重试'
+      error.value = result.message || t('auth.errors.registerFailed')
     }
   } catch (err) {
-    error.value = err.message || '注册失败,请稍后重试'
+    error.value = err.message || t('auth.errors.registerFailed')
   } finally {
     isLoading.value = false
   }

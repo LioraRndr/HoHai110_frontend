@@ -16,20 +16,20 @@
               <p class="modal-desc">{{ achievement.description }}</p>
               <div class="modal-stats">
                 <div class="modal-stat">
-                  <span class="label">参与校友</span>
-                  <span class="value">{{ achievement.alumni }}+ 人</span>
+                  <span class="label">{{ labels.alumni }}</span>
+                  <span class="value">{{ achievement.alumni }}+ {{ labels.alumni === 'Participating Alumni' ? '' : '人' }}</span>
                 </div>
                 <div class="modal-stat">
-                  <span class="label">工程地位</span>
+                  <span class="label">{{ labels.rank }}</span>
                   <span class="value">{{ achievement.rank }}</span>
                 </div>
                 <div class="modal-stat">
-                  <span class="label">完成时间</span>
+                  <span class="label">{{ labels.year }}</span>
                   <span class="value">{{ achievement.year }}</span>
                 </div>
               </div>
               <div class="modal-story">
-                <h3>工程故事</h3>
+                <h3>{{ labels.story }}</h3>
                 <p>{{ achievement.story }}</p>
               </div>
             </div>
@@ -41,6 +41,8 @@
 </template>
 
 <script setup>
+import { useCultureData } from '@/composables/useCultureData'
+
 defineProps({
   show: {
     type: Boolean,
@@ -53,6 +55,8 @@ defineProps({
 })
 
 const emit = defineEmits(['update:show', 'close'])
+
+const { labels } = useCultureData()
 
 const handleClose = () => {
   emit('update:show', false)

@@ -34,7 +34,7 @@
       <div class="scene-section" v-if="node.scene">
         <h4 class="section-title">
           <span class="title-icon">📍</span>
-          历史现场
+          {{ $t('timeline.sections.scene') }}
         </h4>
         <div class="scene-content">
           <p class="scene-location" v-if="node.scene.location">
@@ -51,7 +51,7 @@
       <div class="figures-section" v-if="node.keyFigures && node.keyFigures.length">
         <h4 class="section-title">
           <span class="title-icon">👤</span>
-          关键人物
+          {{ $t('timeline.sections.keyFigures') }}
         </h4>
         <div class="figures-grid">
           <div
@@ -70,7 +70,7 @@
       <div class="moment-section" v-if="node.keyMoment">
         <h4 class="section-title">
           <span class="title-icon">⏰</span>
-          关键时刻
+          {{ $t('timeline.sections.keyMoment') }}
         </h4>
         <div class="moment-content">
           <p class="moment-date">{{ node.keyMoment.date }}</p>
@@ -83,7 +83,7 @@
       <div class="stories-section" v-if="node.stories && node.stories.length">
         <h4 class="section-title">
           <span class="title-icon">📖</span>
-          那些年的故事
+          {{ $t('timeline.sections.stories') }}
         </h4>
         <ul class="stories-list">
           <li v-for="(story, index) in node.stories" :key="index">{{ story }}</li>
@@ -94,7 +94,7 @@
       <div class="moments-section" v-if="node.moments && node.moments.length">
         <h4 class="section-title">
           <span class="title-icon">✨</span>
-          难忘瞬间
+          {{ $t('timeline.sections.moments') }}
         </h4>
         <ul class="moments-list">
           <li v-for="(moment, index) in node.moments" :key="index">{{ moment }}</li>
@@ -105,7 +105,7 @@
       <div class="statistics-section" v-if="node.statistics && node.statistics.length">
         <h4 class="section-title">
           <span class="title-icon">📊</span>
-          {{ node.year >= 2000 ? '数据见证' : '那一年的数据' }}
+          {{ node.year >= 2000 ? $t('timeline.sections.statisticsNew') : $t('timeline.sections.statisticsOld') }}
         </h4>
         <div class="statistics-grid">
           <div
@@ -124,7 +124,7 @@
       <div class="echo-section" v-if="node.echo">
         <h4 class="section-title">
           <span class="title-icon">🔔</span>
-          历史回声
+          {{ $t('timeline.sections.echo') }}
         </h4>
         <div class="echo-content">
           <blockquote class="echo-quote">{{ node.echo.content }}</blockquote>
@@ -136,7 +136,7 @@
       <div class="breakthroughs-section" v-if="node.breakthroughs && node.breakthroughs.length">
         <h4 class="section-title">
           <span class="title-icon">🚀</span>
-          突破性成果
+          {{ $t('timeline.sections.breakthroughs') }}
         </h4>
         <div class="breakthroughs-list">
           <div
@@ -145,8 +145,8 @@
             :key="index"
           >
             <h5>{{ item.title }}</h5>
-            <p v-if="item.leader">负责人:{{ item.leader }}</p>
-            <p v-if="item.lab">研发单位:{{ item.lab }}</p>
+            <p v-if="item.leader">{{ $t('timeline.labels.leader') }}: {{ item.leader }}</p>
+            <p v-if="item.lab">{{ $t('timeline.labels.lab') }}: {{ item.lab }}</p>
             <p v-if="item.significance" class="significance">{{ item.significance }}</p>
             <p v-if="item.impact" class="significance">{{ item.impact }}</p>
             <p v-if="item.achievement" class="significance">{{ item.achievement }}</p>
@@ -181,7 +181,7 @@
       <div class="ceremony-section" v-if="node.ceremony">
         <h4 class="section-title">
           <span class="title-icon">🎊</span>
-          庆典现场
+          {{ $t('timeline.sections.ceremony') }}
         </h4>
         <div class="ceremony-content">
           <p class="ceremony-date">{{ node.ceremony.date }}</p>
@@ -192,7 +192,10 @@
 
       <!-- 参与者 -->
       <div class="attendees-section" v-if="node.attendees && node.attendees.length">
-        <h4 class="section-title">那些在场的人</h4>
+        <h4 class="section-title">
+          <span class="title-icon">👥</span>
+          {{ $t('timeline.sections.attendees') }}
+        </h4>
         <div class="attendees-list">
           <div class="attendee-item" v-for="(person, index) in node.attendees" :key="index">
             <strong>{{ person.name }}</strong>
@@ -214,7 +217,7 @@
       <div class="international-section" v-if="node.international && node.international.length">
         <h4 class="section-title">
           <span class="title-icon">🌏</span>
-          国际化成果
+          {{ $t('timeline.sections.international') }}
         </h4>
         <ul class="international-list">
           <li v-for="(item, index) in node.international" :key="index">{{ item }}</li>
@@ -233,7 +236,7 @@
       <div class="connections-section" v-if="node.liveConnections && node.liveConnections.length">
         <h4 class="section-title">
           <span class="title-icon">📡</span>
-          现场连线
+          {{ $t('timeline.sections.connections') }}
         </h4>
         <div class="connections-grid">
           <div

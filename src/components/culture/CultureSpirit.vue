@@ -1,8 +1,8 @@
 <template>
   <section id="spirit" class="spirit-section">
     <div class="section-container">
-      <h2 class="section-title">河海精神</h2>
-      <p class="section-desc">艰苦朴素 · 实事求是 · 严格要求 · 勇于探索</p>
+      <h2 class="section-title">{{ ui.spiritTitle }}</h2>
+      <p class="section-desc">{{ ui.spiritDescription }}</p>
 
       <div class="spirit-cards">
         <div
@@ -25,6 +25,8 @@
 </template>
 
 <script setup>
+import { useCultureData } from '@/composables/useCultureData'
+
 defineProps({
   spirits: {
     type: Array,
@@ -37,6 +39,8 @@ defineProps({
 })
 
 const emit = defineEmits(['update:hover-index'])
+
+const { ui } = useCultureData()
 </script>
 
 <style scoped>

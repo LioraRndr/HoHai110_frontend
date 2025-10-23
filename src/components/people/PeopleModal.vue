@@ -44,7 +44,7 @@
 
             <!-- Timeline -->
             <div class="timeline-section">
-              <h3 class="section-title">重要历程</h3>
+              <h3 class="section-title">{{ ui.timelineTitle }}</h3>
               <div class="timeline">
                 <div
                   v-for="(event, index) in person.timeline"
@@ -66,7 +66,7 @@
 
             <!-- Photo Gallery -->
             <div v-if="person.photos && person.photos.length > 0" class="gallery-section">
-              <h3 class="section-title">珍贵影像</h3>
+              <h3 class="section-title">{{ ui.galleryTitle }}</h3>
               <div class="photo-gallery">
                 <div
                   v-for="(photo, index) in person.photos"
@@ -92,7 +92,7 @@
 
             <!-- Achievements -->
             <div class="achievements-section">
-              <h3 class="section-title">主要成就</h3>
+              <h3 class="section-title">{{ ui.achievementsTitle }}</h3>
               <ul class="achievements-list">
                 <li
                   v-for="(achievement, index) in person.achievements"
@@ -107,7 +107,7 @@
 
             <!-- Legacy -->
             <div class="legacy-section">
-              <h3 class="section-title">精神传承</h3>
+              <h3 class="section-title">{{ ui.legacyTitle }}</h3>
               <div class="legacy-content">
                 <p class="legacy-text">{{ person.legacy }}</p>
               </div>
@@ -121,6 +121,8 @@
 </template>
 
 <script setup>
+import { usePeopleData } from '@/composables/usePeopleData'
+
 defineProps({
   show: {
     type: Boolean,
@@ -133,6 +135,8 @@ defineProps({
 })
 
 const emit = defineEmits(['close'])
+
+const { ui } = usePeopleData()
 
 const closeModal = () => {
   emit('close')

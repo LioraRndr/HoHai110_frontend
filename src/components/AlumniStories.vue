@@ -1,7 +1,7 @@
 <template>
   <div class="alumni-stories">
     <div class="stories-header">
-      <p class="stories-intro">「我们书写的故事,因你们而开始,因我们而延续。」</p>
+      <p class="stories-intro">{{ $t('alumniStories.intro') }}</p>
     </div>
 
     <div class="stories-carousel">
@@ -70,58 +70,58 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const activeStory = ref(0)
 const carouselTrack = ref(null)
 
-const alumniList = ref([
-  {
-    name: '严恺',
-    title: '双院士,海岸工程奠基人',
+const alumniList = computed(() => {
+  const yankai = {
+    name: t('alumniStories.alumni.yankai.name'),
+    title: t('alumniStories.alumni.yankai.title'),
     avatar: 'https://img.assets.five-plus-one.com/2025/10/5531fab5c2b32e493bc3a88f5d20c7e2.jpg',
-    preview: '1938年,他放弃荷兰优越条件,携一箱书稿归国...',
-    story: '1938年,他放弃荷兰优越条件,携一箱书稿归国。晚年仍坚持赴长江口勘测,留下"江河是流动的文明,治理是永续的使命"的箴言。',
-    quote: '江河是流动的文明,治理是永续的使命。',
-    achievements: ['中国科学院院士', '中国工程院院士', '海岸工程奠基人']
-  },
-  {
-    name: '郑守仁',
-    title: '三峡工程设计总工程师',
-    avatar: 'https://img.assets.five-plus-one.com/2025/10/5f3f38abeb7670dcfb501ac23946431d.png',
-    preview: '27年驻守工地,用计算尺和手绘图破解世界级难题...',
-    story: '27年驻守工地,用计算尺和手绘图破解世界级难题。获国际大坝委员会终身成就奖时,他说:"荣誉属于所有把青春献给三峡的河海人。"',
-    quote: '荣誉属于所有把青春献给三峡的河海人。',
-    achievements: ['中国工程院院士', '三峡工程总工', '最美奋斗者']
-  },
-  {
-    name: '张建云',
-    title: '南水北调战略科学家',
-    avatar: 'https://img.assets.five-plus-one.com/2025/10/bbbe9904a03f6443ef84ac4924c4d4aa.jpg',
-    preview: '从沂蒙山区走到国际水论坛,他始终铭记导师嘱托...',
-    story: '从沂蒙山区走到国际水论坛,他始终铭记导师嘱托:"治水者,当以苍生为念。"其团队研发的洪水预报系统,已在湄公河流域拯救无数生命。',
-    quote: '治水者,当以苍生为念。',
-    achievements: ['中国工程院院士', '国家水网总设计师', '国际水协会会士']
-  },
-  {
-    name: '徐建荣',
-    title: '白鹤滩水电站设计总工程师',
-    avatar: 'https://img.assets.five-plus-one.com/2025/10/93376b4a1f02d3f7f8f698f69d6d830f.png',
-    preview: '面对"地球褶皱"的挑战,他引用校训"勇于探索"...',
-    story: '面对"地球褶皱"的挑战,他引用校训"勇于探索"激励团队:"没有先例,我们就创造先例。"在印度洋与亚欧板块碰撞的断裂带上,筑起超级工程。',
-    quote: '没有先例,我们就创造先例。',
-    achievements: ['国家卓越工程师', '白鹤滩总工', '特等奖获得者']
-  },
-  {
-    name: '缪薇',
-    title: '2015届校友,基层治水代表',
-    avatar: 'https://img.assets.five-plus-one.com/2025/10/7fb4f12f1e437106bec997863c4692d3.png',
-    preview: '在2025年青春华章活动中,她坦言...',
-    story: '在2025年青春华章活动中,她坦言:"母校教我\'水润万物\'的谦逊,也给我\'水击三千里\'的勇气。"扎根基层十年,带领乡村完成数十个水利项目。',
-    quote: '母校教我"水润万物"的谦逊,也给我"水击三千里"的勇气。',
-    achievements: ['全国劳动模范', '基层治水标兵', '优秀校友']
+    preview: t('alumniStories.alumni.yankai.preview'),
+    story: t('alumniStories.alumni.yankai.story'),
+    quote: t('alumniStories.alumni.yankai.quote'),
+    achievements: t('alumniStories.alumni.yankai.achievements')
   }
-])
+
+  const zhengshouren = {
+    name: t('alumniStories.alumni.zhengshouren.name'),
+    title: t('alumniStories.alumni.zhengshouren.title'),
+    avatar: 'https://img.assets.five-plus-one.com/2025/10/5f3f38abeb7670dcfb501ac23946431d.png',
+    preview: t('alumniStories.alumni.zhengshouren.preview'),
+    story: t('alumniStories.alumni.zhengshouren.story'),
+    quote: t('alumniStories.alumni.zhengshouren.quote'),
+    achievements: t('alumniStories.alumni.zhengshouren.achievements')
+  }
+
+  const zhangjianyun = {
+    name: t('alumniStories.alumni.zhangjianyun.name'),
+    title: t('alumniStories.alumni.zhangjianyun.title'),
+    avatar: 'https://img.assets.five-plus-one.com/2025/10/bbbe9904a03f6443ef84ac4924c4d4aa.jpg',
+    preview: t('alumniStories.alumni.zhangjianyun.preview'),
+    story: t('alumniStories.alumni.zhangjianyun.story'),
+    quote: t('alumniStories.alumni.zhangjianyun.quote'),
+    achievements: t('alumniStories.alumni.zhangjianyun.achievements')
+  }
+
+  // 确保 achievements 是数组
+  if (typeof yankai.achievements === 'string') {
+    yankai.achievements = [yankai.achievements]
+  }
+  if (typeof zhengshouren.achievements === 'string') {
+    zhengshouren.achievements = [zhengshouren.achievements]
+  }
+  if (typeof zhangjianyun.achievements === 'string') {
+    zhangjianyun.achievements = [zhangjianyun.achievements]
+  }
+
+  return [yankai, zhengshouren, zhangjianyun]
+})
 
 const setActiveStory = (index) => {
   activeStory.value = index

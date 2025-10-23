@@ -32,19 +32,15 @@
     <!-- 时间线头部 -->
     <div id="timeline-header" class="timeline-header">
       <h1 class="timeline-title">
-        <span class="title-main">时光之河</span>
-        <span class="title-sub">百十年河海征程</span>
+        <span class="title-main">{{ $t('timeline.header.title') }}</span>
+        <span class="title-sub">{{ $t('timeline.header.subtitle') }}</span>
       </h1>
       <div class="header-decoration">
         <div class="deco-line"></div>
         <div class="deco-circle"></div>
         <div class="deco-line"></div>
       </div>
-      <p class="timeline-intro">
-        从1915年清凉山麓的那间祠堂，到今日扎根全球的一流学府，<br />
-        河海大学走过了波澜壮阔的110年。<br />
-        这条时光之河，见证了治水兴邦的初心，承载着薪火相传的使命。
-      </p>
+      <p class="timeline-intro" v-html="$t('timeline.header.intro')"></p>
     </div>
 
     <!-- 时间线主体 -->
@@ -81,9 +77,9 @@
 
         <!-- 行动号召 -->
         <div class="epilogue-cta">
-          <p class="cta-text">传承河海精神，共筑水利梦想</p>
+          <p class="cta-text">{{ $t('timeline.epilogue.cta') }}</p>
           <router-link to="/blessings" class="cta-button">
-            写下你的祝福
+            {{ $t('timeline.epilogue.ctaButton') }}
             <span class="button-arrow">→</span>
           </router-link>
         </div>
@@ -96,12 +92,42 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useScroll } from '@vueuse/core'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import TimelineNode from './TimelineNode.vue'
-import { timelineData, epilogue } from '@/data/timelineData'
+import { timelineData as originalTimelineData } from '@/data/timelineData'
+import timelineDataZh from '@/i18n/locales/timelineData.zh'
+import timelineDataEn from '@/i18n/locales/timelineData.en'
+
+const { t, locale } = useI18n()
+
+// 动态获取结语内容
+const epilogue = computed(() => {
+  return locale.value === 'zh' ? timelineDataZh.epilogue : timelineDataEn.epilogue
+})
+
+// 合并原始数据和翻译数据
+const timelineData = computed(() => {
+  const translations = locale.value === 'zh' ? timelineDataZh.events : timelineDataEn.events
+
+  return originalTimelineData.map(node => {
+    const translation = translations[node.year]
+    if (!translation) return node
+
+    // 合并翻译数据到原始节点
+    return {
+      ...node,
+      ...translation,
+      // 保持原始数据的theme和id
+      theme: node.theme,
+      id: node.id,
+      year: node.year
+    }
+  })
+})
 
 gsap.registerPlugin(ScrollTrigger)
 

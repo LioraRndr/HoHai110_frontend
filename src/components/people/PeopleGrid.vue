@@ -40,7 +40,7 @@
 
           <div class="card-footer">
             <button class="read-more-btn">
-              <span>了解更多</span>
+              <span>{{ ui.learnMore }}</span>
               <span class="arrow">→</span>
             </button>
           </div>
@@ -51,6 +51,8 @@
 </template>
 
 <script setup>
+import { usePeopleData } from '@/composables/usePeopleData'
+
 defineProps({
   people: {
     type: Array,
@@ -59,6 +61,8 @@ defineProps({
 })
 
 defineEmits(['select-person'])
+
+const { ui } = usePeopleData()
 </script>
 
 <style scoped>

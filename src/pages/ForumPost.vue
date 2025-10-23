@@ -1,31 +1,31 @@
 <template>
   <PageLayout>
     <div class="post-page">
-      <div v-if="loading" class="loading">加载中...</div>
+      <div v-if="loading" class="loading">{{ $t('forum.post.loading') }}</div>
 
       <div v-else class="post-container">
         <!-- 返回按钮 -->
-        <button @click="goBack" class="back-btn">← 返回板块</button>
+        <button @click="goBack" class="back-btn">← {{ $t('forum.post.backToBoard') }}</button>
 
         <!-- 帖子内容 -->
         <div class="post-content">
           <div class="post-header">
             <div class="post-tags">
-              <span v-if="post.isSticky" class="tag sticky-tag">置顶</span>
-              <span v-if="post.isHighlighted" class="tag highlight-tag">精华</span>
-              <span v-if="post.status === 'locked'" class="tag lock-tag">已锁定</span>
+              <span v-if="post.isSticky" class="tag sticky-tag">{{ $t('forum.board.tags.sticky') }}</span>
+              <span v-if="post.isHighlighted" class="tag highlight-tag">{{ $t('forum.board.tags.highlighted') }}</span>
+              <span v-if="post.status === 'locked'" class="tag lock-tag">{{ $t('forum.board.tags.locked') }}</span>
             </div>
             <h1 class="post-title">{{ post.title }}</h1>
             <div class="post-meta">
               <div class="author-info">
-                <span class="author-name">{{ post.user?.username || '匿名用户' }}</span>
+                <span class="author-name">{{ post.user?.username || $t('forum.board.anonymousUser') }}</span>
                 <span class="separator">•</span>
                 <span class="post-time">{{ formatTime(post.createdAt) }}</span>
               </div>
               <div class="post-stats-mini">
-                <span>浏览 {{ post.views }}</span>
-                <span>回复 {{ post.replyCount }}</span>
-                <span>点赞 {{ post.likes }}</span>
+                <span>{{ $t('forum.post.viewsLabel') }} {{ post.views }}</span>
+                <span>{{ $t('forum.post.repliesLabel') }} {{ post.replyCount }}</span>
+                <span>{{ $t('forum.post.likesLabel') }} {{ post.likes }}</span>
               </div>
             </div>
           </div>
@@ -37,7 +37,7 @@
                 v-for="(image, index) in post.images"
                 :key="index"
                 :src="image"
-                :alt="`图片${index + 1}`"
+                :alt="`${$t('forum.post.imageAlt')}${index + 1}`"
                 class="post-image"
               />
             </div>
@@ -48,21 +48,21 @@
               :class="['action-btn', 'like-btn', { liked: post.isLiked }]"
               @click="toggleLike"
             >
-              ❤ {{ post.isLiked ? '已赞' : '点赞' }} ({{ post.likes }})
+              ❤ {{ post.isLiked ? $t('forum.post.liked') : $t('forum.post.like') }} ({{ post.likes }})
             </button>
             <button
               v-if="canEdit"
               @click="editPost"
               class="action-btn edit-btn"
             >
-              ✎ 编辑
+              ✎ {{ $t('forum.post.edit') }}
             </button>
             <button
               v-if="canDelete"
               @click="deletePost"
               class="action-btn delete-btn"
             >
-              🗑 删除
+              🗑 {{ $t('forum.post.delete') }}
             </button>
             <!-- 管理员功能 -->
             <button
@@ -70,14 +70,14 @@
               @click="toggleSticky"
               :class="['action-btn', 'admin-btn', { active: post.isSticky }]"
             >
-              📌 {{ post.isSticky ? '取消置顶' : '置顶' }}
+              📌 {{ post.isSticky ? $t('forum.post.unpin') : $t('forum.post.pin') }}
             </button>
             <button
               v-if="isAdmin"
               @click="toggleHighlight"
               :class="['action-btn', 'admin-btn', { active: post.isHighlighted }]"
             >
-              ⭐ {{ post.isHighlighted ? '取消精华' : '设为精华' }}
+              ⭐ {{ post.isHighlighted ? $t('forum.post.unfeature') : $t('forum.post.feature') }}
             </button>
           </div>
         </div>
@@ -85,14 +85,14 @@
         <!-- 回复列表 -->
         <div class="replies-section">
           <div class="section-header">
-            <h2>全部回复 ({{ post.replyCount }})</h2>
+            <h2>{{ $t('forum.post.allReplies') }} ({{ post.replyCount }})</h2>
           </div>
 
           <!-- 发表回复 -->
           <div v-if="isLoggedIn && post.status !== 'locked'" class="reply-editor">
             <textarea
               v-model="newReplyContent"
-              placeholder="发表你的看法..."
+              :placeholder="$t('forum.post.replyPlaceholder')"
               class="reply-textarea"
               rows="4"
             ></textarea>
@@ -101,23 +101,23 @@
               :disabled="!newReplyContent.trim()"
               class="submit-reply-btn"
             >
-              发表回复
+              {{ $t('forum.post.submitReply') }}
             </button>
           </div>
 
           <div v-else-if="!isLoggedIn" class="login-tip">
-            <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }">登录</router-link> 后才能发表回复
+            <router-link :to="{ path: '/login', query: { redirect: $route.fullPath } }">{{ $t('forum.post.loginToReply') }}</router-link> {{ $t('forum.post.loginPrompt') }}
           </div>
 
           <div v-else-if="post.status === 'locked'" class="locked-tip">
-            该帖子已被锁定，无法回复
+            {{ $t('forum.post.lockedPost') }}
           </div>
 
           <!-- 回复列表 -->
-          <div v-if="repliesLoading" class="loading">加载回复中...</div>
+          <div v-if="repliesLoading" class="loading">{{ $t('forum.post.loadingReplies') }}</div>
 
           <div v-else-if="replies.length === 0" class="empty-replies">
-            暂无回复，快来抢沙发吧！
+            {{ $t('forum.post.noReplies') }}
           </div>
 
           <div v-else class="replies-list">
@@ -127,8 +127,8 @@
               class="reply-item"
             >
               <div class="reply-header">
-                <span class="reply-floor">{{ reply.floor }}楼</span>
-                <span class="reply-author">{{ reply.user?.username || '匿名用户' }}</span>
+                <span class="reply-floor">{{ reply.floor }}{{ $t('forum.post.floor') }}</span>
+                <span class="reply-author">{{ reply.user?.username || $t('forum.board.anonymousUser') }}</span>
                 <span class="reply-time">{{ formatTime(reply.createdAt) }}</span>
               </div>
               <div class="reply-content" v-html="formatContent(reply.content)"></div>
@@ -144,14 +144,14 @@
                   @click="replyToReply(reply)"
                   class="reply-action-btn"
                 >
-                  💬 回复
+                  💬 {{ $t('forum.post.replyTo') }}
                 </button>
                 <button
                   v-if="canDeleteReply(reply)"
                   @click="deleteReply(reply.id)"
                   class="reply-action-btn delete"
                 >
-                  🗑 删除
+                  🗑 {{ $t('forum.post.deleteReply') }}
                 </button>
               </div>
 
@@ -165,7 +165,7 @@
                   <div class="sub-reply-header">
                     <span class="sub-reply-author">{{ subReply.user?.username }}</span>
                     <span v-if="subReply.replyToUser" class="reply-to">
-                      回复 @{{ subReply.replyToUser.username }}
+                      {{ $t('forum.post.replyTo') }} @{{ subReply.replyToUser.username }}
                     </span>
                     <span class="sub-reply-time">{{ formatTime(subReply.createdAt) }}</span>
                   </div>
@@ -190,7 +190,7 @@
               :disabled="replyPage === 1"
               class="page-btn"
             >
-              上一页
+              {{ $t('forum.board.pagination.prev') }}
             </button>
             <span class="page-info">{{ replyPage }} / {{ replyTotalPages }}</span>
             <button
@@ -198,7 +198,7 @@
               :disabled="replyPage === replyTotalPages"
               class="page-btn"
             >
-              下一页
+              {{ $t('forum.board.pagination.next') }}
             </button>
           </div>
         </div>
@@ -210,7 +210,7 @@
       v-if="showEditModal"
       :forum-id="post.forumId"
       :post="post"
-      title="编辑帖子"
+      :title="$t('forum.post.editPostTitle')"
       @close="showEditModal = false"
       @updated="handlePostUpdated"
     />
@@ -220,6 +220,7 @@
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { forumAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import PageLayout from '@/components/PageLayout.vue'
@@ -227,6 +228,7 @@ import ForumPostEditor from '@/components/ForumPostEditor.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { t: $t, locale } = useI18n()
 
 const postId = computed(() => parseInt(route.params.id))
 const post = ref({})
@@ -500,12 +502,12 @@ const formatTime = (dateString) => {
   const hours = Math.floor(diff / 3600000)
   const days = Math.floor(diff / 86400000)
 
-  if (minutes < 1) return '刚刚'
-  if (minutes < 60) return `${minutes}分钟前`
-  if (hours < 24) return `${hours}小时前`
-  if (days < 7) return `${days}天前`
+  if (minutes < 1) return $t('forum.board.time.justNow')
+  if (minutes < 60) return `${minutes}${$t('forum.board.time.minutesAgo')}`
+  if (hours < 24) return `${hours}${$t('forum.board.time.hoursAgo')}`
+  if (days < 7) return `${days}${$t('forum.board.time.daysAgo')}`
 
-  return date.toLocaleDateString('zh-CN', {
+  return date.toLocaleDateString(locale.value === 'zh' ? 'zh-CN' : 'en-US', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'

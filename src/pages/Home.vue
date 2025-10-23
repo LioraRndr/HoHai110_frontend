@@ -13,14 +13,14 @@
     <section id="timeline" class="section timeline-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">交互·传承</h2>
-          <p class="section-subtitle">校史长河时间轴</p>
+          <h2 class="section-title">{{ $t('home.timeline.title') }}</h2>
+          <p class="section-subtitle">{{ $t('home.timeline.subtitle') }}</p>
         </div>
         <HistoryTimeline />
         <!-- 导航按钮 -->
         <div class="section-navigation">
           <router-link to="/timeline" class="nav-button">
-            <span>探索完整时间轴</span>
+            <span>{{ $t('home.timeline.exploreMore') }}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -33,14 +33,14 @@
     <section id="mission" class="section mission-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">使命·担当</h2>
-          <p class="section-subtitle">治水报国精神阐释</p>
+          <h2 class="section-title">{{ $t('home.mission.title') }}</h2>
+          <p class="section-subtitle">{{ $t('home.mission.subtitle') }}</p>
         </div>
         <MissionSpirit />
         <!-- 导航按钮 -->
         <div class="section-navigation">
           <router-link to="/culture" class="nav-button">
-            <span>了解更多河海文化</span>
+            <span>{{ $t('home.mission.learnMore') }}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -53,14 +53,14 @@
     <section id="alumni" class="section alumni-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">人物·故事</h2>
-          <p class="section-subtitle">河海英华校友风采</p>
+          <h2 class="section-title">{{ $t('home.people.title') }}</h2>
+          <p class="section-subtitle">{{ $t('home.people.subtitle') }}</p>
         </div>
         <AlumniStories />
         <!-- 导航按钮 -->
         <div class="section-navigation">
           <router-link to="/people" class="nav-button">
-            <span>查看更多杰出校友</span>
+            <span>{{ $t('home.people.viewMore') }}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -73,8 +73,8 @@
     <section id="future" class="section future-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">召唤·行动</h2>
-          <p class="section-subtitle">寄语未来互动板块</p>
+          <h2 class="section-title">{{ $t('home.future.title') }}</h2>
+          <p class="section-subtitle">{{ $t('home.future.subtitle') }}</p>
         </div>
         <FutureMessage />
       </div>
@@ -83,16 +83,16 @@
     <!-- 6. 升华·共情 - 结尾 -->
     <section id="finale" class="section finale-section">
       <div class="finale-content">
-        <p class="finale-quote">「我们或许从未相见,但我们正在共同完成一场跨越百年的壮举。」</p>
+        <p class="finale-quote">{{ $t('home.finale.quote') }}</p>
         <div class="finale-text">
-          <p>所以，请不必担心前路漫漫。</p>
-          <p>因为你就是——</p>
-          <p>「因我们而存在的故事」里，最新的篇章；</p>
-          <p>「为你而燃的薪火」中，最亮的光焰。</p>
+          <p>{{ $t('home.finale.text1') }}</p>
+          <p>{{ $t('home.finale.text2') }}</p>
+          <p>{{ $t('home.finale.text3') }}</p>
+          <p>{{ $t('home.finale.text4') }}</p>
         </div>
         <div class="finale-logo">
-          <h2 class="logo-year">2025.10.27</h2>
-          <p class="logo-text">共赴百十之约</p>
+          <h2 class="logo-year">{{ $t('home.finale.year') }}</h2>
+          <p class="logo-text">{{ $t('home.finale.slogan') }}</p>
         </div>
         <!-- 两个导航按钮 -->
         <div class="finale-buttons">
@@ -101,8 +101,8 @@
               <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div>
-              <span class="button-title">薪传接力</span>
-              <span class="button-subtitle">传递河海精神</span>
+              <span class="button-title">{{ $t('home.finale.blessings.title') }}</span>
+              <span class="button-subtitle">{{ $t('home.finale.blessings.subtitle') }}</span>
             </div>
           </router-link>
           <router-link to="/articles" class="finale-button">
@@ -110,8 +110,8 @@
               <path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div>
-              <span class="button-title">共话百十</span>
-              <span class="button-subtitle">分享你的格言</span>
+              <span class="button-title">{{ $t('home.finale.articles.title') }}</span>
+              <span class="button-subtitle">{{ $t('home.finale.articles.subtitle') }}</span>
             </div>
           </router-link>
         </div>

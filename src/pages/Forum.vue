@@ -2,11 +2,14 @@
   <PageLayout>
     <div class="forum-page">
       <div class="page-header">
-        <h1>共话百十 · 校友论坛</h1>
-        <p class="subtitle">分享记忆，交流想法，共建河海社区</p>
+        <h1>{{ $t('forum.pageTitle') }}</h1>
+        <p class="subtitle">{{ $t('forum.pageSubtitle') }}</p>
       </div>
 
-      <div v-if="loading" class="loading">加载中...</div>
+      <div v-if="loading" class="loading">
+        <div class="spinner"></div>
+        <p>{{ $t('forum.loading') }}</p>
+      </div>
 
       <div v-else class="forums-container">
         <div
@@ -23,17 +26,17 @@
           <div class="forum-stats">
             <div class="stat-item">
               <span class="stat-value">{{ forum.postCount }}</span>
-              <span class="stat-label">帖子</span>
+              <span class="stat-label">{{ $t('forum.stats.posts') }}</span>
             </div>
             <div class="stat-item">
               <span class="stat-value">{{ forum.replyCount }}</span>
-              <span class="stat-label">回复</span>
+              <span class="stat-label">{{ $t('forum.stats.replies') }}</span>
             </div>
           </div>
         </div>
 
         <div v-if="forums.length === 0" class="empty-state">
-          <p>暂无板块</p>
+          <p>{{ $t('forum.noBoards') }}</p>
         </div>
       </div>
     </div>
@@ -43,11 +46,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { forumAPI } from '@/api'
 import { $message } from '@/utils/message.js'
 import PageLayout from '@/components/PageLayout.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 const forums = ref([])
 const loading = ref(true)
 
@@ -59,7 +64,7 @@ const loadForums = async () => {
     forums.value = response.data.forums || []
   } catch (error) {
     console.error('加载板块失败:', error)
-    $message.error('加载板块失败: ' + error.message)
+    $message.error(t('forum.loadingBoardsFailed') + ': ' + error.message)
   } finally {
     loading.value = false
   }
@@ -86,7 +91,7 @@ onMounted(() => {
 .page-header {
   text-align: center;
   margin-bottom: 3rem;
-  margin-top: 60px;
+  margin-top: 90px;
 }
 
 .page-header h1 {
@@ -105,10 +110,26 @@ onMounted(() => {
 }
 
 .loading {
-  text-align: center;
-  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
   color: #999;
-  font-size: 1.1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(74, 144, 226, 0.1);
+  border-top-color: #4A90E2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .forums-container {
