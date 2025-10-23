@@ -1,9 +1,10 @@
 <template>
   <div class="about-page">
     <Navbar />
+    <PageNav :navItems="navItems" />
     <div class="about-container">
       <!-- 页面头部 -->
-      <div class="page-hero">
+      <div id="hero" class="page-hero">
         <h1 class="hero-title">河海大学110周年</h1>
         <p class="hero-subtitle">纪念网站</p>
         <div class="hero-decoration">
@@ -14,7 +15,7 @@
       </div>
 
       <!-- 关于学校 -->
-      <section class="about-section">
+      <section id="about-school" class="about-section">
         <h2 class="section-title">关于河海大学</h2>
         <div class="content-card">
           <p>
@@ -29,7 +30,7 @@
       </section>
 
       <!-- 发展历程 -->
-      <section class="about-section">
+      <section id="milestone" class="about-section">
         <h2 class="section-title">发展历程</h2>
         <div class="milestone-grid">
           <div class="milestone-card">
@@ -56,7 +57,7 @@
       </section>
 
       <!-- 办学成就 -->
-      <section class="about-section">
+      <section id="achievements" class="about-section">
         <h2 class="section-title">办学成就</h2>
         <div class="achievements-grid">
           <div class="achievement-card">
@@ -83,7 +84,7 @@
       </section>
 
       <!-- 关于项目 -->
-      <section class="about-section">
+      <section id="project" class="about-section">
         <h2 class="section-title">关于本项目</h2>
         <div class="content-card project-card">
           <h3>项目简介</h3>
@@ -264,7 +265,7 @@
       </section>
 
       <!-- 团队信息 -->
-      <section class="about-section">
+      <section id="team" class="about-section">
         <h2 class="section-title">开发团队</h2>
         <div class="content-card">
           <p class="team-desc">
@@ -314,10 +315,111 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { h, onMounted } from 'vue'
 import gsap from 'gsap'
 import Navbar from '@/components/Navbar.vue'
+import PageNav from '@/components/PageNav.vue'
 import Footer from '@/components/Footer.vue'
+
+// 导航项配置
+const navItems = [
+  {
+    id: 'hero',
+    label: '首页',
+    icon: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' }),
+      h('polyline', { points: '9 22 9 12 15 12 15 22' })
+    ])
+  },
+  {
+    id: 'about-school',
+    label: '关于学校',
+    icon: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M22 10v6M2 10l10-5 10 5-10 5z' }),
+      h('path', { d: 'M6 12v5c3 3 9 3 12 0v-5' })
+    ])
+  },
+  {
+    id: 'milestone',
+    label: '发展历程',
+    icon: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('circle', { cx: '12', cy: '12', r: '10' }),
+      h('polyline', { points: '12 6 12 12 16 14' })
+    ])
+  },
+  {
+    id: 'achievements',
+    label: '办学成就',
+    icon: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M6 9H4.5a2.5 2.5 0 0 1 0-5H6' }),
+      h('path', { d: 'M18 9h1.5a2.5 2.5 0 0 0 0-5H18' }),
+      h('path', { d: 'M4 22h16' }),
+      h('path', { d: 'M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22' }),
+      h('path', { d: 'M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22' }),
+      h('path', { d: 'M18 2H6v7a6 6 0 0 0 12 0V2z' })
+    ])
+  },
+  {
+    id: 'project',
+    label: '关于项目',
+    icon: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('polyline', { points: '16 18 22 12 16 6' }),
+      h('polyline', { points: '8 6 2 12 8 18' })
+    ])
+  },
+  {
+    id: 'team',
+    label: '开发团队',
+    icon: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
+    }, [
+      h('path', { d: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2' }),
+      h('circle', { cx: '9', cy: '7', r: '4' }),
+      h('path', { d: 'M23 21v-2a4 4 0 0 0-3-3.87' }),
+      h('path', { d: 'M16 3.13a4 4 0 0 1 0 7.75' })
+    ])
+  }
+]
 
 onMounted(() => {
   // 入场动画
