@@ -432,7 +432,17 @@ git commit -m "fix: 修复论坛评论显示问题"
 
 ## 📄 许可证
 
-本项目仅供 **河海大学110周年校庆** 使用。
+本项目采用 [GPL-3.0](LICENSE) 开源协议。
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+Copyright (C) 2025 Five Plus One Team
+
+本程序是自由软件：你可以根据自由软件基金会发布的 GNU 通用公共许可证（GPL-3.0 或更高版本）的条款重新分发和/或修改它。
+
+发布本程序的目的是希望它有用，但**不提供任何保证**；甚至不提供**适销性**或**特定用途适用性**的默示保证。详情请参阅 GNU 通用公共许可证。
+
+你应该已经收到了一份 GNU 通用公共许可证的副本。如果没有，请访问 <https://www.gnu.org/licenses/>。
 
 
 ---

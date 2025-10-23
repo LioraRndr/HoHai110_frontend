@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "description": "",
   "dependencies": {
     "@vueuse/core": "^13.9.0",
