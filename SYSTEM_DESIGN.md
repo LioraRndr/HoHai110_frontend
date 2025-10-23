@@ -345,3 +345,12 @@ src/router/index.js (新增路由和权限检查)
 本系统完整实现了文章发布、评论互动、祝福墙和管理员后台四大核心功能模块，所有功能都已对接API接口，支持完整的用户交互和权限控制。系统采用组件化设计，代码结构清晰，易于维护和扩展。
 
 所有组件都遵循Vue 3 Composition API最佳实践，使用响应式数据和生命周期钩子。样式设计统一采用深色主题和玻璃态效果，提供良好的视觉体验。
+
+---
+
+## 项目信息
+
+- 前端开源地址：[https://github.com/five-plus-one/HoHai110_frontend](https://github.com/five-plus-one/HoHai110_frontend)
+- 后端开源地址：[https://github.com/five-plus-one/HoHai110_backend](https://github.com/five-plus-one/HoHai110_backend)
+- 联系作者：[https://r-l.ink/about](https://r-l.ink/about)
+- 支持我一杯咖啡：[https://r-l.ink/support](https://r-l.ink/support)

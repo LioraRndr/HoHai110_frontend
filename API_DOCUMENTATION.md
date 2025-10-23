@@ -2780,4 +2780,13 @@ A: 需要现有管理员通过 `/api/v1/admin/users/:id/role` 接口将用户角
 
 ---
 
+## 项目信息
+
+- 前端开源地址：[https://github.com/five-plus-one/HoHai110_frontend](https://github.com/five-plus-one/HoHai110_frontend)
+- 后端开源地址：[https://github.com/five-plus-one/HoHai110_backend](https://github.com/five-plus-one/HoHai110_backend)
+- 联系作者：[https://r-l.ink/about](https://r-l.ink/about)
+- 支持我一杯咖啡：[https://r-l.ink/support](https://r-l.ink/support)
+
+---
+
 © 2025 河海大学110周年校庆. All rights reserved.

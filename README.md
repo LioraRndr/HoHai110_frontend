@@ -10,6 +10,10 @@
 [![Vite](https://img.shields.io/badge/Vite-7.1.10-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D16.0.0-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 
+
+[联系作者](https://r-l.ink/about)
+
+[支持我一杯咖啡](https://r-l.ink/support)
 </div>
 
 ---
@@ -438,7 +442,10 @@ git commit -m "fix: 修复论坛评论显示问题"
 如有问题、建议或需要技术支持，请通过以下方式联系项目维护团队：
 
 - 提交 [Issue](../../issues)
-- 邮件联系项目负责人
+- 前端开源地址：[https://github.com/five-plus-one/HoHai110_frontend](https://github.com/five-plus-one/HoHai110_frontend)
+- 后端开源地址：[https://github.com/five-plus-one/HoHai110_backend](https://github.com/five-plus-one/HoHai110_backend)
+- 联系作者：[https://r-l.ink/about](https://r-l.ink/about)
+- 支持我一杯咖啡：[https://r-l.ink/support](https://r-l.ink/support)
 
 ---
 

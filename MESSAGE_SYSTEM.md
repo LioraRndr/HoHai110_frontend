@@ -255,3 +255,12 @@ $message.info('测试消息', '调试')
 3. 提供具体的复现步骤和期望行为
 
 该消息提示系统大大提升了用户体验，让应用更加现代化和专业。🎉
+
+---
+
+## 项目信息
+
+- 前端开源地址：[https://github.com/five-plus-one/HoHai110_frontend](https://github.com/five-plus-one/HoHai110_frontend)
+- 后端开源地址：[https://github.com/five-plus-one/HoHai110_backend](https://github.com/five-plus-one/HoHai110_backend)
+- 联系作者：[https://r-l.ink/about](https://r-l.ink/about)
+- 支持我一杯咖啡：[https://r-l.ink/support](https://r-l.ink/support)

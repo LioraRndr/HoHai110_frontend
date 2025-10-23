@@ -157,6 +157,19 @@
               <strong>{{ team.contact.version.label }}:</strong>
               <span>{{ team.contact.version.value }}</span>
             </div>
+            <div v-if="team.contact.github" class="contact-item github-links">
+              <strong>{{ team.contact.github.label }}:</strong>
+              <div class="github-link-group">
+                <a :href="team.contact.github.frontend" target="_blank" rel="noopener noreferrer" class="github-link">
+                  <span class="link-icon">🔗</span>
+                  <span>{{ team.contact.github.frontendLabel }}</span>
+                </a>
+                <a :href="team.contact.github.backend" target="_blank" rel="noopener noreferrer" class="github-link">
+                  <span class="link-icon">🔗</span>
+                  <span>{{ team.contact.github.backendLabel }}</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -864,6 +877,44 @@ onMounted(() => {
 .contact-item span {
   color: var(--color-ink-black);
   opacity: 0.8;
+}
+
+.github-links {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.github-link-group {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: linear-gradient(135deg, #F8F5EF 0%, #E5E2DC 100%);
+  color: var(--color-river-blue);
+  border: 2px solid var(--color-river-blue);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.github-link:hover {
+  background: var(--color-river-blue);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.github-link .link-icon {
+  font-size: 1em;
 }
 
 /* 响应式 */

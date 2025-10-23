@@ -219,7 +219,8 @@ export default {
         role: 'Frontend & Backend Development',
         links: [
           { icon: '🏠', text: 'Personal Homepage', url: 'http://r-l.ink/home' },
-          { icon: '📧', text: 'Contact', url: 'https://r-l.ink/about' }
+          { icon: '📧', text: 'Contact', url: 'https://r-l.ink/about' },
+          { icon: '☕', text: 'Support Me', url: 'https://r-l.ink/support' }
         ]
       },
       {
@@ -232,6 +233,13 @@ export default {
       version: {
         label: 'Version',
         value: 'v1.0.0'
+      },
+      github: {
+        label: 'Open Source',
+        frontendLabel: 'Frontend Repo',
+        backendLabel: 'Backend Repo',
+        frontend: 'https://github.com/five-plus-one/HoHai110_frontend',
+        backend: 'https://github.com/five-plus-one/HoHai110_backend'
       }
     }
   }

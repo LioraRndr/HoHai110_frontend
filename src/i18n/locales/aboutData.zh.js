@@ -219,7 +219,8 @@ export default {
         role: '前端开发 & 后端开发',
         links: [
           { icon: '🏠', text: '个人主页', url: 'http://r-l.ink/home' },
-          { icon: '📧', text: '联系方式', url: 'https://r-l.ink/about' }
+          { icon: '📧', text: '联系方式', url: 'https://r-l.ink/about' },
+          { icon: '☕', text: '支持我', url: 'https://r-l.ink/support' }
         ]
       },
       {
@@ -232,6 +233,13 @@ export default {
       version: {
         label: '版本',
         value: 'v1.0.0'
+      },
+      github: {
+        label: '开源地址',
+        frontendLabel: '前端仓库',
+        backendLabel: '后端仓库',
+        frontend: 'https://github.com/five-plus-one/HoHai110_frontend',
+        backend: 'https://github.com/five-plus-one/HoHai110_backend'
       }
     }
   }
