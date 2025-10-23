@@ -89,7 +89,7 @@ onMounted(() => {
 .page-header {
   text-align: center;
   margin-bottom: 3rem;
-  margin-top: 60px;
+  margin-top: 90px;
 }
 
 .page-header h1 {

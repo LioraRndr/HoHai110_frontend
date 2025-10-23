@@ -159,6 +159,9 @@
       </div>
     </div>
   </nav>
+
+  <!-- 移动端遮罩层 -->
+  <div class="mobile-backdrop" :class="{ active: isMobileMenuOpen }" @click="closeMobileMenu"></div>
 </template>
 
 <script setup>
@@ -607,7 +610,10 @@ watch(() => route.path, (newPath) => {
   border: none;
   padding: var(--spacing-sm);
   cursor: pointer;
-  z-index: 1001;
+  z-index: 1002;
+  position: relative;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .hamburger-line {
@@ -616,6 +622,27 @@ watch(() => route.path, (newPath) => {
   background: white;
   border-radius: 2px;
   transition: all var(--transition-base);
+}
+
+/* 移动端遮罩层 */
+.mobile-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  z-index: 998;
+  pointer-events: none;
+}
+
+.mobile-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 /* 移动端菜单 */
@@ -635,6 +662,33 @@ watch(() => route.path, (newPath) => {
   overflow-y: auto;
   border-bottom-left-radius: var(--radius-lg);
   border-bottom-right-radius: var(--radius-lg);
+  z-index: 999;
+}
+
+/* 自定义滚动条 */
+.mobile-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-menu::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.mobile-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  transition: background var(--transition-base);
+}
+
+.mobile-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox 滚动条样式 */
+.mobile-menu {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
 }
 
 .mobile-menu.active {

@@ -39,6 +39,7 @@ const total = ref(0)
   text-align: center;
   margin-bottom: var(--spacing-3xl);
   padding: var(--spacing-2xl) 0;
+  margin-top: 50px;
 }
 
 .page-title {

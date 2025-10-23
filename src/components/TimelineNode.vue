@@ -1154,7 +1154,9 @@ blockquote::before {
   }
 
   .motto-wrapper {
-    padding: 0 20px;
+    padding: 0 10px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   .quote-mark {
@@ -1163,6 +1165,15 @@ blockquote::before {
 
   .node-motto {
     font-size: 1rem;
+    white-space: normal !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* 移动端禁用打字机效果 */
+  .node-motto.typing-active {
+    animation: none;
+    border-right: none;
   }
 
   .section-title {
@@ -1171,6 +1182,41 @@ blockquote::before {
 
   .connections-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-card {
+    padding: 20px 12px;
+  }
+
+  .node-title {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+
+  .motto-wrapper {
+    padding: 0 5px;
+    gap: 6px;
+  }
+
+  .quote-mark {
+    font-size: 1.5rem;
+  }
+
+  .node-motto {
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+
+  .scene-content,
+  .ceremony-content,
+  .story-card {
+    padding: 16px;
   }
 }
 </style>

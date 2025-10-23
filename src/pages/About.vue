@@ -164,8 +164,8 @@
               <div class="category-icon">🎨</div>
               <h4>互动体验</h4>
               <ul>
-                <li>海报生成 - 个性化校庆纪念海报制作</li>
-                <li>照片墙 - 校友照片马赛克拼图展示</li>
+                <!-- <li>海报生成 - 个性化校庆纪念海报制作</li> -->
+                <!-- <li>照片墙 - 校友照片马赛克拼图展示</li> -->
                 <li>祝福墙 - 师生校友留言祝福互动</li>
                 <li>寄语未来 - 校友寄语征集与展示</li>
                 <li>火炬传递 - 全局火炬传递计数器</li>
@@ -179,7 +179,7 @@
                 <li>论坛系统 - 多板块讨论区，支持发帖、回复、点赞</li>
                 <li>文章专栏 - 校庆相关文章发布与阅读</li>
                 <li>评论互动 - 文章和帖子的评论功能</li>
-                <li>接力活动 - 校庆接力活动参与和分享</li>
+                <!-- <li>接力活动 - 校庆接力活动参与和分享</li> -->
               </ul>
             </div>
 
@@ -344,13 +344,16 @@ onMounted(() => {
   width: 100%;
   min-height: 100vh;
   background: linear-gradient(180deg, #F8F5EF 0%, #E5E2DC 100%);
+  overflow-x: hidden;
 }
 
 .about-container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: var(--spacing-3xl) var(--spacing-xl);
   padding-top: 100px;
+  box-sizing: border-box;
 }
 
 /* 页面头部 */
@@ -359,6 +362,7 @@ onMounted(() => {
   text-align: center;
   padding: var(--spacing-4xl) 0;
   margin-bottom: var(--spacing-4xl);
+  margin-top: 40px;
 }
 
 .hero-title {
@@ -397,6 +401,9 @@ onMounted(() => {
   border-radius: var(--radius-full);
   opacity: 0.1;
   animation: rotate 30s linear infinite;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .decoration-circle:nth-child(2) {
@@ -436,6 +443,8 @@ onMounted(() => {
   padding: var(--spacing-3xl);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-soft);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .content-card p {
@@ -912,6 +921,11 @@ onMounted(() => {
     letter-spacing: 4px;
   }
 
+  /* 隐藏装饰圆圈避免溢出 */
+  .hero-decoration {
+    display: none;
+  }
+
   .section-title {
     font-size: var(--text-2xl);
   }
@@ -954,6 +968,11 @@ onMounted(() => {
 }
 
 @media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+
   .project-stats {
     grid-template-columns: 1fr;
   }
@@ -964,6 +983,14 @@ onMounted(() => {
 
   .stat-number {
     font-size: var(--text-2xl);
+  }
+
+  .achievement-icon {
+    font-size: 3rem;
+  }
+
+  .content-card {
+    padding: var(--spacing-lg);
   }
 }
 </style>
