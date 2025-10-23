@@ -24,8 +24,8 @@
           <span
             v-for="(char, index) in quoteLine1"
             :key="`quote1-${index}`"
-            class="typewriter-char"
-            :style="{ animationDelay: `${index * 0.08}s` }"
+            :class="['typewriter-char', { 'no-animation': animationPlayed }]"
+            :style="!animationPlayed ? { animationDelay: `${index * 0.08}s` } : {}"
           >{{ char }}</span>
         </p>
       </div>
@@ -36,16 +36,16 @@
           <span
             v-for="(char, index) in historyPara1"
             :key="`hist1-${index}`"
-            class="typewriter-char"
-            :style="{ animationDelay: `${(quoteLine1.length + index) * 0.05}s` }"
+            :class="['typewriter-char', { 'no-animation': animationPlayed }]"
+            :style="!animationPlayed ? { animationDelay: `${(quoteLine1.length + index) * 0.05}s` } : {}"
           >{{ char }}</span>
         </p>
         <p class="history-detail">
           <span
             v-for="(char, index) in historyDetail1"
             :key="`detail1-${index}`"
-            class="typewriter-char fade-in"
-            :style="{ animationDelay: `${(quoteLine1.length + historyPara1.length + index) * 0.03}s` }"
+            :class="['typewriter-char fade-in', { 'no-animation': animationPlayed }]"
+            :style="!animationPlayed ? { animationDelay: `${(quoteLine1.length + historyPara1.length + index) * 0.03}s` } : {}"
           >{{ char }}</span>
         </p>
       </div>
@@ -55,16 +55,16 @@
           <span
             v-for="(char, index) in modernPara1"
             :key="`mod1-${index}`"
-            class="typewriter-char"
-            :style="{ animationDelay: `${(quoteLine1.length + historyPara1.length + historyDetail1.length + 0.5 + index) * 0.05}s` }"
+            :class="['typewriter-char', { 'no-animation': animationPlayed }]"
+            :style="!animationPlayed ? { animationDelay: `${(quoteLine1.length + historyPara1.length + historyDetail1.length + 0.5 + index) * 0.05}s` } : {}"
           >{{ char }}</span>
         </p>
         <p class="modern-detail">
           <span
             v-for="(char, index) in modernDetail1"
             :key="`modd1-${index}`"
-            class="typewriter-char fade-in"
-            :style="{ animationDelay: `${(quoteLine1.length + historyPara1.length + historyDetail1.length + modernPara1.length + 1 + index) * 0.03}s` }"
+            :class="['typewriter-char fade-in', { 'no-animation': animationPlayed }]"
+            :style="!animationPlayed ? { animationDelay: `${(quoteLine1.length + historyPara1.length + historyDetail1.length + modernPara1.length + 1 + index) * 0.03}s` } : {}"
           >{{ char }}</span>
         </p>
       </div>
@@ -103,12 +103,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import { visitorAPI } from '../api'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const heroRef = ref(null)
 const videoRef = ref(null)
@@ -117,6 +117,8 @@ const scrollHintHidden = ref(false)
 const visitorCount = ref('000000')
 const visitorNumber = ref(null)
 const contentHidden = ref(false) // 追踪内容是否已隐藏
+const animationPlayed = ref(false) // 追踪动画是否已播放
+const isLanguageSwitching = ref(false) // 追踪是否正在切换语言
 
 // 文字内容 - 使用 i18n
 const quoteLine1 = computed(() => t('hero.quote'))
@@ -233,6 +235,20 @@ const handleScroll = () => {
   }
 }
 
+// 监听语言切换
+watch(locale, () => {
+  if (!animationPlayed.value) {
+    // 如果动画还没播放完，跳过动画直接显示
+    animationPlayed.value = true
+  }
+  isLanguageSwitching.value = true
+
+  // 短暂延迟后重置语言切换标志
+  setTimeout(() => {
+    isLanguageSwitching.value = false
+  }, 100)
+})
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 
@@ -246,6 +262,11 @@ onMounted(() => {
   setTimeout(() => {
     fetchVisitorCount()
   }, totalChars.value * 30 + 500)
+
+  // 标记动画播放完成
+  setTimeout(() => {
+    animationPlayed.value = true
+  }, totalChars.value * 30 + 1500)
 })
 
 onUnmounted(() => {
@@ -371,8 +392,18 @@ onUnmounted(() => {
   animation: typewriter 0.1s ease-in forwards;
 }
 
+.typewriter-char.no-animation {
+  opacity: 1;
+  animation: none;
+}
+
 .typewriter-char.fade-in {
   animation: fadeIn 0.2s ease-in forwards;
+}
+
+.typewriter-char.fade-in.no-animation {
+  opacity: 1;
+  animation: none;
 }
 
 @keyframes typewriter {
