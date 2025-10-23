@@ -73,12 +73,14 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, tm } = useI18n()
 
 const activeStory = ref(0)
 const carouselTrack = ref(null)
 
 const alumniList = computed(() => {
+  const alumniData = tm('alumniStories.alumni')
+
   const yankai = {
     name: t('alumniStories.alumni.yankai.name'),
     title: t('alumniStories.alumni.yankai.title'),
@@ -86,7 +88,7 @@ const alumniList = computed(() => {
     preview: t('alumniStories.alumni.yankai.preview'),
     story: t('alumniStories.alumni.yankai.story'),
     quote: t('alumniStories.alumni.yankai.quote'),
-    achievements: t('alumniStories.alumni.yankai.achievements')
+    achievements: alumniData.yankai.achievements
   }
 
   const zhengshouren = {
@@ -96,7 +98,7 @@ const alumniList = computed(() => {
     preview: t('alumniStories.alumni.zhengshouren.preview'),
     story: t('alumniStories.alumni.zhengshouren.story'),
     quote: t('alumniStories.alumni.zhengshouren.quote'),
-    achievements: t('alumniStories.alumni.zhengshouren.achievements')
+    achievements: alumniData.zhengshouren.achievements
   }
 
   const zhangjianyun = {
@@ -106,18 +108,7 @@ const alumniList = computed(() => {
     preview: t('alumniStories.alumni.zhangjianyun.preview'),
     story: t('alumniStories.alumni.zhangjianyun.story'),
     quote: t('alumniStories.alumni.zhangjianyun.quote'),
-    achievements: t('alumniStories.alumni.zhangjianyun.achievements')
-  }
-
-  // 确保 achievements 是数组
-  if (typeof yankai.achievements === 'string') {
-    yankai.achievements = [yankai.achievements]
-  }
-  if (typeof zhengshouren.achievements === 'string') {
-    zhengshouren.achievements = [zhengshouren.achievements]
-  }
-  if (typeof zhangjianyun.achievements === 'string') {
-    zhangjianyun.achievements = [zhangjianyun.achievements]
+    achievements: alumniData.zhangjianyun.achievements
   }
 
   return [yankai, zhengshouren, zhangjianyun]
