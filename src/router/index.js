@@ -118,6 +118,11 @@ const routes = [
     path: '/message-test',
     name: 'MessageTest',
     component: () => import('@/pages/MessageTest.vue')
+  },
+  {
+    path: '/auth-test',
+    name: 'AuthTest',
+    component: () => import('@/pages/AuthTestPage.vue')
   }
 ]
 

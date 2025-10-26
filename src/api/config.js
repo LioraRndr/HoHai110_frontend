@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { $message } from '@/utils/message.js'
 
 // API基础配置
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/v1'
@@ -11,6 +12,9 @@ const apiClient = axios.create({
     'Content-Type': 'application/json'
   }
 })
+
+// 用于防止重复弹出登录过期提示
+let isAuthErrorShown = false
 
 // 请求拦截器 - 添加token
 apiClient.interceptors.request.use(
@@ -29,13 +33,22 @@ apiClient.interceptors.request.use(
 // 响应拦截器 - 处理错误
 apiClient.interceptors.response.use(
   (response) => {
-    return response.data
+    // 正常响应，检查业务状态码是否表示认证失败
+    const data = response.data
+    if (data && isAuthenticationError(data)) {
+      handleAuthenticationFailure()
+      return Promise.reject(new Error('登录信息已过期，请重新登录'))
+    }
+    return data
   },
   async (error) => {
     const originalRequest = error.config
 
-    // Token过期或无效,尝试刷新
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // 检查是否为认证失败（HTTP 401 或业务层认证失败）
+    const isAuthError = error.response?.status === 401 ||
+                        (error.response?.data && isAuthenticationError(error.response.data))
+
+    if (isAuthError && !originalRequest._retry) {
       originalRequest._retry = true
 
       try {
@@ -52,13 +65,13 @@ apiClient.interceptors.response.use(
           return apiClient(originalRequest)
         } else {
           // 没有refreshToken,直接跳转到登录页
-          clearAuthAndRedirect()
-          return Promise.reject(new Error('登录已过期,请重新登录'))
+          handleAuthenticationFailure()
+          return Promise.reject(new Error('登录信息已过期，请重新登录'))
         }
       } catch (refreshError) {
         // 刷新失败,清除token并跳转到登录页
-        clearAuthAndRedirect()
-        return Promise.reject(new Error('登录已过期,请重新登录'))
+        handleAuthenticationFailure()
+        return Promise.reject(new Error('登录信息已过期，请重新登录'))
       }
     }
 
@@ -68,11 +81,57 @@ apiClient.interceptors.response.use(
   }
 )
 
-// 清除认证信息并跳转到登录页
-function clearAuthAndRedirect() {
-  localStorage.removeItem('token')
-  localStorage.removeItem('refreshToken')
-  localStorage.removeItem('user')
+/**
+ * 判断响应数据是否表示认证失败
+ * @param {Object} data - 响应数据
+ * @returns {boolean}
+ */
+function isAuthenticationError(data) {
+  // 检查多种可能的认证失败情况
+  const authErrorPatterns = [
+    '认证失败',
+    '身份验证失败',
+    '登录已过期',
+    '登录失效',
+    '未授权',
+    '无效的令牌',
+    '无效的token',
+    'token已过期',
+    'token失效',
+    'unauthorized',
+    'authentication failed',
+    'token expired',
+    'invalid token'
+  ]
+
+  // 检查 message 字段
+  const message = (data.message || '').toLowerCase()
+  const hasAuthErrorMessage = authErrorPatterns.some(pattern =>
+    message.includes(pattern.toLowerCase())
+  )
+
+  // 常见的认证失败状态码（业务层）
+  const authErrorCodes = [401, 403]
+  const hasAuthErrorCode = authErrorCodes.includes(data.code)
+
+  return hasAuthErrorMessage || hasAuthErrorCode
+}
+
+/**
+ * 处理认证失败：清除认证信息、显示提示、跳转到登录页
+ */
+function handleAuthenticationFailure() {
+  // 防止重复提示
+  if (isAuthErrorShown) {
+    return
+  }
+  isAuthErrorShown = true
+
+  // 清除认证信息
+  clearAuthData()
+
+  // 显示全局提示
+  $message.warning('登录信息已过期，请重新登录', '提示')
 
   // 保存当前路径，登录后可以跳转回来
   const currentPath = window.location.pathname + window.location.search
@@ -80,10 +139,44 @@ function clearAuthAndRedirect() {
     localStorage.setItem('redirectAfterLogin', currentPath)
   }
 
-  // 跳转到登录页
-  if (window.location.pathname !== '/login') {
-    window.location.href = '/login'
+  // 延迟跳转，确保用户看到提示
+  setTimeout(() => {
+    // 使用动态导入路由，避免循环依赖
+    import('@/router').then((routerModule) => {
+      const router = routerModule.default
+      router.push({ name: 'Login' }).then(() => {
+        // 跳转完成后重置标志，允许下次显示提示
+        isAuthErrorShown = false
+      })
+    })
+  }, 500)
+}
+
+/**
+ * 清除所有认证数据
+ */
+function clearAuthData() {
+  localStorage.removeItem('token')
+  localStorage.removeItem('refreshToken')
+  localStorage.removeItem('user')
+
+  // 如果使用了 Pinia store，也需要清除
+  // 这里通过动态导入避免循环依赖
+  try {
+    import('@/store/user').then((userStoreModule) => {
+      const { useUserStore } = userStoreModule
+      const userStore = useUserStore()
+      userStore.token = null
+      userStore.user = null
+    })
+  } catch (error) {
+    console.warn('Failed to clear user store:', error)
   }
+}
+
+// 清除认证信息并跳转到登录页（保留此函数以保持向后兼容）
+function clearAuthAndRedirect() {
+  handleAuthenticationFailure()
 }
 
 export default apiClient
