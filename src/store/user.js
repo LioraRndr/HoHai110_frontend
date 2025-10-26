@@ -55,21 +55,24 @@ export const useUserStore = defineStore('user', () => {
 
       if (response.code === 0) {
         // 尝试从不同位置获取 token 和 user 数据
-        let tokenData, userData
+        let tokenData, refreshTokenData, userData
 
         // 情况1: 数据在 response.data 中
         if (response.data && typeof response.data === 'object' && response.data.token) {
           tokenData = response.data.token
+          refreshTokenData = response.data.refreshToken
           userData = response.data.user
         }
         // 情况2: 数据在 response.message 中（后端可能把数据放错位置）
         else if (response.message && typeof response.message === 'object' && response.message.token) {
           tokenData = response.message.token
+          refreshTokenData = response.message.refreshToken
           userData = response.message.user
         }
         // 情况3: token 和 user 直接在 response 中
         else if (response.token && response.user) {
           tokenData = response.token
+          refreshTokenData = response.refreshToken
           userData = response.user
         }
 
@@ -81,8 +84,14 @@ export const useUserStore = defineStore('user', () => {
           localStorage.setItem('token', tokenData)
           localStorage.setItem('user', JSON.stringify(userData))
 
+          // 保存 refreshToken（如果有）
+          if (refreshTokenData) {
+            localStorage.setItem('refreshToken', refreshTokenData)
+          }
+
           console.log('[UserStore] Login successful, user saved:', {
             token: tokenData,
+            refreshToken: refreshTokenData ? 'exists' : 'none',
             user: userData
           })
 
@@ -92,7 +101,11 @@ export const useUserStore = defineStore('user', () => {
           throw new Error('登录响应数据格式错误')
         }
       } else {
-        throw new Error(response.message || '登录失败')
+        // 处理 message 可能是对象的情况
+        const errorMessage = typeof response.message === 'string'
+          ? response.message
+          : '登录失败'
+        throw new Error(errorMessage)
       }
     } catch (err) {
       console.error('[UserStore] Login error:', err)

@@ -104,8 +104,16 @@ function isAuthenticationError(data) {
     'invalid token'
   ]
 
-  // 检查 message 字段
-  const message = (data.message || '').toLowerCase()
+  // 检查 message 字段（确保 message 是字符串）
+  let message = ''
+  if (typeof data.message === 'string') {
+    message = data.message.toLowerCase()
+  } else if (data.message && typeof data.message === 'object') {
+    // 如果 message 是对象，可能是后端返回了数据在 message 中
+    // 这种情况不是认证失败
+    return false
+  }
+
   const hasAuthErrorMessage = authErrorPatterns.some(pattern =>
     message.includes(pattern.toLowerCase())
   )
